@@ -1,9 +1,9 @@
 import React from 'react'
 
-const StartQuitButton = ({ gamePhase, clickHandler }) => {
+const StartQuitButton = ({ currentGamePhase, clickHandler }) => {
 
   let action = 'Start'
-  if (gamePhase !== 'pregame') {
+  if (currentGamePhase !== 'off') {
     action = 'Quit'
   }
 

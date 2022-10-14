@@ -1,3 +1,4 @@
-export class Falling extends BasePhase {
+import BasePhase from "./BasePhase.js";
+export default class Falling extends BasePhase {
   
 }

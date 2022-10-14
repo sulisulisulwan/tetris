@@ -1,3 +1,4 @@
-export class Animate extends BasePhase {
+import BasePhase from "./BasePhase.js";
+export default class Animate extends BasePhase {
   
 }
