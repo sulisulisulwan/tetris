@@ -14,8 +14,7 @@ export class BaseTetrimino {
     } 
     
     this.status = 'inQueue'
-    this.currentOrientation = 'north'
-    this.ghostCoordinates = this.getGhostCoordinates()
+    // this.ghostCoordinates = this.getGhostCoordinates()
   }
 
   setCurrentGridPosition(newGridPosition) {

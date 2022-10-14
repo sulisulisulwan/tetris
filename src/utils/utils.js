@@ -1,4 +1,8 @@
-
+const offsetCoordsToLineBelow = (currentCoords) => {
+  return currentCoords.map(coord => {
+    return [coord[0] + 1, coord[1]]
+  })
+}
 
 const gridCoordsAreClear = (targetCoords, currPlayField) => {
   return targetCoords.every(coord => {
@@ -14,5 +18,6 @@ const gridCoordsAreClear = (targetCoords, currPlayField) => {
 }
 
 export {
+  offsetCoordsToLineBelow,
   gridCoordsAreClear
 }

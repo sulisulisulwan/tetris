@@ -1,15 +1,13 @@
 import BasePhase from "./BasePhase.js";
 export default class Pregame extends BasePhase {
   
-  constructor(appStateSetter) {
+  constructor(handlerProps) {
     super()
-    this.appStateSetter = appStateSetter
+    this.handlerProps = handlerProps
   }
 
-  testAppStateSetter() {
-    this.appStateSetter({
-      doesthiswork: 'yay!!'
-    })
+  exec() {
+    console.log('Pregame phase executed')
   }
 
 }

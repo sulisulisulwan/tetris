@@ -4,9 +4,11 @@ export class ITetrimino extends BaseTetrimino {
 
   constructor() {
     super()
+    this.minoGraphic = '[x]'
     this.startingGridPosition = [19, 3]
     this.currentGridPosition = [19, 3]
     this.localGridSize = 4
+    this.currentOrientation = 'north'
     this.orientations = {
       north: {
         primaryPosition: [[1,0], [1,1], [1,2], [1,3]],

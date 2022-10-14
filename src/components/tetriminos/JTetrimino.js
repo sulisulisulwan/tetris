@@ -4,9 +4,11 @@ export class JTetrimino extends BaseTetrimino {
   
   constructor() {
     super()
+    this.minoGraphic = '[o]'
     this.startingGridPosition = [18, 2]
     this.currentGridPosition = [18, 2]
     this.localGridSize = 3
+    this.currentOrientation = 'north'
     this.orientations = {
       north: {
         primaryPosition: [[0,0], [1,0], [1,1], [1,2]],
