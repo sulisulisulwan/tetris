@@ -67,6 +67,17 @@ export class TetriminoMovementHandler {
 
   }
 
+
+  /**
+   * moveOneDown()
+   * 
+   * This alters the playField and tetrimino state, currently as a side effect.
+   * Needs a refactor.
+   * 
+   * @param {*} playField 
+   * @param {*} tetrimino 
+   * @returns 
+   */
   moveOneDown(playField, tetrimino) {
     
     // Get the current location of all of the minos in the tetrimino

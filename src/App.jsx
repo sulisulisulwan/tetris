@@ -16,6 +16,7 @@ class App extends React.Component {
       playField: this.getInitialPlayField(),
       nextQueue: new NextQueue(), // Danger with this one.  It holds state within the class, so we have to setState with this instantition for every update
       gamePhases: {
+        off: this.offPhase,
         animate: this.animatePhase,
         completion: this.completionPhase,
         eliminate: this.eliminatePhase,
@@ -25,6 +26,15 @@ class App extends React.Component {
         lock: this.lockPhase,
         pattern: this.patternPhase,
         pregame: this.pregamePhase
+      },
+      playerAction: {
+        autoRepeat: {
+          left: false,
+          right: false,
+          override: null,
+        },
+        softdrop: false,
+        harddrop: false
       },
       currentGamePhase: 'off',
       
@@ -36,11 +46,15 @@ class App extends React.Component {
       currentTetrimino: null
     }
 
+
     this.startQuitClickHandler = this.startQuitClickHandler.bind(this)
+    
+    this.offPhase = this.offPhase.bind(this)
     this.generationPhase = this.generationPhase.bind(this)
     this.fallingPhase = this.fallingPhase.bind(this)
       this.setContinuousFallEvent = this.setContinuousFallEvent.bind(this)
       this.continuousFallEvent = this.continuousFallEvent.bind(this)
+      this.playerKeystrokeHandler = this.playerKeystrokeHandler.bind(this)
       this.playerKeystrokeHandler = this.playerKeystrokeHandler.bind(this)
   }
 
@@ -56,8 +70,23 @@ class App extends React.Component {
       this.setState({ currentGamePhase: 'generation', }) : this.setState({ currentGamePhase: 'off' })
   }
 
+  /**
+   * 
+   * OFF PHASE
+   * 
+   */
 
+  offPhase() {
+    '>>> Game off'
+  }
+  /**
+   * 
+   * GENERATION PHASE
+   * 
+   */
   generationPhase() {
+
+    // Dequeue a new tetrimino and instantiate it.
     const tetriminoCtr = this.state.nextQueue.dequeue()
     const newCurrentTetrimino = new tetriminoCtr()
 
@@ -79,47 +108,131 @@ class App extends React.Component {
     })
   }
 
+  /**
+   * 
+   * FALLING PHASE
+   * 
+   */
+
   fallingPhase() {
     if (this.state.intervalId === null) {
       this.setState({ intervalId: this.setContinuousFallEvent() })
     }
     //set a setInterval event for updating termino downward motion?  Whenever you click downward it clearsthe interval?
   }
-        setContinuousFallEvent() {
-          return setInterval(this.continuousFallEvent.bind(this), 1000)
-        }
 
-        continuousFallEvent() {
-          
-          const playField = this.state.playField.slice()
-          const tetrimino = Object.assign(Object.create(Object.getPrototypeOf(this.state.currentTetrimino)), this.state.currentTetrimino)
-          
-          const successfulMove = this.state.tetriminoMovementHandler.moveOneDown(playField, tetrimino)
+  setContinuousFallEvent() {
+    return setInterval(this.continuousFallEvent.bind(this), 1000)
+  }
+
+  continuousFallEvent() {
+    const playField = this.state.playField.slice()
+    const tetrimino = this.state.currentTetrimino
+    
+    // Attempt to move the tetrimino down one line. If successful, its state will be altered
+    const successfulMove = this.state.tetriminoMovementHandler.moveOneDown(playField, tetrimino)
+
+    // With a successful change of internal data, force a rerender for visuals.
+    if (successfulMove)  {
+      this.setState({ currentTetrimino: tetrimino })
+      return
+    }
+
+    // If unsuccessful we clearInterval and setState for locking down the termino.
+    clearInterval(this.state.intervalId)
+    this.setState({
+      intervalId: null,
+      currentGamePhase: 'lock'
+    })
+  }
 
 
+        playerKeystrokeHandler(e) {
 
-          if (!successfulMove)  {
-            clearInterval(this.intervalId)
-            this.setState({
-              intervalId: null,
-              currentGamePhase: 'lock'
-            })
+          if (!this.state.currentGamePhase === 'falling') {
+            return 
+          }
+
+          e.preventDefault()
+
+          const key = e.key
+          const strokeType = e.type
+
+          const keystrokeMap = new Map([
+            ['ArrowLeft','left'],
+            ['num4','left'],
+            ['ArrowRight','right'],
+            ['num6','right'],
+            ['down','softdrop'],
+            [' ','harddrop'],
+            ['num8','harddrop'],
+            ['ArrowUp','clockwise'],
+            ['x','clockwise'],
+            ['num1','clockwise'],
+            ['num5','clockwise'],
+            ['num9','clockwise'],
+            ['Control','counter-clockwise'],
+            ['z','counter-clockwise'],
+            ['num3','counter-clockwise'],
+            ['num7','counter-clockwise'],
+            ['Shift','hold'],
+            ['c','hold'],
+            ['num0','hold'],
+            ['F1','pausegame'],
+            ['Escape','pausegame'],
+          ])
+
+          const playerAction = keystrokeMap.get(key)
+
+          // left and right arrow actions
+          if (playerAction === 'left' || playerAction === 'right') {
+            const { autoRepeat } = this.state.playerAction
+            let { right, left, override } = autoRepeat
+            if (strokeType === 'keydown') {
+              playerAction === 'left' ? left = true : right = true
+              playerAction === 'left' ? override = 'left' : override = 'right'
+            } else if(strokeType === 'keyup') {
+              if (override === 'left') {
+                override = right ? 'right' : null
+              } else if (override === 'right') {
+                override = left ? 'left' : null
+              } else {
+                override = null
+              }
+              playerAction === 'left' ? left = false : right = false
+            }
+            this.setState(prevState => ({
+              playerAction: {
+                ...prevState,
+                autoRepeat: {
+                  left,
+                  right,
+                  override
+                }
+              },
+            }))
             return
           }
 
-          console.log(tetrimino)
-          this.setState({
-            currentTetrimino: tetrimino
-          })
+          // this may need additional logic banning auto repeat behavior
+          if (playerAction === 'harddrop') {
+            let harddrop = strokeType === 'keydown' ? true : false
+            this.setState(prevState => ({
+              playerAction: { 
+                ...prevState.playerAction,
+                harddrop 
+              }
+            }))
+          }
           
-          //at the end of each fall event, a check is made if a one line for the tetrimino IN ITS CURRENT STATE is possible.  
-          // If not, we clearInterval and setState for the next phase
-        }
-
-
-        playerKeystrokeHandler() {
-          if (!this.state.currentGamePhase === 'falling') {
-            return 
+          if (playerAction === 'softdrop') {
+            let softdrop = strokeType === 'keydown' ? true : false
+            this.setState(prevState => ({
+              playerAction: { 
+                ...prevState.playerAction,
+                softdrop 
+              }
+            }))
           }
 
           // left = left, Num-4
@@ -146,6 +259,12 @@ class App extends React.Component {
           // this handler will directly update terminos state AND the playfield grid.
         }
     
+  /**
+   * 
+   * 
+   * 
+   */
+
     lockPhase() {
 
       //classic rules for lock: setTimeout for lock. 0.5 seconds unless player moves termino to a position which can fall
@@ -159,18 +278,22 @@ class App extends React.Component {
 
   componentDidMount() {
     console.log(' >>>>> App component mounted')
+
+    document.addEventListener('keydown', this.playerKeystrokeHandler, true)
+    document.addEventListener('keyup', this.playerKeystrokeHandler, true)
   }
 
   componentDidUpdate() {  
     const { currentGamePhase, gamePhases } = this.state
     const phaseHandler = gamePhases[currentGamePhase].bind(this)
+    console.log(this.state)
     phaseHandler()
   }
 
   render() {
     return (
       <div>
-        <div className="game-title">Tetris</div>
+        <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Tetris</div>
         <div className="playfield-and-nextqueue">
           <PlayFieldGrid playFieldData={this.state.playField.slice(20)}/>
           <NextQueueDisplay nextqueueData={this.state.nextQueue}/>
