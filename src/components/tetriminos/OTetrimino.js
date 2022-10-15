@@ -4,7 +4,7 @@ export class OTetrimino extends BaseTetrimino {
   
   constructor() {
     super()
-    this.minoGraphic = '[e]'
+    this.minoGraphic = '[o]'
     this.startingGridPosition = [18, 3]
     this.currentGridPosition = [18, 3] // 22nd row from bottom and 4th square from left
     this.localGridSize = 3

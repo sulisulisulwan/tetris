@@ -47,6 +47,11 @@ export class BaseTetrimino {
     return grid.map(row => new Array(this.localGridSize).fill('[_]', 0, this.localGridSize))
   }
 
+  reset() {
+    this.setCurrentGridPosition(this.startingGridPosition)
+    this.setCurrentOrientation('north')
+  }
+
 }
 
 /**

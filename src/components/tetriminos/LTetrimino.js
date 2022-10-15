@@ -4,7 +4,7 @@ export class LTetrimino extends BaseTetrimino {
   
   constructor() {
     super()
-    this.minoGraphic = '[z]'
+    this.minoGraphic = '[l]'
     this.startingGridPosition = [18, 2]
     this.currentGridPosition = [18, 2]
     this.localGridSize = 3

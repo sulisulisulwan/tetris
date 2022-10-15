@@ -23,6 +23,9 @@
   margin-top: 20px;
 }
 
+.playfield-container {
+  font-family: monospace;
+}
 
 .nextqueue-wrapper {
   margin-left: 20px;

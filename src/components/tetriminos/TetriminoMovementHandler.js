@@ -94,8 +94,17 @@ export class TetriminoMovementHandler {
       targetCoords.push(targetCoord)
     }
 
+    // Clear the playfield of the tetrimino's current position so no collision occurs with the old position
+    for (let i = 0; i < oldCoords.length; i += 1) {
+      playField[oldCoords[i][0]][oldCoords[i][1]] = '[_]'
+    }
+
     // Verify if the new target position is unoccupied.
     if (!gridCoordsAreClear(targetCoords, playField)) {
+      // If they're occupied, undo the clearing of the old coords and return false
+      for (let i = 0; i < oldCoords.length; i += 1) {
+        playField[oldCoords[i][0]][oldCoords[i][1]] = tetrimino.minoGraphic
+      }
       return false
     }
     
@@ -104,11 +113,9 @@ export class TetriminoMovementHandler {
     tetrimino.setCurrentGridPosition([oldVertical + 1, oldHorizontal])
       
     // Update the playfield by removing the old coordinates and inputting the new.
-    
-    for (let i = 0; i < oldCoords.length; i += 1) {
-      playField[oldCoords[i][0]][oldCoords[i][1]] = '[_]'
-    }
+
     for (let i = 0; i < targetCoords.length; i += 1) {
+      
       playField[targetCoords[i][0]][targetCoords[i][1]] = tetrimino.minoGraphic
     }
     return true
