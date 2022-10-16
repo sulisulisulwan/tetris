@@ -1,5 +1,5 @@
 import React from "react";
-import { NextQueue } from "./random-generation/NextQueue";
+import { NextQueue } from "./next-queue/NextQueue";
 
 const NextQueueDisplay = ({ nextqueueData }) => {
 

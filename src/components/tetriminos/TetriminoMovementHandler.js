@@ -1,4 +1,4 @@
-import { gridCoordsAreClear } from '../../utils/utils.js'
+import { gridCoordsAreClear, makeCopy } from '../../utils/utils.js'
 import { SuperRotationSystem } from '../../rotation-systems/SuperRS.js'
 // import { ClassicRotationSystem } from '../rotation-systems/SuperRS'
 
@@ -8,6 +8,7 @@ export class TetriminoMovementHandler {
   constructor() {
     this.rotationSystemMap = this.setRotationSystemMap()
     this.rotationSystem = this.setRotationSystem()
+
   }
 
   setRotationSystemMap() {
@@ -42,93 +43,89 @@ export class TetriminoMovementHandler {
     }
   }
 
-  moveRightOne(playField, tetrimino) {
+  right(tetrimino, verticalIdx) {
     const coordsWithinLocalGrid = tetrimino.orientations[tetrimino.currentOrientation].primaryPosition
-    const targetCoords = coordsWithinLocalGrid.map(coord => {
-      return [coord[0], coord[1] + tetrimino.currentGridPosition[1] + 1]
-    })
-
-    const newCoords = gridCoordsAreClear(targetCoords, playField) ? targetCoords : null
-    if (newCoords) {
-      tetrimino.setCurrentGridPosition(newCoords)
-    }
+    const oldCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0], coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1]]
+    const targetCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0], coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1] + 1]
+    return { oldCoord, targetCoord }
   }
 
-  moveLeftOne(playField, tetrimino) {
+  left(tetrimino, verticalIdx) {
     const coordsWithinLocalGrid = tetrimino.orientations[tetrimino.currentOrientation].primaryPosition
-    const targetCoords = coordsWithinLocalGrid.map(coord => {
-      return [coord[0], coord[1] + tetrimino.currentGridPosition[1] - 1]
-    })
-
-    const newCoords = gridCoordsAreClear(targetCoords, playField) ? targetCoords : null
-    if (newCoords) {
-      tetrimino.setCurrentGridPosition(newCoords)
-    }
-
+    const oldCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0], coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1]]
+    const targetCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0], coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1] - 1]
+    return { oldCoord, targetCoord }
   }
 
-
-  /**
-   * moveOneDown()
-   * 
-   * This alters the playField and tetrimino state, currently as a side effect.
-   * Needs a refactor.
-   * 
-   * @param {*} playField 
-   * @param {*} tetrimino 
-   * @returns 
-   */
-  moveOneDown(playField, tetrimino) {
+  down(tetrimino, verticalIdx) {
     
-    // Get the current location of all of the minos in the tetrimino
     const coordsWithinLocalGrid = tetrimino.orientations[tetrimino.currentOrientation].primaryPosition
+    const oldCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0], coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1]]
+    const targetCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0] + 1, coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1]]
+    return { oldCoord, targetCoord }
+  }
+
+  updateTetrimino(tetrimino, direction) {
+    const [oldVertical, oldHorizontal] = tetrimino.currentGridPosition
+    if (direction === 'left') {
+      tetrimino.currentGridPosition = [oldVertical, oldHorizontal - 1]
+    } else if (direction === 'right') {
+      tetrimino.currentGridPosition = [oldVertical, oldHorizontal + 1]
+    } else if (direction === 'down') {
+      tetrimino.currentGridPosition = [oldVertical + 1, oldHorizontal]
+    }
+
+    return tetrimino
+  }
+
+  moveOne(direction, playField, tetrimino) {
 
     const oldCoords = []
     const targetCoords = []
 
-    // Get each mino square coordinate for both the old position and the target position
-    for (let i = 0; i < coordsWithinLocalGrid.length; i += 1) {
-      const oldCoord = [coordsWithinLocalGrid[i][0] + tetrimino.currentGridPosition[0], coordsWithinLocalGrid[i][1] + tetrimino.currentGridPosition[1]]
-      const targetCoord = [coordsWithinLocalGrid[i][0] + tetrimino.currentGridPosition[0] + 1, coordsWithinLocalGrid[i][1] + tetrimino.currentGridPosition[1]]
+    // Get old and new coordinates
+    for (let i = 0; i < tetrimino.orientations[tetrimino.currentOrientation].primaryPosition.length; i += 1) {
+      const { oldCoord, targetCoord } = this[direction](tetrimino, i)
       oldCoords.push(oldCoord)
       targetCoords.push(targetCoord)
     }
 
-    // Clear the playfield of the tetrimino's current position so no collision occurs with the old position
-    for (let i = 0; i < oldCoords.length; i += 1) {
-      playField[oldCoords[i][0]][oldCoords[i][1]] = '[_]'
-    }
-
-    // Verify if the new target position is unoccupied.
-    if (!gridCoordsAreClear(targetCoords, playField)) {
-      // If they're occupied, undo the clearing of the old coords and return false
-      for (let i = 0; i < oldCoords.length; i += 1) {
-        playField[oldCoords[i][0]][oldCoords[i][1]] = tetrimino.minoGraphic
-      }
-      return false
-    }
+    // Clear out the old coordinates to test new coordinates
+    oldCoords.forEach(coord => {
+      playField[coord[0]][coord[1]] = '[_]'
+    })
     
-    // Update the new point of reference for the tetrimino local grid
-    const [oldVertical, oldHorizontal] = tetrimino.currentGridPosition
-    tetrimino.setCurrentGridPosition([oldVertical + 1, oldHorizontal])
-      
-    // Update the playfield by removing the old coordinates and inputting the new.
+    if (!gridCoordsAreClear(targetCoords, playField)) {
+      // Revert to old coordinates if failed.
+      oldCoords.forEach(coord => {
 
-    for (let i = 0; i < targetCoords.length; i += 1) {
-      
-      playField[targetCoords[i][0]][targetCoords[i][1]] = tetrimino.minoGraphic
+        
+        playField[coord[0]][coord[1]] = tetrimino.minoGraphic
+      })
+
+      return {
+        newPlayField: playField, 
+        newTetrimino: tetrimino,
+        successfulMove: false
+      }
     }
-    return true
+
+    // Update tetrimino object 
+    tetrimino = this.updateTetrimino(tetrimino, direction)
+      
+    // Update the playfield 
+    targetCoords.forEach(coord => {
+      playField[coord[0]][coord[1]] = tetrimino.minoGraphic
+    })
+
+    return {
+      newPlayField: playField, 
+      newTetrimino: tetrimino,
+      successfulMove: true
+    }
 
   }
 
-
-  moveLeft() {
-
-  }
-  moveRight() {
-
-  }
   // This is abstracted further from moveOne, as moveOne
   softDrop() {
 

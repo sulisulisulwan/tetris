@@ -1,19 +1,11 @@
-import { ITetrimino } from '../components/tetriminos/ITetrimino.js'
-import { OTetrimino } from '../components/tetriminos/OTetrimino.js'
-import { STetrimino } from '../components/tetriminos/STetrimino.js'
-import { ZTetrimino } from '../components/tetriminos/ZTetrimino.js'
-import { TTetrimino } from '../components/tetriminos/TTetrimino.js'
-import { JTetrimino } from '../components/tetriminos/JTetrimino.js'
-import { LTetrimino } from '../components/tetriminos/LTetrimino.js'
-
 export class VirtualBag {
 
   constructor() {
     this.tetriminos = [
-      ITetrimino, OTetrimino, 
-      STetrimino, ZTetrimino,
-      TTetrimino, JTetrimino, 
-      LTetrimino
+      'ITetrimino', 'OTetrimino', 
+      'STetrimino', 'ZTetrimino',
+      'TTetrimino', 'JTetrimino', 
+      'LTetrimino'
     ]
     this.bag = this.getShuffledTetriminos() || []
   }

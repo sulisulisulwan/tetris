@@ -1,12 +1,14 @@
 import React from 'react'
 import PlayFieldGrid from './components/playfield/PlayFieldGrid.jsx'
-import { NextQueue } from './random-generation/NextQueue.js'
+import { NextQueue } from './next-queue/NextQueue.js'
 import NextQueueDisplay from './NextQueueDisplay.jsx'
 import StartQuitButton from './StartQuitButton.jsx'
 import { offsetCoordsToLineBelow, gridCoordsAreClear } from './utils/utils.js'
 import { Animate, Completion, Eliminate, Falling, Generation, Iterate, Lock, Pattern, Pregame } from './engine/index.js'
 import { TetriminoMovementHandler } from './components/tetriminos/TetriminoMovementHandler.js'
 
+import { TetriminoFactory } from './components/tetriminos/TetriminoFactory'
+import { makeCopy } from './utils/utils.js'
 
 class App extends React.Component {
 
@@ -45,7 +47,7 @@ class App extends React.Component {
       },
       
       currentGamePhase: 'off',
-      fallSpeed: 250,
+      fallSpeed: 1000,
       //Test state props
       fallIntervalId: null,
       tetriminoMovementHandler: new TetriminoMovementHandler().setRotationSystem('super'),
@@ -86,33 +88,30 @@ class App extends React.Component {
   }
 
   /**
-   * 
    * OFF PHASE
-   * 
    */
 
   offPhase() {
-    console.log('>>> Game off')
+    // console.log('>>> Game off')
   }
+
   /**
-   * 
    * GENERATION PHASE
-   * 
    */
   generationPhase() {
 
     // Dequeue a new tetrimino and instantiate it.
-    const tetriminoCtr = this.state.nextQueue.dequeue()
-    const newCurrentTetrimino = new tetriminoCtr()
+    const tetriminoContext = this.state.nextQueue.dequeue()
+    const newTetrimino = TetriminoFactory.getTetrimino(tetriminoContext)
+    
+    const playField = makeCopy(this.state.playField)
 
-    const playField = this.state.playField.slice()
-
-    const startingOrientationCoords = newCurrentTetrimino.orientations[newCurrentTetrimino.currentOrientation].primaryPosition
+    const startingOrientationCoords = newTetrimino.orientations[newTetrimino.currentOrientation].primaryPosition
 
     startingOrientationCoords.forEach(coord => {
       const [vertical, horizontal] = coord
-      const [startingVertical, startingHorizontal] = newCurrentTetrimino.currentGridPosition
-      playField[startingVertical + vertical][startingHorizontal + horizontal] = newCurrentTetrimino.minoGraphic
+      const [startingVertical, startingHorizontal] = newTetrimino.currentGridPosition
+      playField[startingVertical + vertical][startingHorizontal + horizontal] = newTetrimino.minoGraphic
     })
 
     let { swapStatus } = this.state.holdQueue
@@ -125,7 +124,7 @@ class App extends React.Component {
     this.setState(prevState => ({ 
       playField,
       nextQueue: this.state.nextQueue,
-      currentTetrimino: newCurrentTetrimino,
+      currentTetrimino: newTetrimino,
       currentGamePhase: 'falling',
       holdQueue: {
         ...prevState.holdQueue,
@@ -141,7 +140,7 @@ class App extends React.Component {
    */
 
   fallingPhase() {
-    console.log('>>>>>>>>> FALLING PHASE')
+    // console.log('>>>>>>>>> FALLING PHASE')
     if (this.state.fallIntervalId === null) {
       this.setState({ fallIntervalId: this.setContinuousFallEvent() })
     }
@@ -153,18 +152,21 @@ class App extends React.Component {
   }
 
   continuousFallEvent() {
-    const playField = this.state.playField.slice()
-    const tetrimino = this.state.currentTetrimino
-    
+    const playFieldCopy = makeCopy(this.state.playField)
+    const tetriminoCopy = makeCopy(this.state.currentTetrimino)
+
     // Attempt to move the tetrimino down one line. If successful, its state will be altered
-    const successfulMove = this.state.tetriminoMovementHandler.moveOneDown(playField, tetrimino)
+    const { newPlayField, newTetrimino, successfulMove} = this.state.tetriminoMovementHandler.moveOne('down', playFieldCopy, tetriminoCopy)
 
     // With a successful change of internal data, force a rerender for visuals.
     if (successfulMove)  {
-      this.setState({ currentTetrimino: tetrimino })
+      this.setState({ 
+        currentTetrimino: newTetrimino,
+        playField: newPlayField 
+      })
       return
     }
-
+    
     // If unsuccessful we clearInterval and setState for locking down the termino.
     clearInterval(this.state.fallIntervalId)
     this.setState({
@@ -212,6 +214,11 @@ class App extends React.Component {
 
           const playerAction = keystrokeMap.get(key)
 
+          const playField = makeCopy(this.state.playField)
+          const tetrimino = makeCopy(this.state.currentTetrimino)
+
+          
+
           /*************
            * 
            * AUTO REPEAT ACTIONS
@@ -228,29 +235,70 @@ class App extends React.Component {
             // Releasing one of the held keys will revert movement back to other direction after 0,3 sec delay
             const { autoRepeat } = this.state.playerAction
             let { right, left, override } = autoRepeat
+
+            // Determine what action will be taken.  Override always determines this.
             if (strokeType === 'keydown') {
               playerAction === 'left' ? left = true : right = true
               playerAction === 'left' ? override = 'left' : override = 'right'
-            } else if(strokeType === 'keyup') {
-              if (override === 'left') {
+            } else if (strokeType === 'keyup') {
+              if (playerAction === 'left') {
+                left = false
                 override = right ? 'right' : null
-              } else if (override === 'right') {
+              } else if (playerAction === 'right') {
+                right = false
                 override = left ? 'left' : null
-              } else {
-                override = null
               }
-              playerAction === 'left' ? left = false : right = false
             }
-            this.setState(prevState => ({
-              playerAction: {
-                ...prevState,
-                autoRepeat: {
-                  left,
-                  right,
-                  override
-                }
-              },
-            }))
+
+            // Validate and apply the override action
+            if (override === 'left') {
+              let { newPlayField, newTetrimino } = this.state.tetriminoMovementHandler.moveOne('left', playField, tetrimino)
+              this.setState(prevState => {
+                return ({
+                  ...prevState,
+                  playerAction: {
+                    ...prevState.playerAction,
+                    autoRepeat: {
+                      left,
+                      right,
+                      override
+                    }
+                  },
+                  playField: newPlayField,
+                  currentTetrimino: newTetrimino
+              })})
+
+            } else if (override === 'right') {
+              let { newPlayField, newTetrimino } = this.state.tetriminoMovementHandler.moveOne('right', playField, tetrimino)
+
+              this.setState(prevState => {
+                return ({
+                  ...prevState,
+                  playerAction: {
+                    ...prevState.playerAction,
+                    autoRepeat: {
+                      left,
+                      right,
+                      override
+                    }
+                  },
+                  playField: newPlayField,
+                  currentTetrimino: newTetrimino
+              })})
+            } else if (override === null) {
+              this.setState(prevState => {
+                return ({
+                  ...prevState,
+                  playerAction: {
+                    ...prevState.playerAction,
+                    autoRepeat: {
+                      left,
+                      right,
+                      override
+                    }
+                  },
+              })})
+            }
             return
           }
           
@@ -361,7 +409,7 @@ class App extends React.Component {
 
   lockPhase() {
 
-    console.log('>>>>>>> LOCK PHASE')
+    // console.log('>>>>>>> LOCK PHASE')
 
     // Player can still alter the the tetrimino's position and orientation.
     // Everytime player alters tetrimino position and orientation, lockPhase runs and checks if
@@ -390,16 +438,23 @@ class App extends React.Component {
   lockDownTimeout() {
 
     clearTimeout(this.lockIntervalId)
-    this.state.currentTetrimino.setStatusLocked()
+    const tetriminoCopy = makeCopy(this.state.currentTetrimino)
+    tetriminoCopy.status = 'locked'
+
     this.setState({
-      currentGamePhase: 'pattern',
-      lockIntervalId: null
+      currentGamePhase: 'off',
+      lockIntervalId: null,
+      currentTetrimino: tetriminoCopy
     })
+    // this.setState({
+    //   currentGamePhase: 'pattern',
+    //   lockIntervalId: null,
+    //   currentTetrimino: tetriminoCopy
+    // })
   }
 
-
   patternPhase() {
-    console.log('>>>> PATTERN PHASE')
+    // console.log('>>>> PATTERN PHASE')
     // In this phase, the engine looks for patterns made from Locked down Blocks in the Matrix. 
     // once a pattern has been matched, it can trigger any number of tetris variant-related effects.
     // the classic pattern is the Line Clear pattern. this pattern is matched when one or more rows 
@@ -413,7 +468,7 @@ class App extends React.Component {
   }
 
   iteratePhase() {
-    console.log('>>>>>>>ITERATE PHASE')
+    // console.log('>>>>>>>ITERATE PHASE')
 
     // In this phase, the engine is given a chance to scan through all cells in 
     // the Matrix and evaluate or manipulate them according to an editor-defined 
@@ -427,7 +482,7 @@ class App extends React.Component {
   }
   
   animatePhase() {
-    console.log('>>>>>>>ANIMATE PHASE')
+    // console.log('>>>>>>>ANIMATE PHASE')
 
     // Here, any animation scripts are executed within the Matrix. the tetris engine 
     // moves on to the eliminate Phase once all animation scripts have been run.
@@ -438,7 +493,7 @@ class App extends React.Component {
   }
   
   eliminatePhase() {
-    console.log('>>>>>>>ELIMINATE PHASE')
+    // console.log('>>>>>>>ELIMINATE PHASE')
 
     // Any Minos marked for removal, i.e., on the hit list, are cleared from the 
     // Matrix in this phase. If this results in one or more complete 10-cell rows
@@ -457,7 +512,7 @@ class App extends React.Component {
   }
 
   completionPhase() {
-    console.log('>>>>>>>COMPLETION PHASE')
+    // console.log('>>>>>>>COMPLETION PHASE')
 
     // this is where any updates to information fields on the tetris playfield are updated, 
     // such as the Score and time. the Level up condition is also checked to see if it is 
@@ -469,7 +524,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log(' >>>>> App component mounted')
+    // console.log(' >>>>> App component mounted')
 
     document.addEventListener('keydown', this.playerKeystrokeHandler, true)
     document.addEventListener('keyup', this.playerKeystrokeHandler, true)
@@ -486,6 +541,7 @@ class App extends React.Component {
       <div>
         <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Tetris</div>
         <div className="playfield-and-nextqueue">
+          {/* <PlayFieldGrid playFieldData={this.state.playField}/> */}
           <PlayFieldGrid playFieldData={this.state.playField.slice(20)}/>
           <NextQueueDisplay nextqueueData={this.state.nextQueue}/>
         </div>
