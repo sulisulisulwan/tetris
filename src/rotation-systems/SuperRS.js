@@ -1,113 +1,111 @@
-import { gridCoordsAreClear } from '../utils/utils.js'
+import { gridCoordsAreClear, makeCopy } from '../utils/utils.js'
 
 export class SuperRotationSystem {
 
   constructor() {
     this.relativeOrientations = {
-      north: { left: 'west', right: 'east' },
-      south: { left: 'east', right: 'west' },
-      east:  { left: 'north', right: 'south' },
-      west:  { left: 'south', right: 'north' },
+      north: { flipCounterClockwise: 'west', flipClockwise: 'east' },
+      south: { flipCounterClockwise: 'east', flipClockwise: 'west' },
+      east:  { flipCounterClockwise: 'north', flipClockwise: 'south' },
+      west:  { flipCounterClockwise: 'south', flipClockwise: 'north' },
     }
   }
 
-  /**
-   * 
-   * Public facing method used upon player flip input.  
-   * Returns either the grid coordinates of the new flipped position 
-   * OR null to signify flip isn't possible.
-   * 
-   * @param {*} tetrimino 
-   * @param {*} playerInput 
-   * @param {*} currPlayField 
-   * 
-   * @returns number[][] 
-   * 2 dimensional array where each inner array represents a tetrimino square
-   * Innermost arrays contain two ints, the first representing vertical coordinate, the second the horizontal coordinate
-   * 
-   */
-
-  getValidTargetGridCoords(tetrimino, playerInput, currPlayField) {
-    return tryFlipPoints(tetrimino, playerInput, currPlayField)
+  flip(tetrimino, playerInput, currPlayField) {
+    return this.tryFlipPoints(tetrimino, playerInput, currPlayField)
   }
-  
 
-  tryFlipPoints(tetrimino, playerInput, currPlayField) {
+  tryFlipPoints(tetrimino, playerInput, playField) {
     
-    const { currentOrientation } = tetrimino
+    const { currentOrientation, currentOriginOnPlayfield } = tetrimino
     const targetOrientation = this.getTargetOrientation(currentOrientation, playerInput)
+    
 
-    const startPositionsData = tetrimino.orientations[currentOrientation]
-    const endPositionsData = tetrimino.orientations[targetOrientation]
+    const oldCoordsOffOriginAndRotationPoints = tetrimino.orientations[currentOrientation]
+    const targetCoordsOffOriginAndRotationPoints = tetrimino.orientations[targetOrientation]
 
-    const targetPrimaryPosition = endPositionsData.primaryPosition
+    const targetCoordsOffOrigin = targetCoordsOffOriginAndRotationPoints.coordsOffOrigin
 
     let flipPoint = 1
 
+    // Get the actual coordinates of each mino on the current playfield
+    const oldCoordsOnPlayfield = oldCoordsOffOriginAndRotationPoints.coordsOffOrigin.map(oldCoordsOffOrigin => {
+      // Coordinate of tetrimino grid origin on playfield   +   Offset of each mino from that origin   
+      return [tetrimino.currentOriginOnPlayfield[0] + oldCoordsOffOrigin[0], tetrimino.currentOriginOnPlayfield[1] + oldCoordsOffOrigin[1]]
+    })
+
+
     while (flipPoint <= 5) {
-      console.log(`Offset for playeInput=${playerInput} and flipPoint=${flipPoint} with ITetrimino starting ${currentOrientation.toUpperCase()} flipping to ${targetOrientation.toUpperCase()}`)
-      const startPoint = startPositionsData.rotationPoints[flipPoint]
-      const endPoint = endPositionsData.rotationPoints[flipPoint]
+      // Get old and new coordinates
+      const startPoint = oldCoordsOffOriginAndRotationPoints.rotationPoints[flipPoint]
+      const endPoint = targetCoordsOffOriginAndRotationPoints.rotationPoints[flipPoint]
 
-      const offsetTowardsStartPoint = this.calculateOffsetTowardsStartPoint(startPoint, endPoint)
-      const targetPlayfieldCoords = this.calculateTargetPlayfieldCoords(targetPrimaryPosition, offsetTowardsStartPoint)
+      const offset = this.calculateOffsetTowardsStartPoint(startPoint, endPoint)
 
-      if (this.flipIsValid(targetPlayfieldCoords, currPlayField)) { // COMMENT OUT WHEN TESTING
-        return targetPlayfieldCoords
+      // Take 
+      const targetCoordsOnPlayfield = this.getTargetPlayfieldCoords(targetCoordsOffOrigin, currentOriginOnPlayfield, offset)
+       
+      
+      // Clear out old coordinates to test new coordinates
+      oldCoordsOnPlayfield.forEach(coord => {
+          playField[coord[0]][coord[1]] = '[_]'
+      })
+
+
+
+      if (!gridCoordsAreClear(targetCoordsOnPlayfield, playField)) {
+        // Revert to old coordinates if failed
+        oldCoordsOnPlayfield.forEach(coord => {
+          playField[coord[0]][coord[1]] = tetrimino.minoGraphic
+        })
+        flipPoint += 1
+        continue
       }
       
-      // this.renderFlipOnGrid(startPositionsData, targetPlayfieldCoords, tetrimino.startingGridPosition) // TESTING ONLY
+      // Update tetrimino object
+      tetrimino = this.updateTetrimino(tetrimino, offset, targetOrientation) 
 
-      flipPoint += 1
+      // Update playfield
+      targetCoordsOnPlayfield.forEach(coord => {
+        playField[coord[0]][coord[1]] = tetrimino.minoGraphic
+      })
+
+      return {
+        newPlayField: playField,
+        newTetrimino: tetrimino,
+        successfulMove: true
+      }
     }
 
-    return null
-
+    return {
+      newPlayField: playField, 
+      newTetrimino: tetrimino,
+      successfulMove: false
+    }
   }
 
-  getTargetOrientation(currentOrientation, playerInput) {
-    return this.relativeOrientations[currentOrientation][playerInput]
+  updateTetrimino(tetrimino, offset, targetOrientation) {
+    const [oldVertical, oldHorizontal] = tetrimino.currentOriginOnPlayfield
+    tetrimino.currentOriginOnPlayfield = [oldVertical + offset[0], oldHorizontal + offset[1]]
+    tetrimino.currentOrientation = targetOrientation
+    return tetrimino
+  }
+
+  getTargetOrientation(currentOrientation, flipDirection) {
+    return this.relativeOrientations[currentOrientation][flipDirection]
+  }
+
+  getTargetPlayfieldCoords(targetCoordsOffOrigin, currentOriginOnPlayfield, offset) {
+    
+    const [verticalOrigin, horizontalOrigin] = currentOriginOnPlayfield
+    const [verticalOffset, horizontalOffset] = offset
+    return targetCoordsOffOrigin.map(pointCoords => [pointCoords[0] + verticalOrigin + verticalOffset, pointCoords[1] + horizontalOrigin + horizontalOffset])
   }
 
   calculateOffsetTowardsStartPoint(startPoint, endPoint) {
     const [ startX, startY ] = startPoint
     const [ endX, endY ] = endPoint
     return [ startX - endX, startY - endY]
-  }
-
-  calculateTargetPlayfieldCoords(targetPrimaryPosition, offset) {
-    const [verticalOffset, horizontalOffset] = offset
-    return targetPrimaryPosition.map(pointCoords => [pointCoords[0] + verticalOffset, pointCoords[1] + horizontalOffset])
-  }
-
-  flipIsValid(targetCoords, currPlayField) {
-    return gridCoordsAreClear(targetCoords, currPlayField)
-  }
-
-  testFlipPoints(tetrimino, options) {
-    options.testTheseOrientations.forEach(orientation => {
-      tetrimino.setCurrentOrientation(orientation)
-      this.tryFlipPoints(tetrimino, 'left', null)
-      this.tryFlipPoints(tetrimino, 'right', null)
-    })
-  }
-
-  renderFlipOnGrid(startPositionsData, targetPlayfieldCoords, generationPosition) {
-
-    const testRows = new Array(40).fill(null)
-    const testGrid = testRows.map(row => new Array(10).fill(' ', 0, 10))
-
-    const initialOrientation = startPositionsData.primaryPosition
-
-    const [zeroVertical, zeroHorizontal] = generationPosition
-
-    const originalIdxs = initialOrientation.map(coords => [zeroVertical + coords[0], zeroHorizontal + coords[1]])
-    const targetIdxs = targetPlayfieldCoords.map(coords => [zeroVertical + coords[0], zeroHorizontal + coords[1]])
-    
-    originalIdxs.forEach(coords => testGrid[coords[0]][coords[1]] = testGrid[coords[0]][coords[1]] === ' ' ? '0' : ' ')
-    targetIdxs.forEach(coords => testGrid[coords[0]][coords[1]] = testGrid[coords[0]][coords[1]] === ' ' ? '1' : 'x')
-    
-    testGrid.forEach(row => console.log(JSON.stringify(row)))
   }
 
 }

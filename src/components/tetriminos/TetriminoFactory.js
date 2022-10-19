@@ -7,7 +7,7 @@ export class TetriminoFactory {
   static getBaseTetrimino() {
     return {
       startingGridPosition: [18, 2],
-      currentGridPosition: [18, 2],
+      currentOriginOnPlayfield: [18, 2],
       localGridSize: 3,
       currentOrientation: 'north',
       status: 'inQueue'
@@ -18,28 +18,33 @@ export class TetriminoFactory {
     const getContext = `get${tetrimino}`
     return TetriminoFactory[getContext]()
   }
+
+  static resetTetrimino(tetrimino) {
+    return getTetrimino(tetrimino.name)
+  }
   
   static getITetrimino() {
     const tetrimino = this.getBaseTetrimino()
+    tetrimino.name = 'ITetrimino'
     tetrimino.minoGraphic = '[i]'
     tetrimino.startingGridPosition = [19, 3]
-    tetrimino.currentGridPosition = [19, 3]
+    tetrimino.currentOriginOnPlayfield = [19, 3]
     tetrimino.localGridSize = 4
     tetrimino.orientations = {
       north: {
-        primaryPosition: [[1,0], [1,1], [1,2], [1,3]],
+        coordsOffOrigin: [[1,0], [1,1], [1,2], [1,3]],
         rotationPoints: { 1: [1,1], 2: [1,0], 3: [1,3], 4: [1,0], 5: [1,3] }
       },
       east: {
-        primaryPosition: [[0,2], [1,2], [2,2], [3,2]],
+        coordsOffOrigin: [[0,2], [1,2], [2,2], [3,2]],
         rotationPoints: { 1: [1,1], 2: [1,2], 3: [1,2], 4: [0,2], 5: [3,2] }      
       },
       south: {
-        primaryPosition: [[2,0], [2,1], [2,2], [2,3]],
+        coordsOffOrigin: [[2,0], [2,1], [2,2], [2,3]],
         rotationPoints: { 1: [1,1], 2: [1,3], 3: [1,0], 4: [2,2], 5: [2,0] }
       },
       west: {
-        primaryPosition: [[0,1], [1,1], [2,1], [3,1]],
+        coordsOffOrigin: [[0,1], [1,1], [2,1], [3,1]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [3,1], 5: [0,1] }
       }
     }  
@@ -49,24 +54,25 @@ export class TetriminoFactory {
 
   static getOTetrimino() {
     const tetrimino = this.getBaseTetrimino()
+    tetrimino.name = 'OTetrimino'
     tetrimino.minoGraphic = '[o]',
     tetrimino.startingGridPosition = [18, 3],
-    tetrimino.currentGridPosition = [18, 3],
+    tetrimino.currentOriginOnPlayfield = [18, 3],
     tetrimino.orientations = {
       north: {
-        primaryPosition: [[0,1], [0,2], [1,1], [1,2]],
+        coordsOffOrigin: [[0,1], [0,2], [1,1], [1,2]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       east: {
-        primaryPosition: [[0,1], [0,2], [1,1], [1,2]],
+        coordsOffOrigin: [[0,1], [0,2], [1,1], [1,2]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       south: {
-        primaryPosition: [[0,1], [0,2], [1,1], [1,2]],
+        coordsOffOrigin: [[0,1], [0,2], [1,1], [1,2]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       west: {
-        primaryPosition: [[0,1], [0,2], [1,1], [1,2]],
+        coordsOffOrigin: [[0,1], [0,2], [1,1], [1,2]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       }
     } 
@@ -76,22 +82,23 @@ export class TetriminoFactory {
 
   static getJTetrimino() {
     const tetrimino = this.getBaseTetrimino()
+    tetrimino.name = 'JTetrimino'
     tetrimino.minoGraphic = '[j]'
     tetrimino.orientations = {
       north: {
-        primaryPosition: [[0,0], [1,0], [1,1], [1,2]],
+        coordsOffOrigin: [[0,0], [1,0], [1,1], [1,2]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       east: {
-        primaryPosition: [[0,1], [0,2], [1,1], [2,1]],
+        coordsOffOrigin: [[0,1], [0,2], [1,1], [2,1]],
         rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] }
       },
       south: {
-        primaryPosition: [[1,0], [1,1], [1,2], [2,2]],
+        coordsOffOrigin: [[1,0], [1,1], [1,2], [2,2]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       west: {
-        primaryPosition: [[0,1], [1,1], [2,0], [2,1]],
+        coordsOffOrigin: [[0,1], [1,1], [2,0], [2,1]],
         rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] }
       }
     }
@@ -101,22 +108,23 @@ export class TetriminoFactory {
 
   static getLTetrimino() {
     const tetrimino = this.getBaseTetrimino()
+    tetrimino.name = 'LTetrimino'
     tetrimino.minoGraphic = '[l]'
     tetrimino.orientations = {
       north: {
-        primaryPosition: [[0,2], [1,0], [1,1], [1,2]],
+        coordsOffOrigin: [[0,2], [1,0], [1,1], [1,2]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       east: {
-        primaryPosition: [[0,1], [1,1], [2,1], [2,2]],
+        coordsOffOrigin: [[0,1], [1,1], [2,1], [2,2]],
         rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] }
       },
       south: {
-        primaryPosition: [[1,0], [1,1], [1,2], [2,0]],
+        coordsOffOrigin: [[1,0], [1,1], [1,2], [2,0]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       west: {
-        primaryPosition: [[0,0], [0,1], [1,1], [2,1]],
+        coordsOffOrigin: [[0,0], [0,1], [1,1], [2,1]],
         rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] }
       }
     }
@@ -126,22 +134,23 @@ export class TetriminoFactory {
 
   static getSTetrimino() {
     const tetrimino = this.getBaseTetrimino()
+    tetrimino.name = 'STetrimino'
     tetrimino.minoGraphic = '[s]'
     tetrimino.orientations = {
       north: {
-        primaryPosition: [[0,1], [0,2], [1,0], [1,1]],
+        coordsOffOrigin: [[0,1], [0,2], [1,0], [1,1]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       east: {
-        primaryPosition: [[0,1], [1,1], [1,2], [2,2]],
+        coordsOffOrigin: [[0,1], [1,1], [1,2], [2,2]],
         rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] }
       },
       south: {
-        primaryPosition: [[1,1], [1,2], [2,0], [2,1]],
+        coordsOffOrigin: [[1,1], [1,2], [2,0], [2,1]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       west: {
-        primaryPosition: [[0,0], [1,0], [1,1], [2,1]],
+        coordsOffOrigin: [[0,0], [1,0], [1,1], [2,1]],
         rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] }
       }
     }
@@ -151,22 +160,23 @@ export class TetriminoFactory {
 
   static getZTetrimino() {
     const tetrimino = this.getBaseTetrimino()
+    tetrimino.name = 'ZITetrimino'
     tetrimino.minoGraphic = '[z]'
     tetrimino.orientations = {
       north: {
-        primaryPosition: [[0,0], [0,1], [1,1], [1,2]],
+        coordsOffOrigin: [[0,0], [0,1], [1,1], [1,2]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       east: {
-        primaryPosition: [[0,2], [1,1], [1,2], [2,1]],
+        coordsOffOrigin: [[0,2], [1,1], [1,2], [2,1]],
         rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] }
       },
       south: {
-        primaryPosition: [[1,0], [1,1], [2,1], [2,2]],
+        coordsOffOrigin: [[1,0], [1,1], [2,1], [2,2]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       west: {
-        primaryPosition: [[0,1], [1,0], [1,1], [2,0]],
+        coordsOffOrigin: [[0,1], [1,0], [1,1], [2,0]],
         rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] }
       }
     } 
@@ -176,22 +186,23 @@ export class TetriminoFactory {
 
   static getTTetrimino() {
     const tetrimino = this.getBaseTetrimino()
+    tetrimino.name = 'TTetrimino'
     tetrimino.minoGraphic = '[t]'
     tetrimino.orientations = {
       north: {
-        primaryPosition: [[0,1], [1,0], [1,1], [1,2]],
+        coordsOffOrigin: [[0,1], [1,0], [1,1], [1,2]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       east: {
-        primaryPosition: [[0,1], [1,1], [1,2], [2,1]],
+        coordsOffOrigin: [[0,1], [1,1], [1,2], [2,1]],
         rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] }
       },
       south: {
-        primaryPosition: [[1,0], [1,1], [1,2] , [2,1]],
+        coordsOffOrigin: [[1,0], [1,1], [1,2] , [2,1]],
         rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
       },
       west: {
-        primaryPosition: [[0,1], [1,1], [1,1], [2,1]],
+        coordsOffOrigin: [[0,1], [1,0], [1,1], [2,1]],
         rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] }
       }
     } 

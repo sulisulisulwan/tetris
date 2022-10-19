@@ -4,11 +4,9 @@ import { SuperRotationSystem } from '../../rotation-systems/SuperRS.js'
 
 export class TetriminoMovementHandler {
 
-
   constructor() {
     this.rotationSystemMap = this.setRotationSystemMap()
-    this.rotationSystem = this.setRotationSystem()
-
+    this.rotationSystem = this.setRotationSystem('super')
   }
 
   setRotationSystemMap() {
@@ -19,8 +17,8 @@ export class TetriminoMovementHandler {
   }
 
   setRotationSystem(rotationSystem) {
-    this.rotationSystem = this.rotationSystemMap.get(rotationSystem)
-    return this
+    const rotatingSystemCtr = this.rotationSystemMap.get(rotationSystem)
+    return new rotatingSystemCtr()
   }
 
   /**
@@ -28,80 +26,57 @@ export class TetriminoMovementHandler {
    * They will alter the current tetrimino position, nothing more
    */
 
-  flipRight(playField, tetrimino) {
-
-    const newCoords = this.rotationSystem.getValidTargetGridCoords(tetrimino, 'right', playField, )
-    if (newCoords) {
-      tetrimino.setCurrentGridPosition(newCoords)
-    }
+  flipClockwise(playField, tetrimino) {
+    return this.rotationSystem.flip(tetrimino, 'flipClockwise', playField)
   }
   
-  flipLeft() {
-    const newCoords = this.rotationSystem.getValidTargetGridCoords(tetrimino, 'left', playField, )
-    if (newCoords) {
-      tetrimino.setCurrentGridPosition(newCoords)
-    }
+  flipCounterClockwise() {
+    return this.rotationSystem.flip(tetrimino, 'flipCounterClockwise', playField)
   }
 
   right(tetrimino, verticalIdx) {
-    const coordsWithinLocalGrid = tetrimino.orientations[tetrimino.currentOrientation].primaryPosition
-    const oldCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0], coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1]]
-    const targetCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0], coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1] + 1]
-    return { oldCoord, targetCoord }
+    const oldCoordsOffOrigin = tetrimino.orientations[tetrimino.currentOrientation].coordsOffOrigin
+    const oldCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1]]
+    const targetCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1] + 1]
+    return { oldCoordOnPlayfield, targetCoordOnPlayfield }
   }
 
   left(tetrimino, verticalIdx) {
-    const coordsWithinLocalGrid = tetrimino.orientations[tetrimino.currentOrientation].primaryPosition
-    const oldCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0], coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1]]
-    const targetCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0], coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1] - 1]
-    return { oldCoord, targetCoord }
+    const oldCoordsOffOrigin = tetrimino.orientations[tetrimino.currentOrientation].coordsOffOrigin
+    const oldCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1]]
+    const targetCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1] - 1]
+    return { oldCoordOnPlayfield, targetCoordOnPlayfield }
   }
 
   down(tetrimino, verticalIdx) {
     
-    const coordsWithinLocalGrid = tetrimino.orientations[tetrimino.currentOrientation].primaryPosition
-    const oldCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0], coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1]]
-    const targetCoord = [coordsWithinLocalGrid[verticalIdx][0] + tetrimino.currentGridPosition[0] + 1, coordsWithinLocalGrid[verticalIdx][1] + tetrimino.currentGridPosition[1]]
-    return { oldCoord, targetCoord }
-  }
-
-  updateTetrimino(tetrimino, direction) {
-    const [oldVertical, oldHorizontal] = tetrimino.currentGridPosition
-    if (direction === 'left') {
-      tetrimino.currentGridPosition = [oldVertical, oldHorizontal - 1]
-    } else if (direction === 'right') {
-      tetrimino.currentGridPosition = [oldVertical, oldHorizontal + 1]
-    } else if (direction === 'down') {
-      tetrimino.currentGridPosition = [oldVertical + 1, oldHorizontal]
-    }
-
-    return tetrimino
+    const oldCoordsOffOrigin = tetrimino.orientations[tetrimino.currentOrientation].coordsOffOrigin
+    const oldCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1]]
+    const targetCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0] + 1, oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1]]
+    return { oldCoordOnPlayfield, targetCoordOnPlayfield }
   }
 
   moveOne(direction, playField, tetrimino) {
 
-    const oldCoords = []
-    const targetCoords = []
+    const oldCoordsOnPlayfield = []
+    const targetCoordsOnPlayfield = []
+
+    const { currentOrientation } = tetrimino
+    const oldCoordsOffOrigin = tetrimino.orientations[currentOrientation].coordsOffOrigin
 
     // Get old and new coordinates
-    for (let i = 0; i < tetrimino.orientations[tetrimino.currentOrientation].primaryPosition.length; i += 1) {
-      const { oldCoord, targetCoord } = this[direction](tetrimino, i)
-      oldCoords.push(oldCoord)
-      targetCoords.push(targetCoord)
+    for (let i = 0; i < oldCoordsOffOrigin.length; i += 1) {
+      const { oldCoordOnPlayfield, targetCoordOnPlayfield } = this[direction](tetrimino, i)
+      oldCoordsOnPlayfield.push(oldCoordOnPlayfield)
+      targetCoordsOnPlayfield.push(targetCoordOnPlayfield)
     }
 
     // Clear out the old coordinates to test new coordinates
-    oldCoords.forEach(coord => {
-      playField[coord[0]][coord[1]] = '[_]'
-    })
+    playField = this.clearTetriminoFromPlayField(oldCoordsOnPlayfield, playField)
     
-    if (!gridCoordsAreClear(targetCoords, playField)) {
+    if (!gridCoordsAreClear(targetCoordsOnPlayfield, playField)) {
       // Revert to old coordinates if failed.
-      oldCoords.forEach(coord => {
-
-        
-        playField[coord[0]][coord[1]] = tetrimino.minoGraphic
-      })
+      playField = this.addTetriminoToPlayField(oldCoordsOnPlayfield, playField, tetrimino.minoGraphic)
 
       return {
         newPlayField: playField, 
@@ -114,9 +89,7 @@ export class TetriminoMovementHandler {
     tetrimino = this.updateTetrimino(tetrimino, direction)
       
     // Update the playfield 
-    targetCoords.forEach(coord => {
-      playField[coord[0]][coord[1]] = tetrimino.minoGraphic
-    })
+    playField = this.addTetriminoToPlayField(targetCoordsOnPlayfield, playField, tetrimino.minoGraphic)
 
     return {
       newPlayField: playField, 
@@ -133,6 +106,39 @@ export class TetriminoMovementHandler {
 
   hardDrop() {
 
+  }
+
+  // SHARED METHODS
+
+  updateTetrimino(tetrimino, direction) {
+    const [oldVertical, oldHorizontal] = tetrimino.currentOriginOnPlayfield
+    if (direction === 'left') {
+      tetrimino.currentOriginOnPlayfield = [oldVertical, oldHorizontal - 1]
+    } else if (direction === 'right') {
+      tetrimino.currentOriginOnPlayfield = [oldVertical, oldHorizontal + 1]
+    } else if (direction === 'down') {
+      tetrimino.currentOriginOnPlayfield = [oldVertical + 1, oldHorizontal]
+    } else if (direction === 'flipClockwise') {
+
+      // current orientation
+
+
+    }
+    return tetrimino
+  }
+
+  clearTetriminoFromPlayField(coords, playField) {
+    coords.forEach(coord => {
+      playField[coord[0]][coord[1]] = '[_]'
+    })
+    return playField
+  }
+
+  addTetriminoToPlayField(coords, playField, minoGraphic) {
+    coords.forEach(coord => {
+      playField[coord[0]][coord[1]] = minoGraphic
+    })
+    return playField
   }
 
 }

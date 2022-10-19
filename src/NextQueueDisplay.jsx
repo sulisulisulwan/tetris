@@ -9,8 +9,8 @@ const NextQueueDisplay = ({ nextqueueData }) => {
   
   const nextQueueForDisplay = []
   let curr = nextqueueData.peek().next
-
-  for (let i = 0; i < 7; i += 1) {
+  
+  for (let i = 0; i < nextqueueData.length; i += 1) {
     nextQueueForDisplay.push(curr.tetrimino.name)
     curr = curr.next
   }

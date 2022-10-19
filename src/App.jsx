@@ -6,6 +6,7 @@ import StartQuitButton from './StartQuitButton.jsx'
 import { offsetCoordsToLineBelow, gridCoordsAreClear } from './utils/utils.js'
 import { Animate, Completion, Eliminate, Falling, Generation, Iterate, Lock, Pattern, Pregame } from './engine/index.js'
 import { TetriminoMovementHandler } from './components/tetriminos/TetriminoMovementHandler.js'
+import { PlayerControl } from './playerControl/PlayerControl.js'
 
 import { TetriminoFactory } from './components/tetriminos/TetriminoFactory'
 import { makeCopy } from './utils/utils.js'
@@ -17,6 +18,8 @@ class App extends React.Component {
     this.state = {
       playField: this.getInitialPlayField(),
       nextQueue: new NextQueue(), // Danger with this one.  It holds state within the class, so we have to setState with this instantition for every update
+      tetriminoMovementHandler: new TetriminoMovementHandler(),
+      playerControlHandler: new PlayerControl(),
       holdQueue: {
         swapStatus: 'swapAvailableNow',
         heldTetrimino: null
@@ -41,18 +44,13 @@ class App extends React.Component {
         },
         softdrop: false,
         harddrop: false,
-        clockwise: false,
-        counterClockwise: false,
+        flipClockwise: false,
+        flipCounterClockwise: false,
         hold: false
       },
-      
       currentGamePhase: 'off',
-      fallSpeed: 1000,
-      //Test state props
+      fallSpeed: 250,
       fallIntervalId: null,
-      tetriminoMovementHandler: new TetriminoMovementHandler().setRotationSystem('super'),
-
-
       currentTetrimino: null
     }
 
@@ -64,8 +62,8 @@ class App extends React.Component {
     this.fallingPhase = this.fallingPhase.bind(this)
       this.setContinuousFallEvent = this.setContinuousFallEvent.bind(this)
       this.continuousFallEvent = this.continuousFallEvent.bind(this)
-      this.playerKeystrokeHandler = this.playerKeystrokeHandler.bind(this)
-      this.playerKeystrokeHandler = this.playerKeystrokeHandler.bind(this)
+      // this.playerKeystrokeHandler = this.playerKeystrokeHandler.bind(this)
+      this.handlePlayerKeyStroke = this.handlePlayerKeyStroke.bind(this)
     this.lockPhase = this.lockPhase.bind(this)
       this.lockDownTimeout = this.lockDownTimeout.bind(this)
     this.patternPhase = this.patternPhase.bind(this)
@@ -87,6 +85,10 @@ class App extends React.Component {
       this.setState({ currentGamePhase: 'generation', }) : this.setState({ currentGamePhase: 'off' })
   }
 
+  handlePlayerKeyStroke(e) {
+    this.state.playerControlHandler.keystrokeHandler(e, this.setState.bind(this), this.state)
+  }
+
   /**
    * OFF PHASE
    */
@@ -106,11 +108,11 @@ class App extends React.Component {
     
     const playField = makeCopy(this.state.playField)
 
-    const startingOrientationCoords = newTetrimino.orientations[newTetrimino.currentOrientation].primaryPosition
+    const startingOrientationCoords = newTetrimino.orientations[newTetrimino.currentOrientation].coordsOffOrigin
 
     startingOrientationCoords.forEach(coord => {
       const [vertical, horizontal] = coord
-      const [startingVertical, startingHorizontal] = newTetrimino.currentGridPosition
+      const [startingVertical, startingHorizontal] = newTetrimino.currentOriginOnPlayfield
       playField[startingVertical + vertical][startingHorizontal + horizontal] = newTetrimino.minoGraphic
     })
 
@@ -176,237 +178,6 @@ class App extends React.Component {
     })
   }
 
-
-        playerKeystrokeHandler(e) {
-
-          if (!this.state.currentGamePhase === 'falling') {
-            return 
-          }
-
-          e.preventDefault()
-
-          const key = e.key
-          const strokeType = e.type
-
-          const keystrokeMap = new Map([
-            ['ArrowLeft','left'],
-            ['num4','left'],
-            ['ArrowRight','right'],
-            ['num6','right'],
-            ['ArrowDown','softdrop'],
-            [' ','harddrop'],
-            ['num8','harddrop'],
-            ['ArrowUp','clockwise'],
-            ['x','clockwise'],
-            ['num1','clockwise'],
-            ['num5','clockwise'],
-            ['num9','clockwise'],
-            ['Control','counter-clockwise'],
-            ['z','counter-clockwise'],
-            ['num3','counter-clockwise'],
-            ['num7','counter-clockwise'],
-            ['Shift','hold'],
-            ['c','hold'],
-            ['num0','hold'],
-            ['F1','pausegame'],
-            ['Escape','pausegame'],
-          ])
-
-          const playerAction = keystrokeMap.get(key)
-
-          const playField = makeCopy(this.state.playField)
-          const tetrimino = makeCopy(this.state.currentTetrimino)
-
-          
-
-          /*************
-           * 
-           * AUTO REPEAT ACTIONS
-           * 
-           ************/
-
-          // Left and Right arrow actions
-          if (playerAction === 'left' || playerAction === 'right') {
-            // ArrowLeft = left, Num-4
-            // ArrowRight = right, Num-6
-            // Auto repeat after 0.3 secs delay of holding down key
-            // Moves tetrimino fully across playfield in 0.5 secs
-            // Pressing opposite direction while holding original key will switch to that directino during auto repeat will re-initiate 0.3sec delay
-            // Releasing one of the held keys will revert movement back to other direction after 0,3 sec delay
-            const { autoRepeat } = this.state.playerAction
-            let { right, left, override } = autoRepeat
-
-            // Determine what action will be taken.  Override always determines this.
-            if (strokeType === 'keydown') {
-              playerAction === 'left' ? left = true : right = true
-              playerAction === 'left' ? override = 'left' : override = 'right'
-            } else if (strokeType === 'keyup') {
-              if (playerAction === 'left') {
-                left = false
-                override = right ? 'right' : null
-              } else if (playerAction === 'right') {
-                right = false
-                override = left ? 'left' : null
-              }
-            }
-
-            // Validate and apply the override action
-            if (override === 'left') {
-              let { newPlayField, newTetrimino } = this.state.tetriminoMovementHandler.moveOne('left', playField, tetrimino)
-              this.setState(prevState => {
-                return ({
-                  ...prevState,
-                  playerAction: {
-                    ...prevState.playerAction,
-                    autoRepeat: {
-                      left,
-                      right,
-                      override
-                    }
-                  },
-                  playField: newPlayField,
-                  currentTetrimino: newTetrimino
-              })})
-
-            } else if (override === 'right') {
-              let { newPlayField, newTetrimino } = this.state.tetriminoMovementHandler.moveOne('right', playField, tetrimino)
-
-              this.setState(prevState => {
-                return ({
-                  ...prevState,
-                  playerAction: {
-                    ...prevState.playerAction,
-                    autoRepeat: {
-                      left,
-                      right,
-                      override
-                    }
-                  },
-                  playField: newPlayField,
-                  currentTetrimino: newTetrimino
-              })})
-            } else if (override === null) {
-              this.setState(prevState => {
-                return ({
-                  ...prevState,
-                  playerAction: {
-                    ...prevState.playerAction,
-                    autoRepeat: {
-                      left,
-                      right,
-                      override
-                    }
-                  },
-              })})
-            }
-            return
-          }
-          
-          if (playerAction === 'softdrop') {
-              // ArrowDown = softdrop 
-              // Soft drop is 20 times faster than current drop time
-              // This is an immediate auto repeat.  Only ceases when keystroke lifted
-              // Lockdown does not occur till lock timer completed
-              // Softdrop action should continue even after termino is 
-              //locked and new termino generates while key is kept pressed
-            let softdrop = strokeType === 'keydown' ? true : false
-            this.setState(prevState => ({
-              playerAction: { 
-                ...prevState.playerAction,
-                softdrop 
-              }
-            }))
-          }
-
-          /* *********
-           * 
-           *  NON AUTO REPEAT ACTIONS
-           * 
-           * **********/
-          if (
-            playerAction === 'harddrop' || 
-            playerAction === 'clockwise' || 
-            playerAction === 'counter-clockwise'
-          ) {
-          // harddrop = spacebar, Num-8
-          // rotate clockwise = Up, X, Num-1, Num-5, Num-9
-          // rotate counter clockwise = Control, Z, Num-3, Num-7
-
-            if (strokeType === 'keydown' && this.state.playerAction[playerAction]) {
-              return
-            }
-
-            this.setState(prevState => ({
-              playerAction: { 
-                ...prevState.playerAction,
-                [playerAction]: strokeType === 'keyup' ? false : true
-              }
-            }))
-
-          }
-
-          if (playerAction === 'hold') {
-            if (strokeType === 'keydown' && this.state.playerAction[hold]) {
-              return
-            }
-
-            let { swapStatus } = this.state.holdQueue
-            if (swapStatus === 'swapAvailableNow') {
-
-              let { heldTetrimino } = this.state.holdQueue
-              const { currentTetrimino } = this.state
-
-              currentTetrimino.reset()
-              const newHoldQueueTetrimino = currentTetrimino
-
-              swapStatus = 'justSwapped'
-
-              // In the case where hold is used for the first time in game,
-              // the current held tetrimino will be null and swapped for the
-              // current tetrimino, which should, in essence return the game state
-              // to the first drop of the game, except with a filled hold queue
-              this.setState(prevState => ({
-                ...prevState,
-                currentGamePhase: 'generation',
-                playerAction: { 
-                  ...prevState.playerAction,
-                  hold: strokeType === 'keyup' ? false : true
-                },
-                holdQueue: {
-                  swapStatus,
-                  heldTetrimino: newHoldQueueTetrimino
-                },
-                currentTetrimino: heldTetrimino
-              }))
-
-              return
-            }
-
-            this.setState(prevState => ({
-              ...prevState,
-              playerAction: { 
-                ...prevState.playerAction,
-                hold: strokeType === 'keyup' ? false : true
-              },
-            }))
-          }
-
-          // hold = Shift, C, Num-0
-          // pausegame = F1 or Esc
-
-            // NO AUTO REPEAT FOR ROTATION
-            // NO AUTO REPEAT FOR HARD DROP
-
-          // Here, write out the keyboard mapping logic
-          // this handler will directly update terminos state AND the playfield grid.
-        }
-    
-  /**
-   * 
-   * 
-   * 
-   */
-
   lockPhase() {
 
     // console.log('>>>>>>> LOCK PHASE')
@@ -423,7 +194,7 @@ class App extends React.Component {
     const playField = this.state.playField.slice()
     const tetrimino = this.state.currentTetrimino
     
-    const positionOfLineBelow = offsetCoordsToLineBelow(tetrimino.currentGridPosition)
+    const positionOfLineBelow = offsetCoordsToLineBelow(tetrimino.currentOriginOnPlayfield)
     if (gridCoordsAreClear(positionOfLineBelow, playField)) {
       this.clearTimeout(this.lockIntervalId)
       this.setState({
@@ -442,7 +213,7 @@ class App extends React.Component {
     tetriminoCopy.status = 'locked'
 
     this.setState({
-      currentGamePhase: 'off',
+      currentGamePhase: 'pattern',
       lockIntervalId: null,
       currentTetrimino: tetriminoCopy
     })
@@ -526,8 +297,8 @@ class App extends React.Component {
   componentDidMount() {
     // console.log(' >>>>> App component mounted')
 
-    document.addEventListener('keydown', this.playerKeystrokeHandler, true)
-    document.addEventListener('keyup', this.playerKeystrokeHandler, true)
+    document.addEventListener('keydown', this.handlePlayerKeyStroke, true)
+    document.addEventListener('keyup', this.handlePlayerKeyStroke, true)
   }
 
   componentDidUpdate() {  
