@@ -1,16 +1,15 @@
 import React from "react";
-import { NextQueue } from "./next-queue/NextQueue";
 
-const NextQueueDisplay = ({ nextqueueData }) => {
+const NextQueueDisplay = ({ nextQueueData }) => {
 
-  if (false === nextqueueData instanceof NextQueue) {
+  if (nextQueueData === null) {
     return <div className="nextqueue-wrapper">Not yet rendered</div>
   }
   
   const nextQueueForDisplay = []
-  let curr = nextqueueData.peek().next
+  let curr = nextQueueData.peek().next
   
-  for (let i = 0; i < nextqueueData.length; i += 1) {
+  for (let i = 0; i < nextQueueData.length; i += 1) {
     nextQueueForDisplay.push(curr.tetrimino.name)
     curr = curr.next
   }

@@ -8,6 +8,8 @@ const offsetCoordsToLineBelow = (currentCoords) => {
   })
 }
 
+
+
 const gridCoordsAreClear = (targetCoords, currPlayField) => {
   return targetCoords.every(coord => {
     if (currPlayField[coord[0]]) { // This coordinate exists in the playable space

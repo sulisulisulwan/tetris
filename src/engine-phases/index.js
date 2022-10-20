@@ -7,6 +7,7 @@ import Iterate from './phases/Iterate.js'
 import Lock from './phases/Lock.js'
 import Pattern from './phases/Pattern.js'
 import Pregame from './phases/Pregame.js'
+import Off from './phases/Off.js'
 
 
 export {
@@ -18,5 +19,6 @@ export {
   Iterate,
   Lock,
   Pattern,
-  Pregame
+  Pregame,
+  Off
 }

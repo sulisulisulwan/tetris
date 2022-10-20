@@ -30,7 +30,7 @@ export class TetriminoMovementHandler {
     return this.rotationSystem.flip(tetrimino, 'flipClockwise', playField)
   }
   
-  flipCounterClockwise() {
+  flipCounterClockwise(playField, tetrimino) {
     return this.rotationSystem.flip(tetrimino, 'flipCounterClockwise', playField)
   }
 
@@ -49,7 +49,6 @@ export class TetriminoMovementHandler {
   }
 
   down(tetrimino, verticalIdx) {
-    
     const oldCoordsOffOrigin = tetrimino.orientations[tetrimino.currentOrientation].coordsOffOrigin
     const oldCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1]]
     const targetCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0] + 1, oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1]]
@@ -73,11 +72,10 @@ export class TetriminoMovementHandler {
 
     // Clear out the old coordinates to test new coordinates
     playField = this.clearTetriminoFromPlayField(oldCoordsOnPlayfield, playField)
-    
+
     if (!gridCoordsAreClear(targetCoordsOnPlayfield, playField)) {
       // Revert to old coordinates if failed.
       playField = this.addTetriminoToPlayField(oldCoordsOnPlayfield, playField, tetrimino.minoGraphic)
-
       return {
         newPlayField: playField, 
         newTetrimino: tetrimino,
@@ -86,14 +84,14 @@ export class TetriminoMovementHandler {
     }
 
     // Update tetrimino object 
-    tetrimino = this.updateTetrimino(tetrimino, direction)
-      
+    const newTetrimino = this.updateTetrimino(tetrimino, direction)
+    
     // Update the playfield 
     playField = this.addTetriminoToPlayField(targetCoordsOnPlayfield, playField, tetrimino.minoGraphic)
 
     return {
       newPlayField: playField, 
-      newTetrimino: tetrimino,
+      newTetrimino: newTetrimino,
       successfulMove: true
     }
 
@@ -117,13 +115,10 @@ export class TetriminoMovementHandler {
     } else if (direction === 'right') {
       tetrimino.currentOriginOnPlayfield = [oldVertical, oldHorizontal + 1]
     } else if (direction === 'down') {
-      tetrimino.currentOriginOnPlayfield = [oldVertical + 1, oldHorizontal]
-    } else if (direction === 'flipClockwise') {
-
-      // current orientation
-
-
+      const newOne = [oldVertical + 1, oldHorizontal]
+      tetrimino.currentOriginOnPlayfield = newOne
     }
+
     return tetrimino
   }
 
