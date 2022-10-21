@@ -21,11 +21,6 @@ export class TetriminoMovementHandler {
     return new rotatingSystemCtr()
   }
 
-  /**
-   * All movement controller methods return void
-   * They will alter the current tetrimino position, nothing more
-   */
-
   flipClockwise(playField, tetrimino) {
     return this.rotationSystem.flip(tetrimino, 'flipClockwise', playField)
   }
@@ -47,7 +42,7 @@ export class TetriminoMovementHandler {
     const targetCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1] - 1]
     return { oldCoordOnPlayfield, targetCoordOnPlayfield }
   }
-
+  
   down(tetrimino, verticalIdx) {
     const oldCoordsOffOrigin = tetrimino.orientations[tetrimino.currentOrientation].coordsOffOrigin
     const oldCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1]]
@@ -55,43 +50,74 @@ export class TetriminoMovementHandler {
     return { oldCoordOnPlayfield, targetCoordOnPlayfield }
   }
 
-  moveOne(direction, playField, tetrimino) {
+  gridCoordsAreClear(tetrimino, playField, direction) {
 
     const oldCoordsOnPlayfield = []
     const targetCoordsOnPlayfield = []
-
+  
     const { currentOrientation } = tetrimino
     const oldCoordsOffOrigin = tetrimino.orientations[currentOrientation].coordsOffOrigin
-
+  
     // Get old and new coordinates
     for (let i = 0; i < oldCoordsOffOrigin.length; i += 1) {
       const { oldCoordOnPlayfield, targetCoordOnPlayfield } = this[direction](tetrimino, i)
       oldCoordsOnPlayfield.push(oldCoordOnPlayfield)
       targetCoordsOnPlayfield.push(targetCoordOnPlayfield)
     }
-
+  
     // Clear out the old coordinates to test new coordinates
-    playField = this.clearTetriminoFromPlayField(oldCoordsOnPlayfield, playField)
+    const playFieldNoTetrimino = this.clearTetriminoFromPlayField(oldCoordsOnPlayfield, playField)
+  
+    const targetCoordsClear = targetCoordsOnPlayfield.every(coord => {
+      if (playFieldNoTetrimino[coord[0]]) { // This coordinate exists in the playable space
+        if (playFieldNoTetrimino[coord[0]][coord[1]] !== undefined) { // This square exists in the playable space
+          if (playFieldNoTetrimino[coord[0]][coord[1]] === '[_]') { // This square is not yet occupied
+            return true
+          }
+        }
+      } 
+      return false
+    }) 
+  
+    return {
+      oldCoordsOnPlayfield,
+      targetCoordsOnPlayfield,
+      playFieldNoTetrimino,
+      targetCoordsClear
+    }
+  }
+  
 
-    if (!gridCoordsAreClear(targetCoordsOnPlayfield, playField)) {
+  moveOne(direction, playField, tetrimino) {
+    const playFieldCopy = makeCopy(playField)
+
+    const {
+      oldCoordsOnPlayfield,
+      targetCoordsOnPlayfield,
+      playFieldNoTetrimino,
+      targetCoordsClear
+    } = this.gridCoordsAreClear(tetrimino, playFieldCopy, direction)
+
+    if (!targetCoordsClear) {
       // Revert to old coordinates if failed.
-      playField = this.addTetriminoToPlayField(oldCoordsOnPlayfield, playField, tetrimino.minoGraphic)
+      const newPlayField = this.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetrimino.minoGraphic)
       return {
-        newPlayField: playField, 
+        newPlayField,
         newTetrimino: tetrimino,
         successfulMove: false
       }
     }
 
     // Update tetrimino object 
-    const newTetrimino = this.updateTetrimino(tetrimino, direction)
+    const tetriminoCopy = makeCopy(tetrimino)
+    const newTetrimino = this.updateTetrimino(tetriminoCopy, direction)
     
     // Update the playfield 
-    playField = this.addTetriminoToPlayField(targetCoordsOnPlayfield, playField, tetrimino.minoGraphic)
+    const newPlayField = this.addTetriminoToPlayField(targetCoordsOnPlayfield, playFieldCopy, tetrimino.minoGraphic)
 
     return {
-      newPlayField: playField, 
-      newTetrimino: newTetrimino,
+      newPlayField, 
+      newTetrimino,
       successfulMove: true
     }
 

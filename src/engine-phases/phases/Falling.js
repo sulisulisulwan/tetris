@@ -25,6 +25,7 @@ export default class Falling extends BasePhase {
     //   return
     // } 
     this.setAcquiredState(stateData)
+
     // If phase just begun, kick off intervallic falling event
     if (stateData.fallIntervalId === null) {
       setState({ fallIntervalId: this.setContinuousFallEvent(stateData, setState) })
@@ -49,7 +50,6 @@ export default class Falling extends BasePhase {
     if (successfulMove)  {
       
       setState(prevState => {
-
         return {
           ...prevState,
           currentTetrimino: newTetrimino,

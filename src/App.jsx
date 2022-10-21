@@ -12,7 +12,6 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      engine: this.setEngine(),
       playField: this.getInitialPlayField(),
       nextQueueData: null,
       holdQueue: {
@@ -32,6 +31,13 @@ class App extends React.Component {
         hold: false
       },
       currentGamePhase: 'off',
+
+      possibleActivePatterns: {
+        lineClear: true
+      },
+
+      eliminateActions: [],
+      
       fallSpeed: 250,
       fallIntervalId: null,
       lockIntervalId: null,
@@ -46,7 +52,7 @@ class App extends React.Component {
   }
 
   setEngine() {
-    return new Engine()
+    return new Engine(this.state)
   }
 
   getInitialPlayField() {
@@ -62,6 +68,10 @@ class App extends React.Component {
   }
 
   handlePlayerKeyStroke(e) {
+    if (e.type === 'keyup') {
+      // console.log('in ABSOLUTE highest level handler on keyup', this.state)
+
+    }
     playerControlHandler.keystrokeHandler(e, this.setState.bind(this), this.state)
   }
 
@@ -71,6 +81,9 @@ class App extends React.Component {
   }
 
   componentDidUpdate() { 
+    if (this.state.playField.every(row => row.every(square => square === '[_]'))) {
+      // console.log('EMPTY')
+    }
     this.engine.handleGameStateUpdate(this.state, this.setState.bind(this))
   }
 

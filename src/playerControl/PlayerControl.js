@@ -51,21 +51,14 @@ export class PlayerControl {
     if (!action) {
       return
     }
-    const stateData = { 
-      playerAction: state.playerAction,
-      playField: makeCopy(state.playField),
-      tetrimino: makeCopy(state.currentTetrimino)
-    }
 
-    if (stateData.tetrimino.status === 'locked') {
+    if (state.currentTetrimino.status === 'locked') {
       return
     }
 
-
     eventData.action = action
 
-
-    this[action](setState, stateData, eventData)
+    this[action](setState, state, eventData)
 
   }
 
@@ -78,13 +71,14 @@ export class PlayerControl {
   }
 
   leftAndRight(setState, stateData, eventData) {
-    
-    const { playerAction, playField, tetrimino } = stateData
+    const { playerAction, playField, currentTetrimino } = stateData
     const { autoRepeat } = playerAction
     let { right, left, override } = autoRepeat
     const { strokeType, action } = eventData
 
-
+    if (strokeType === 'keyup') {
+      // console.log('keyup Time!!  Here is playfield state', stateData)
+    }
 
     // Determine what action will be taken.  Override always determines this.
     if (strokeType === 'keydown') {
@@ -100,59 +94,45 @@ export class PlayerControl {
       }
     }
 
-    
+    const stateCopy = makeCopy(stateData)
     // Validate and apply the override action
     if (override === 'left') {
 
+      const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('left', playField, currentTetrimino)
       
-      let { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('left', playField, tetrimino)
-      
-      setState(prevState => {
-        return ({
-          ...prevState,
-          playerAction: {
-            ...prevState.playerAction,
-            autoRepeat: {
-              left,
-              right,
-              override
-            }
-          },
-          playField: newPlayField,
-          currentTetrimino: newTetrimino
-      })})
+      stateCopy.playField = newPlayField
+      stateCopy.currentTetrimino = newTetrimino
+      stateCopy.playerAction.autoRepeat.override = override
+      stateCopy.playerAction.autoRepeat.left = left ? left : stateCopy.playerAction.autoRepeat.left
+      stateCopy.playerAction.autoRepeat.right = right ? right : stateCopy.playerAction.autoRepeat.right
+
+      setState(stateCopy)
 
     } else if (override === 'right') {
-      let { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('right', playField, tetrimino)
+      const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('right', playField, currentTetrimino)
+      // console.log('playfield after first right', newPlayField)
+      stateCopy.playField = newPlayField
+      stateCopy.currentTetrimino = newTetrimino
+      stateCopy.playerAction.autoRepeat.override = override
+      stateCopy.playerAction.autoRepeat.left = left ? left : stateCopy.playerAction.autoRepeat.left
+      stateCopy.playerAction.autoRepeat.right = right ? right : stateCopy.playerAction.autoRepeat.right
 
-      setState(prevState => {
-        return ({
-          ...prevState,
-          playerAction: {
-            ...prevState.playerAction,
-            autoRepeat: {
-              left,
-              right,
-              override
-            }
-          },
-          playField: newPlayField,
-          currentTetrimino: newTetrimino
-      })})
+      setState(stateCopy)
+
     } else if (override === null) {
+      // console.log('im the cause!')
+      stateCopy.playerAction.autoRepeat.override = override
+      stateCopy.playerAction.autoRepeat.left = left ? left : false
+      stateCopy.playerAction.autoRepeat.right = right ? right : false
+
+      console.log(stateCopy)
       setState(prevState => {
-        return ({
-          ...prevState,
-          playerAction: {
-            ...prevState.playerAction,
-            autoRepeat: {
-              left,
-              right,
-              override
-            }
-          },
-      })})
+        // console.log('prevState for null case in setState', prevState )
+        // console.log('stateData for null case in setState', stateData )
+        return stateCopy
+      })
     }
+
     return
   }
 
@@ -169,27 +149,20 @@ export class PlayerControl {
     // Softdrop action should continue even after termino is 
     //locked and new termino generates while key is kept pressed
     const { strokeType } = eventData
-    let { softdrop } = stateData.playerAction
+    const { softdrop } = stateData.playerAction
 
     if (softdrop) {
       if (strokeType === 'keyUp')  {
-        setState(prevState => ({
-          playerAction: { 
-            ...prevState.playerAction,
-            softdrop: false 
-          }
-        }))
-        return
+        const stateCopy = makeCopy(stateData)
+        stateCopy.playerAction.softdrop = false
+        setState(stateCopy)
       }
       return
     }
-
-    setState(prevState => ({
-      playerAction: { 
-        ...prevState.playerAction,
-        softdrop: true
-      }
-    }))
+    
+    const stateCopy = makeCopy(stateData)
+    stateCopy.playerAction.softdrop = false
+    setState(stateCopy)
   }
   
   harddrop(setState, stateData, eventData) {
@@ -197,81 +170,70 @@ export class PlayerControl {
     const { strokeType } = eventData
     const { playerAction } = stateData
 
-    if (strokeType === 'keydown' && stateData.playerAction[playerAction]) {
+    if (strokeType === 'keydown' && stateData.playerAction.harddrop) {
       return
     }
 
-    setState(prevState => ({
-      playerAction: { 
-        ...prevState.playerAction,
-        [playerAction]: strokeType === 'keyup' ? false : true
-      }
-    }))
+    const stateCopy = makeCopy(stateData)
+    stateCopy.playerAction.harddrop = strokeType === 'keyup' ? false : true
+
+    setState(stateCopy)
   }
 
   flipClockwise(setState, stateData, eventData) {
 
-    const { playerAction, playField, tetrimino } = stateData
+    const { playerAction, playField, currentTetrimino } = stateData
     const { strokeType } = eventData
 
     if (strokeType === 'keydown' && stateData.playerAction[playerAction]) {
       return
     }
 
+    const stateCopy = makeCopy(stateData)
+
     if (strokeType === 'keyup') {
-      setState(prevState => ({
-        playerAction: { 
-          ...prevState.playerAction,
-          [playerAction]: false
-        },
-      }))
+      stateCopy.playerAction.flipClockwise = false
+      setState(stateCopy)
       return
     }
-
-    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.flipClockwise(playField, tetrimino)
-
-    setState(prevState => ({
-      playField: newPlayField,
-      playerAction: { 
-        ...prevState.playerAction,
-        [playerAction]: true
-      },
-      currentTetrimino: newTetrimino
-    }))
+    
+    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.flipClockwise(playField, currentTetrimino)
+    
+    stateCopy.playerAction.flipClockwise = true
+    stateCopy.currentTetrimino = newTetrimino
+    stateCopy.playField = newPlayField
+    setState(stateCopy)
 
   }
 
   flipCounterClockwise(setState, stateData, eventData) {
 
-    const { playerAction, playField, tetrimino } = stateData
+    const { playerAction, playField, currentTetrimino } = stateData
     const { strokeType } = eventData
 
     if (strokeType === 'keydown' && stateData.playerAction[playerAction]) {
       return
     }
 
+    const stateCopy = makeCopy(stateData)
+
     if (strokeType === 'keyup') {
-      setState(prevState => ({
-        playerAction: { 
-          ...prevState.playerAction,
-          [playerAction]: false
-        },
-      }))
+      stateCopy.playerAction.flipCounterClockwise = false
+      setState(stateCopy)
       return
     }
 
-    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.flipCounterClockwise(playField, tetrimino)
+    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.flipCounterClockwise(playField, currentTetrimino)
 
-    setState(prevState => ({
-      playField: newPlayField,
-      playerAction: { 
-        ...prevState.playerAction,
-        [playerAction]: true
-      },
-      currentTetrimino: newTetrimino
-    }))
+    stateCopy.playerAction.flipCounterClockwise = true
+    stateCopy.playField = newPlayField
+    stateCopy.currentTetrimino = newTetrimino
+    setState(stateCopy)
+
   }
 
+
+  // TODO: 
   hold(setState, stateData, eventData) {
 
     const { strokeType } = eventData

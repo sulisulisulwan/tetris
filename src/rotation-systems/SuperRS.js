@@ -1,4 +1,4 @@
-import { gridCoordsAreClear, makeCopy } from '../utils/utils.js'
+import { makeCopy } from '../utils/utils.js'
 
 export class SuperRotationSystem {
 
@@ -20,7 +20,6 @@ export class SuperRotationSystem {
     const { currentOrientation, currentOriginOnPlayfield } = tetrimino
     const targetOrientation = this.getTargetOrientation(currentOrientation, playerInput)
     
-
     const oldCoordsOffOriginAndRotationPoints = tetrimino.orientations[currentOrientation]
     const targetCoordsOffOriginAndRotationPoints = tetrimino.orientations[targetOrientation]
 
@@ -34,6 +33,7 @@ export class SuperRotationSystem {
       return [tetrimino.currentOriginOnPlayfield[0] + oldCoordsOffOrigin[0], tetrimino.currentOriginOnPlayfield[1] + oldCoordsOffOrigin[1]]
     })
 
+    const playFieldCopy = makeCopy(playField)
 
     while (flipPoint <= 5) {
       // Get old and new coordinates
@@ -41,44 +41,39 @@ export class SuperRotationSystem {
       const endPoint = targetCoordsOffOriginAndRotationPoints.rotationPoints[flipPoint]
 
       const offset = this.calculateOffsetTowardsStartPoint(startPoint, endPoint)
-
-      // Take 
       const targetCoordsOnPlayfield = this.getTargetPlayfieldCoords(targetCoordsOffOrigin, currentOriginOnPlayfield, offset)
        
-      
       // Clear out old coordinates to test new coordinates
       oldCoordsOnPlayfield.forEach(coord => {
-          playField[coord[0]][coord[1]] = '[_]'
+        playFieldCopy[coord[0]][coord[1]] = '[_]'
       })
 
-
-
-      if (!gridCoordsAreClear(targetCoordsOnPlayfield, playField)) {
+      if (!this.gridCoordsAreClear(targetCoordsOnPlayfield, playFieldCopy)) {
         // Revert to old coordinates if failed
         oldCoordsOnPlayfield.forEach(coord => {
-          playField[coord[0]][coord[1]] = tetrimino.minoGraphic
+          playFieldCopy[coord[0]][coord[1]] = tetrimino.minoGraphic
         })
         flipPoint += 1
         continue
       }
       
       // Update tetrimino object
-      tetrimino = this.updateTetrimino(tetrimino, offset, targetOrientation) 
+      const newTetrimino = this.updateTetrimino(tetrimino, offset, targetOrientation) 
 
       // Update playfield
       targetCoordsOnPlayfield.forEach(coord => {
-        playField[coord[0]][coord[1]] = tetrimino.minoGraphic
+        playFieldCopy[coord[0]][coord[1]] = tetrimino.minoGraphic
       })
 
       return {
-        newPlayField: playField,
-        newTetrimino: tetrimino,
+        newPlayField: playFieldCopy,
+        newTetrimino: newTetrimino,
         successfulMove: true
       }
     }
 
     return {
-      newPlayField: playField, 
+      newPlayField: playFieldCopy, 
       newTetrimino: tetrimino,
       successfulMove: false
     }
@@ -86,9 +81,10 @@ export class SuperRotationSystem {
 
   updateTetrimino(tetrimino, offset, targetOrientation) {
     const [oldVertical, oldHorizontal] = tetrimino.currentOriginOnPlayfield
-    tetrimino.currentOriginOnPlayfield = [oldVertical + offset[0], oldHorizontal + offset[1]]
-    tetrimino.currentOrientation = targetOrientation
-    return tetrimino
+    const newTetrimino = makeCopy(tetrimino)
+    newTetrimino.currentOriginOnPlayfield = [oldVertical + offset[0], oldHorizontal + offset[1]]
+    newTetrimino.currentOrientation = targetOrientation
+    return newTetrimino
   }
 
   getTargetOrientation(currentOrientation, flipDirection) {
@@ -106,6 +102,20 @@ export class SuperRotationSystem {
     const [ startX, startY ] = startPoint
     const [ endX, endY ] = endPoint
     return [ startX - endX, startY - endY]
+  }
+
+  gridCoordsAreClear(targetCoordsOnPlayfield, playFieldNoTetrimino) {
+    
+    return targetCoordsOnPlayfield.every(coord => {
+      if (playFieldNoTetrimino[coord[0]]) { // This coordinate exists in the playable space
+        if (playFieldNoTetrimino[coord[0]][coord[1]] !== undefined) { // This square exists in the playable space
+          if (playFieldNoTetrimino[coord[0]][coord[1]] === '[_]') { // This square is not yet occupied
+            return true
+          }
+        }
+      } 
+      return false
+    }) 
   }
 
 }
