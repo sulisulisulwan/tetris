@@ -142,18 +142,26 @@ export class PlayerControl {
     const { playField, currentTetrimino } = stateData
 
     console.log(softdrop)
-    if (softdrop) {
-      if (strokeType === 'keyUp')  {
-        const stateCopy = makeCopy(stateData)
-        stateCopy.playerAction.softdrop = false
-        setState(stateCopy)
-      }
+    // if (softdrop && strokeType === 'keyup')  {
+    if (strokeType === 'keyup')  {
+      const stateCopy = makeCopy(stateData)
+      stateCopy.playerAction.softdrop = false
+      setState(stateCopy)
+      return
+    }
+
+
+    if (softdrop && strokeType === 'keydown')  {
+      const stateCopy = makeCopy(stateData)
+      const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
+      stateCopy.playField = newPlayField
+      stateCopy.currentTetrimino = newTetrimino
+      setState(stateCopy)
       return
     }
     
-    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
     const stateCopy = makeCopy(stateData)
-
+    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
     stateCopy.playField = newPlayField
     stateCopy.currentTetrimino = newTetrimino
     stateCopy.playerAction.softdrop = true
@@ -175,8 +183,6 @@ export class PlayerControl {
       setState(stateCopy)
       return
     }
-
-    
 
     let { playField, currentTetrimino } = stateCopy
     let keepDropping = true
