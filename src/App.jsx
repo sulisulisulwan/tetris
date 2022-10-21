@@ -90,7 +90,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Tetris</div>
+        <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Suli's Tetris</div>
         <div className="playfield-and-nextqueue">
           <PlayFieldGrid playFieldData={this.state.playField.slice(20)}/>
           <NextQueueDisplay nextQueueData={this.state.nextQueueData}/>

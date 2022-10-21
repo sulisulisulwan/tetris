@@ -14,6 +14,7 @@ export default class Generation extends BasePhase {
     console.log('>>> GENERATION PHASE')
     // Dequeue a new tetrimino and instantiate it.
     const tetriminoContext = this.nextQueue.dequeue()
+    const nextQueueData = this.nextQueue.queueToArray(5)
     const newTetrimino = TetriminoFactory.getTetrimino(tetriminoContext)
     
     
@@ -37,6 +38,7 @@ export default class Generation extends BasePhase {
 
     // Update state
     setState(prevState => ({ 
+      nextQueueData,
       playField,
       currentTetrimino: newTetrimino,
       currentGamePhase: 'falling',

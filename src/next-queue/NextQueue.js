@@ -50,15 +50,31 @@ class QueueList {
 
   }
 
-  logQueue() {
-    
+  queueToArray(length) {
+
+    let counter = Infinity
+    if (length) {
+      counter = length
+    }
+
     const queue = []
     let curr = this.head.next !== null ? this.head.next : this.head
 
     while (curr.next !== null) {
+      if (!counter) {
+        break
+      }
       queue.push(curr.tetrimino)
       curr = curr.next
+      counter -= 1
     }
+
+    return queue
+  }
+
+  logQueue(length) {
+    
+    const queue = this.queueToArray(length)
 
     console.log(
       'QUEUE: ', queue,
@@ -91,6 +107,10 @@ export class NextQueue {
     }
     return queue
 
+  }
+
+  queueToArray(length) {
+    return this.queue.queueToArray(length)
   }
 
   dequeue() {

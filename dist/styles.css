@@ -29,18 +29,34 @@
 
 .nextqueue-wrapper {
   margin-left: 20px;
+  width: 120px;
+  background-color: lightgray;
+  text-align: center;
 }
 
 .text-next {
   color: red;
   font-family: monospace;
   font-size: 30px;
-  margin-bottom: 20px
+  margin-bottom: 20px;
+  align-content: center;
 }
 
-.next-tetriminos {
-  margin-bottom: 10px;
+.next-tetrimino-tile {
+  margin-bottom: 12px;
+
 }
+.next-tetrimino-tile-row {
+  /* margin-bottom: 10px; */
+  display: flex;
+  flex-direction: row;
+  font-family: monospace;
+  justify-content: center;
+}
+/* .next-tetrimino-tile-square {
+  background-color: white;
+  font-family: monospace;
+} */
 
 
 .start-quit-button-wrapper{
