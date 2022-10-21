@@ -9,7 +9,7 @@ export default class Iterate extends BasePhase {
 
   execute(stateData, setState) {
 
-    console.log('>>>>>>>ITERATE PHASE')
+    // console.log('>>>>>>>ITERATE PHASE')
     const stateCopy = makeCopy(stateData)
     this.setAcquiredState(stateCopy)
 

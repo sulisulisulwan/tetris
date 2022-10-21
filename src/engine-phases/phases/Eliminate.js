@@ -19,7 +19,7 @@ export default class Eliminate extends BasePhase {
     // the highest level reached, his total score, and other statistics that can be 
     // tracked in this phase.
   execute(stateData, setState) {
-    console.log('>>>>>>>ELIMINATE PHASE')
+    // console.log('>>>>>>>ELIMINATE PHASE')
 
     const stateCopy = makeCopy(stateData)
     this.setAcquiredState(stateCopy)

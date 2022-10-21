@@ -11,7 +11,7 @@ export default class Lock extends BasePhase {
   }
 
   execute(stateData, setState) {
-    console.log('>>>> LOCK PHASE')
+    // console.log('>>>> LOCK PHASE')
     this.setAcquiredState(stateData)
 
     if (this.acquiredState.playerAction.autoRepeat.right) {

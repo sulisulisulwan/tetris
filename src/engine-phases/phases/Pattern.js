@@ -36,7 +36,7 @@ export default class Pattern extends BasePhase {
 
   execute(stateData, setState) {
 
-    console.log('>>>> PATTERN PHASE')
+    // console.log('>>>> PATTERN PHASE')
     const stateCopy = makeCopy(stateData)
     this.setAcquiredState(stateCopy)
     

@@ -8,7 +8,7 @@ export default class Animate extends BasePhase {
   }
 
   execute(stateData, setState) {
-    console.log('>>>>>>>ANIMATE PHASE')
+    // console.log('>>>>>>>ANIMATE PHASE')
     const stateCopy = makeCopy(stateData)
     this.setAcquiredState(stateCopy)
 

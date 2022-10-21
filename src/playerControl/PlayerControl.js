@@ -139,7 +139,9 @@ export class PlayerControl {
     //locked and new termino generates while key is kept pressed
     const { strokeType } = eventData
     const { softdrop } = stateData.playerAction
+    const { playField, currentTetrimino } = stateData
 
+    console.log(softdrop)
     if (softdrop) {
       if (strokeType === 'keyUp')  {
         const stateCopy = makeCopy(stateData)
@@ -149,23 +151,55 @@ export class PlayerControl {
       return
     }
     
+    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
     const stateCopy = makeCopy(stateData)
-    stateCopy.playerAction.softdrop = false
+
+    stateCopy.playField = newPlayField
+    stateCopy.currentTetrimino = newTetrimino
+    stateCopy.playerAction.softdrop = true
     setState(stateCopy)
   }
   
   harddrop(setState, stateData, eventData) {
 
     const { strokeType } = eventData
-    const { playerAction } = stateData
 
+    console.log(strokeType)
     if (strokeType === 'keydown' && stateData.playerAction.harddrop) {
       return
     }
-
     const stateCopy = makeCopy(stateData)
-    stateCopy.playerAction.harddrop = strokeType === 'keyup' ? false : true
 
+    if (strokeType === 'keyup') {
+      stateCopy.playerAction.harddrop = false
+      setState(stateCopy)
+      return
+    }
+
+    
+
+    let { playField, currentTetrimino } = stateCopy
+    let keepDropping = true
+
+    while (keepDropping) {
+      const {       
+        newPlayField,
+        newTetrimino,
+        successfulMove
+      } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
+
+      playField = newPlayField
+      currentTetrimino = newTetrimino
+
+      if (!successfulMove) {
+        keepDropping = false
+      }
+    }
+
+    stateCopy.playerAction.harddrop = true
+    stateCopy.currentGamePhase = 'pattern'
+    stateCopy.playField = playField
+    stateCopy.currentTetrimino = currentTetrimino
     setState(stateCopy)
   }
 
