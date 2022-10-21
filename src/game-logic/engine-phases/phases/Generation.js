@@ -1,17 +1,25 @@
-
+import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
 import { NextQueue } from '../../next-queue/NextQueue.js'
 import { TetriminoFactory } from '../../components/tetriminos/TetriminoFactory.js'
-import { makeCopy } from "../../utils/utils.js";
+
 export default class Generation extends BasePhase {
 
   constructor() {
     super()
+    this.localState = {}
     this.nextQueue = new NextQueue()
   }
 
-  execute(stateData, setState) {
+  syncToLocalState(appState) {
+    this.localState = appState
+  }
+  
+  execute(appState, setAppState) {
     console.log('>>> GENERATION PHASE')
+    const appStateCopy = makeCopy(appState)
+    this.syncToLocalState(appStateCopy)
+
     // Dequeue a new tetrimino and instantiate it.
     const tetriminoContext = this.nextQueue.dequeue()
     const nextQueueData = this.nextQueue.queueToArray(5)
@@ -37,7 +45,7 @@ export default class Generation extends BasePhase {
     }
 
     // Update state
-    setState(prevState => ({ 
+    setAppState(prevState => ({ 
       nextQueueData,
       playField,
       currentTetrimino: newTetrimino,
@@ -48,4 +56,5 @@ export default class Generation extends BasePhase {
       }
     }))
   }
+
 }

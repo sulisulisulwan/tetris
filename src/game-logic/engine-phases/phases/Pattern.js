@@ -1,11 +1,13 @@
 import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
+
+
+
 export default class Pattern extends BasePhase {
 
   constructor(initialGameState) {
     super()
-
-    this.acquiredState = {}
+    this.localState = {}
     this.patternMetadata = {
       lineClear: {
         priority: 1
@@ -13,12 +15,23 @@ export default class Pattern extends BasePhase {
     }
     this.loadedPatterns = this.loadPatterns(initialGameState.possibleActivePatterns)
   }
-    // In this phase, the engine looks for patterns made from Locked down Blocks in the Matrix. 
-    // once a pattern has been matched, it can trigger any number of tetris variant-related effects.
-    // the classic pattern is the Line Clear pattern. this pattern is matched when one or more rows 
-    // of 10 horizontally aligned Matrix cells are occupied by Blocks. the matching Blocks are then 
-    // marked for removal on a hit list. Blocks on the hit list are cleared from the Matrix at a later 
-    // time in the eliminate Phase.
+
+  syncToLocalState(appState) {
+    this.localState = appState
+  }
+
+  execute(appState, setAppState) {
+    // console.log('>>>> PATTERN PHASE')
+    const appStateCopy = makeCopy(appState)
+    this.syncToLocalState(appStateCopy)
+    
+    const eliminationActions = this.runPatternScanners() 
+
+    setAppState({
+      currentGamePhase: 'iterate',
+      eliminationActions
+    })
+  }
 
   loadPatterns(possibleActivePatterns) {
 
@@ -34,20 +47,6 @@ export default class Pattern extends BasePhase {
     return patternsToLoad
   }
 
-  execute(stateData, setState) {
-
-    // console.log('>>>> PATTERN PHASE')
-    const stateCopy = makeCopy(stateData)
-    this.setAcquiredState(stateCopy)
-    
-    const eliminationActions = this.runPatternScanners() 
-
-    setState({
-      currentGamePhase: 'iterate',
-      eliminationActions
-    })
-  }
-
   runPatternScanners() {
     const patterns = this.loadedPatterns
     const actions = []
@@ -59,10 +58,6 @@ export default class Pattern extends BasePhase {
       }
     })
     return actions
-  }
-  
-  setAcquiredState(state) {
-    this.acquiredState = state
   }
 
   // In this phase, we only mark the lines to be cleared.  We can map the return action object to functions in future phases
@@ -84,5 +79,13 @@ export default class Pattern extends BasePhase {
 
     return rowsToClear.length ? actionItem : null
   }
-
 }
+
+/**
+ * In this phase, the engine looks for patterns made from Locked down Blocks in the Matrix. 
+ * once a pattern has been matched, it can trigger any number of tetris variant-related effects.
+ * the classic pattern is the Line Clear pattern. this pattern is matched when one or more rows 
+ * of 10 horizontally aligned Matrix cells are occupied by Blocks. the matching Blocks are then 
+ * marked for removal on a hit list. Blocks on the hit list are cleared from the Matrix at a later 
+ * time in the eliminate Phase.
+ */

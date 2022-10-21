@@ -1,28 +1,31 @@
+import { makeCopy } from "../../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
-import { makeCopy, gridCoordsAreClear, offsetCoordsToLineBelow } from "../../utils/utils.js";
 import { TetriminoMovementHandler } from "../../components/tetriminos/TetriminoMovementHandler.js";
+
 
 export default class Lock extends BasePhase {
 
   constructor() {
     super()
+    this.localState = {}
     this.tetriminoMovementHandler = new TetriminoMovementHandler()
-    this.acquiredState = null
   }
 
-  execute(stateData, setState) {
+  syncToLocalState(appState) {
+    this.localState = appState
+  }
+
+  execute(appState, setAppState) {
     // console.log('>>>> LOCK PHASE')
-    this.setAcquiredState(stateData)
+    const appStateCopy = makeCopy(appState)
+    this.syncToLocalState(appStateCopy)
 
-    if (this.acquiredState.playerAction.autoRepeat.right) {
-
-    }
     // If Lock Phase has just been initiated, set lock timer
     if (!stateData.lockIntervalId) {
-      setState(prevState => {
+      setAppState(prevState => {
         return {
           ...prevState,
-          lockIntervalId: setTimeout(this.lockDownTimeout.bind(this), 500, setState)
+          lockIntervalId: setTimeout(this.lockDownTimeout.bind(this), 500, setAppState)
         }
       })
       return
@@ -34,18 +37,24 @@ export default class Lock extends BasePhase {
     const { targetCoordsClear } = this.tetriminoMovementHandler.gridCoordsAreClear(tetriminoCopy, playFieldCopy, 'down')
 
     if (targetCoordsClear) {
-      // if (targetCoords lowest point is lower or at the same level as oldCoords {
+      /**
+       * if (targetCoords lowest point is lower or at the same level as oldCoords {
+       * TODO: this ^^ will requires 
+       *    - a new field for tetrimino for each orientation that keeps track of lowest point of tetrimino in that orientation
+       *    - a new field for state which keeps track of the lowest point before rotation
+       */
         clearTimeout(stateData.lockIntervalId)
-        setState({
+        setAppState({
           currentGamePhase: 'falling',
-          lockIntervalId: null
+          lockIntervalId: null,
+          // potential new field for tracking lowest point before rotation
         })
-      // } 
+    
     }
     
   }
 
-  lockDownTimeout(setState) {
+  lockDownTimeout(setAppState) {
 
     clearTimeout(this.acquiredState.lockIntervalId)
 
@@ -60,7 +69,7 @@ export default class Lock extends BasePhase {
 
     if (targetCoordsClear) {
       const newPlayField = this.tetriminoMovementHandler.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetriminoCopy.minoGraphic)
-      setState({
+      setAppState({
         currentGamePhase: 'falling',
         lockIntervalId: null,
         currentTetrimino: tetriminoCopy,
@@ -72,7 +81,7 @@ export default class Lock extends BasePhase {
     const newPlayField = this.tetriminoMovementHandler.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetriminoCopy.minoGraphic)
     tetriminoCopy.status = 'locked'
 
-    setState({
+    setAppState({
       currentGamePhase: 'pattern',
       lockIntervalId: null,
       currentTetrimino: tetriminoCopy,
@@ -80,12 +89,13 @@ export default class Lock extends BasePhase {
     })
   }
 
-  setAcquiredState(stateData) {
-    this.acquiredState = stateData
-  }
 }
 
-      //TODO:note: using the Super Rotation System, rotating a tetrimino often causes the y-coordinate of the tetrimino to increase, 
-      //i.e., it “lifts up” off the Surface it landed on. the Lock down timer does not reset in this case, but it does stop 
-      //counting down until the tetrimino lands again on a Surface that has the same (or higher) y-coordinate as it did before 
-      //it was rotated. only if it lands on a Surface with a lower y-coordinate will the timer reset.
+/**
+ * TODO:note: using the Super Rotation System, rotating a tetrimino often causes the y-coordinate of the tetrimino to increase, 
+ * i.e., it “lifts up” off the Surface it landed on. the Lock down timer does not reset in this case, but it does stop 
+ * counting down until the tetrimino lands again on a Surface that has the same (or higher) y-coordinate as it did before 
+ * it was rotated. only if it lands on a Surface with a lower y-coordinate will the timer reset.
+ */
+
+      

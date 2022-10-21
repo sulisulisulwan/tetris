@@ -1,6 +1,6 @@
 import { TetriminoMovementHandler } from "../components/tetriminos/TetriminoMovementHandler.js"
 import { TetriminoFactory } from "../components/tetriminos/TetriminoFactory.js"
-import { makeCopy } from '../utils/utils.js'
+import { makeCopy } from '../../utils/utils.js'
 export class PlayerControl {
 
   constructor() {
