@@ -22,7 +22,7 @@ export class Engine {
     this.lock = new Lock()
     this.pattern = new Pattern(initialGameState)
     this.animate = new Animate()
-    this.eliminate = new Eliminate()
+    this.eliminate = new Eliminate(initialGameState)
     this.completion = new Completion()
     this.iterate = new Iterate()
     

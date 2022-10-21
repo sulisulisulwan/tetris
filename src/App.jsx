@@ -36,8 +36,8 @@ class App extends React.Component {
         lineClear: true
       },
 
-      eliminateActions: [],
-      
+      eliminationActions: [],
+
       fallSpeed: 250,
       fallIntervalId: null,
       lockIntervalId: null,

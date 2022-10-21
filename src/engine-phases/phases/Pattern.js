@@ -40,11 +40,11 @@ export default class Pattern extends BasePhase {
     const stateCopy = makeCopy(stateData)
     this.setAcquiredState(stateCopy)
     
-    const eliminateActions = this.runPatternScanners() 
+    const eliminationActions = this.runPatternScanners() 
 
     setState({
       currentGamePhase: 'iterate',
-      eliminateActions
+      eliminationActions
     })
   }
 
@@ -77,7 +77,12 @@ export default class Pattern extends BasePhase {
       }
     })
 
-    return rowsToClear.length ? { lineClear: rowsToClear } : null
+    const actionItem = { 
+      eliminatorName: 'lineClear', 
+      actionData: rowsToClear 
+    } 
+
+    return rowsToClear.length ? actionItem : null
   }
 
 }

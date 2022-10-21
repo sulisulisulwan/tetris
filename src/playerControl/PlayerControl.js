@@ -76,10 +76,6 @@ export class PlayerControl {
     let { right, left, override } = autoRepeat
     const { strokeType, action } = eventData
 
-    if (strokeType === 'keyup') {
-      // console.log('keyup Time!!  Here is playfield state', stateData)
-    }
-
     // Determine what action will be taken.  Override always determines this.
     if (strokeType === 'keydown') {
       action === 'left' ? left = true : right = true
@@ -110,7 +106,6 @@ export class PlayerControl {
 
     } else if (override === 'right') {
       const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('right', playField, currentTetrimino)
-      // console.log('playfield after first right', newPlayField)
       stateCopy.playField = newPlayField
       stateCopy.currentTetrimino = newTetrimino
       stateCopy.playerAction.autoRepeat.override = override
@@ -120,17 +115,11 @@ export class PlayerControl {
       setState(stateCopy)
 
     } else if (override === null) {
-      // console.log('im the cause!')
       stateCopy.playerAction.autoRepeat.override = override
       stateCopy.playerAction.autoRepeat.left = left ? left : false
       stateCopy.playerAction.autoRepeat.right = right ? right : false
 
-      console.log(stateCopy)
-      setState(prevState => {
-        // console.log('prevState for null case in setState', prevState )
-        // console.log('stateData for null case in setState', stateData )
-        return stateCopy
-      })
+      setState(stateCopy)
     }
 
     return
