@@ -1,5 +1,8 @@
-Need to refactor 
+TODO: At some point need to refactor the relationship between Pattern, Elimination, Completition, Scoring, and App.state
+Decoupling necessary to allow changing of game modes
 
-TetriminoMovementHandler and LockPhase to streamline code.
 
-Refactor moveOne subroutines and maybe put utils in tetrimino handler
+Next up:
+
+T-spin recognition per fall round
+Level change implementation upon line clearing

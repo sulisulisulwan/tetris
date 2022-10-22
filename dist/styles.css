@@ -1,5 +1,6 @@
 .game-app-wrapper {
   display: flex;
+  flex-direction: column;
 }
 
 .game-title{
@@ -22,7 +23,7 @@
   flex-direction: row;
 }
 
-.playfield-and-nextqueue {
+.playfield-and-sidebar-right {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -32,22 +33,40 @@
 }
 
 .playfield-container {
-  font-family: monospace;
+  /* font-family: monospace;
   padding: 10px;
-  border: gray 2px solid;
+  border: gray 3px solid;
+  background-color: lightgray; */
+}
+
+.sidebar-right {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  /* background-color: blue; */
 }
 
 .nextqueue-wrapper {
-  padding: 10px;
-  border: gray 2px solid;
-  margin-left: 20px;
+  /* padding: 10px;
+  border: #808080 2px solid;
+  height: 100%;
   width: 120px;
   background-color: lightgray;
+  text-align: center; */
+}
+
+.score-display {
+  /* background-color: lightgray;
+  border: gray 2px solid;
+  margin-bottom: 20px;
+  height: 20%;
   text-align: center;
+  font-family: monospace;
+  font-size: 15px; */
 }
 
 .text-next {
-  color: red;
+  color: black;
   font-family: monospace;
   font-size: 30px;
   margin-bottom: 20px;
@@ -75,4 +94,14 @@
   display: flex;
   justify-content: center;
   margin-left: 40px;
+}
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+}
+
+.instruction-block {
+  display: flex;
+  justify-content: center;
 }
