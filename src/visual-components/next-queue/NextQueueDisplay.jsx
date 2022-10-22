@@ -49,7 +49,7 @@ class NextQueueDisplay extends React.Component {
     const { nextQueueData } = this.props
 
     if (nextQueueData === null) {
-      return <div className="nextqueue-wrapper">Not yet rendered</div>
+      return <div className="nextqueue-wrapper"><div className="text-next">Next</div></div>
     }  
 
     return(

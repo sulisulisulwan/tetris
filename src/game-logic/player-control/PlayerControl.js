@@ -1,12 +1,14 @@
 import { TetriminoMovementHandler } from "../tetriminos/TetriminoMovementHandler.js"
 import { TetriminoFactory } from "../tetriminos/TetriminoFactory.js"
 import { makeCopy } from "../utils/utils.js"
+import { Scoring } from "../levels-and-scoring/Scoring.js"
 
 export class PlayerControl {
 
-  constructor() {
+  constructor(gameMode) {
     this.tetriminoMovementHandler = new TetriminoMovementHandler()
     this.tetriminoFactory = new TetriminoFactory()
+    this.scoringSystem = new Scoring(gameMode)
     this.keystrokeMap = new Map([
       ['ArrowLeft','left'],
       ['num4','left'],
@@ -178,7 +180,18 @@ export class PlayerControl {
 
     if (softdrop && strokeType === 'keydown')  {
       const stateCopy = makeCopy(stateData)
-      const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
+      const { newPlayField, newTetrimino, successfulMove } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
+
+      let totalScore
+
+      if (successfulMove) {
+        const scoreData = { currentScore: stateCopy.totalScore }
+        const scoreItem = ['softdrop', scoreData]
+
+        totalScore = this.scoringSystem.updateScore(stateCopy, scoreItem)
+      }
+      
+      stateCopy.totalScore = totalScore || stateCopy.totalScore
       stateCopy.playField = newPlayField
       stateCopy.currentTetrimino = newTetrimino
       setState(stateCopy)
@@ -210,6 +223,7 @@ export class PlayerControl {
 
     let { playField, currentTetrimino } = stateCopy
     let keepDropping = true
+    let linesDropped = 0
 
     while (keepDropping) {
       const {       
@@ -224,8 +238,18 @@ export class PlayerControl {
       if (!successfulMove) {
         keepDropping = false
       }
+
+      linesDropped += 1
     }
 
+    const scoringData = {
+      currentScore: stateData.totalScore,
+      linesDropped
+    }
+
+    const scoringItem = ['harddrop', scoringData]
+    stateCopy.totalScore = this.scoringSystem.updateScore(stateData, scoringItem)
+    
     stateCopy.playerAction.harddrop = true
     stateCopy.currentGamePhase = 'pattern'
     stateCopy.playField = playField

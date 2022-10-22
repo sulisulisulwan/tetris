@@ -43,7 +43,7 @@ export default class Lock extends BasePhase {
        *    - a new field for tetrimino for each orientation that keeps track of lowest point of tetrimino in that orientation
        *    - a new field for state which keeps track of the lowest point before rotation
        */
-        clearTimeout(stateData.lockIntervalId)
+        clearTimeout(appState.lockIntervalId)
         setAppState({
           currentGamePhase: 'falling',
           lockIntervalId: null,

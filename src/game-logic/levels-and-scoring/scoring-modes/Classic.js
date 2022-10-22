@@ -1,31 +1,6 @@
-export class Scoring {
+export class ClassicScoring {
 
-  constructor() {
-    this.gameMode = "the way scoring will happen"
-    this.scoreModesMap = this.loadScoreModesMap()
-  }
-
-  init(gameMode) {
-    this.gameMode = this.scoreModesMap.get(gameMode)
-  }
-
-  loadScoreModesMap() {
-    return new Map([
-      ['classic', ClassicScoring ]
-    ])
-  }
-
-  updateScore(appState, scoreContext) {
-    return this.gameMode.updateScore(appState, scoreContext)
-  }
-}
-
-// These static classes should correspond with Pattern Engine class, which should update
-class ClassicScoring {
-
-  constructor() {
-    
-  }
+  constructor() {}
 
   // scoreContext can be passed from any part of the Application for any reason
   static updateScore(appState, scoreContext) {
@@ -52,7 +27,6 @@ class ClassicScoring {
      * 
      * ETC. basically [<context>, <data to calculate on>]
      *  
-     * 
      */
 
     const [scoringMethod, scoringData] = scoreContext
@@ -117,30 +91,13 @@ class ClassicScoring {
   }
 
   static softdrop(scoringData) {
-    let totalScore = 0
-    // Need to know
-      // Current score
     const { currentScore } = scoringData
-
-    // Add current score to running score
-    // Add 1 to score
-    
-    return totalScore
-
+    return currentScore + 1
   }
 
   static harddrop(scoringData) {
-
-    let totalScore = 0
-    // Need to know
-      // Current score
-      // Amount of lines dropped
-    const { currentLevel, linesDropped } = scoringData
-
-    // Multiply 2 by amount of lines dropped
-    // Add to total score
-
-    return totalScore
+    const { currentScore, linesDropped } = scoringData
+    return currentScore + (linesDropped * 2)
   }
 
 }
