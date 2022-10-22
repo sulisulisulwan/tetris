@@ -1,6 +1,6 @@
 import React from "react";
 import NextTetriminoTile from './NextTetriminoTile.jsx'
-
+import { levelColors } from '../levelColors'
 class NextQueueDisplay extends React.Component {
 
   constructor(props) {
@@ -46,14 +46,24 @@ class NextQueueDisplay extends React.Component {
 
   render () {
 
-    const { nextQueueData } = this.props
+    const { nextQueueData, currentLevel } = this.props
 
+    const styles = {
+      padding: '10px',
+      border: 'gray 2px solid',
+      height: '100%',
+      width: '120px',
+      backgroundColor: levelColors[currentLevel],
+      textAlign: 'center'
+    }
     if (nextQueueData === null) {
-      return <div className="nextqueue-wrapper"><div className="text-next">Next</div></div>
+      return <div className="nextqueue-wrapper" style={styles}><div className="text-next">Next</div></div>
     }  
 
+
+
     return(
-      <div className="nextqueue-wrapper">
+      <div className="nextqueue-wrapper" style={styles}>
         <div className="text-next">Next</div>
         {nextQueueData.map((tetriminoName, i)=> {
           const graphicGrid = this[`${tetriminoName}Graphic`]

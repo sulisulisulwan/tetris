@@ -6,7 +6,6 @@ import ScoreDisplay from './visual-components/ScoreDisplay.jsx'
 
 import { PlayerControl } from './game-logic/player-control/PlayerControl.js'
 import { Engine } from './game-logic/engine-phases/Engine.js'
-import { Scoring } from './game-logic/levels-and-scoring/Scoring.js'
 
 class App extends React.Component {
 
@@ -20,8 +19,7 @@ class App extends React.Component {
         swapStatus: 'swapAvailableNow',
         heldTetrimino: null
       },
-      score: 0,
-      fallSpeed: 1000,
+
       totalScore: 0,
       playerAction: {
         autoRepeat: {
@@ -47,7 +45,12 @@ class App extends React.Component {
       currentTetrimino: null,
 
       scoringContextsForCompletion: [],
+
       currentLevel: 1,
+      levelClearedLinesGoal: 5, // this is a fixed goal system
+      fallSpeed: 1000,
+      totalLinesCleared: 0,
+
       backToBack: false,
       performedTSpin: false,
       performedMiniTSpin: false
@@ -100,10 +103,20 @@ class App extends React.Component {
       <div className="game-app-wrapper">
         <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Suli's Tetris</div>
         <div className="playfield-and-sidebar-right">
-          <PlayFieldGrid playFieldData={this.state.playField.slice(20)}/>
+          <PlayFieldGrid 
+            playFieldData={this.state.playField.slice(20)}
+            currentLevel={this.state.currentLevel}  
+          />
           <div className='sidebar-right'>
-            <ScoreDisplay scoreData={this.state.totalScore}/>
-            <NextQueueDisplay nextQueueData={this.state.nextQueueData}/>
+            <ScoreDisplay 
+              scoreData={this.state.totalScore} 
+              currentLevel={this.state.currentLevel} 
+              linesCleared={this.state.totalLinesCleared}
+              />
+            <NextQueueDisplay 
+              nextQueueData={this.state.nextQueueData}
+              currentLevel={this.state.currentLevel} 
+            />
           </div>
         </div>
         <StartQuitButton currentGamePhase={this.state.currentGamePhase} clickHandler={this.startQuitClickHandler}/>

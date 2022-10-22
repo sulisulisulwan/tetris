@@ -42,6 +42,7 @@ export default class Pattern extends BasePhase {
               backToBack: appState.backToBack
             }
           ])
+          newState.totalLinesCleared = appState.totalLinesCleared + action.actionData.length
           break
         default:
           break

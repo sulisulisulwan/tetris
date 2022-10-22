@@ -48,7 +48,6 @@ export default class Eliminate extends BasePhase {
   }
 
   lineClear(playField, actionData) {
-    console.log('this runs')
     const filteredPlayField = playField.filter((row, index) => {
       const isTargetRow = actionData.includes(index) 
       return !isTargetRow

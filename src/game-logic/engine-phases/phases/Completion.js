@@ -1,7 +1,7 @@
 import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
 import { Scoring } from "../../levels-and-scoring/Scoring.js";
-
+import { LevelGoals } from "../../levels-and-scoring/LevelGoals.js";
 
 export default class Completion extends BasePhase {
 
@@ -9,6 +9,7 @@ export default class Completion extends BasePhase {
     super()
     this.localState = {}
     this.scoringSystem = new Scoring('classic')
+    this.levelGoalsSystem = new LevelGoals('fixed')
   }
 
   syncToLocalState(appState) {
@@ -29,6 +30,15 @@ export default class Completion extends BasePhase {
         newState[field] = data[field]
       }
     })
+
+    if (appState.totalLinesCleared > appState.levelClearedLinesGoal) {
+      const newLevel = appState.currentLevel + 1
+      const { levelClearedLinesGoal, fallSpeed } = this.levelGoalsSystem.getNewLevelSpecs(newLevel)
+      
+      newState.currentLevel = newLevel
+      newState.levelClearedLinesGoal = levelClearedLinesGoal
+      newState.fallSpeed = fallSpeed
+    }
 
     newState.currentGamePhase = 'generation'
 

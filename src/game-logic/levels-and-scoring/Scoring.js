@@ -4,12 +4,12 @@ export class Scoring {
 
   constructor(gameMode) {
     this.scoreModesMap = this.loadScoreModesMap()
-    this.scoringHandler = this.init(gameMode)
+    this.scoringHandler = this.loadScoringHandler(gameMode)
 
     this.updateScore = this.updateScore.bind(this)
   }
 
-  init(gameMode) {
+  loadScoringHandler(gameMode) {
     const ctor = this.scoreModesMap.get(gameMode)
     return new ctor()
   }
@@ -25,5 +25,3 @@ export class Scoring {
   }
 
 }
-
-// These static classes should correspond with Pattern Engine class, which should update
