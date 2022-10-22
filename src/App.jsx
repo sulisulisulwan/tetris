@@ -45,6 +45,12 @@ class App extends React.Component {
       fallIntervalId: null,
       lockIntervalId: null,
       currentTetrimino: null,
+
+      scoringContextsForCompletion: [],
+      currentLevel: 1,
+      backToBack: false,
+      performedTSpin: false,
+      performedMiniTSpin: false
     }
 
     this.startQuitClickHandler = this.startQuitClickHandler.bind(this)

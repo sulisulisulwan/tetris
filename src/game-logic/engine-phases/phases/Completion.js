@@ -1,6 +1,6 @@
 import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
-
+import { Scoring } from "../../levels-and-scoring/Scoring.js";
 
 
 export default class Completion extends BasePhase {
@@ -8,6 +8,7 @@ export default class Completion extends BasePhase {
   constructor() {
     super()
     this.localState = {}
+    this.scoringSystem = new Scoring('classic')
   }
 
   syncToLocalState(appState) {
@@ -19,9 +20,19 @@ export default class Completion extends BasePhase {
     const appStateCopy = makeCopy(appState)
     this.syncToLocalState(appStateCopy)
 
-    setAppState({
-      currentGamePhase: 'generation'
+    const scoringContexts = appState.scoringContextsForCompletion
+    const newState = {}
+
+    scoringContexts.forEach(scoringContext => {
+      const data = this.scoringSystem.updateScore(appState, scoringContext)
+      for (const field in data) {
+        newState[field] = data[field]
+      }
     })
+
+    newState.currentGamePhase = 'generation'
+
+    setAppState(newState)
   }
 
 }

@@ -10,7 +10,8 @@ export class Scoring {
   }
 
   init(gameMode) {
-    return this.scoreModesMap.get(gameMode)
+    const ctor = this.scoreModesMap.get(gameMode)
+    return new ctor()
   }
 
   loadScoreModesMap() {

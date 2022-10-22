@@ -24,13 +24,32 @@ export default class Pattern extends BasePhase {
     // console.log('>>>> PATTERN PHASE')
     const appStateCopy = makeCopy(appState)
     this.syncToLocalState(appStateCopy)
+    const newState = {}
+    newState.scoringContextsForCompletion = []
+    newState.currentGamePhase = 'iterate'
+    newState.eliminationActions = this.runPatternScanners() 
     
-    const eliminationActions = this.runPatternScanners() 
+    newState.eliminationActions.forEach(action => {
 
-    setAppState({
-      currentGamePhase: 'iterate',
-      eliminationActions
+      switch (action.eliminatorName) {
+        case 'lineClear':
+          newState.scoringContextsForCompletion.push([
+            'lineClear', { 
+              currentScore: appState.totalScore,
+              currentLevel: appState.currentLevel,
+              linesCleared: action.actionData.length,
+              performedTSpin: appState.performedTSpin,
+              backToBack: appState.backToBack
+            }
+          ])
+          break
+        default:
+          break
+      }
+
     })
+
+    setAppState(newState)
   }
 
   loadPatterns(possibleActivePatterns) {

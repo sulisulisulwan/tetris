@@ -15,12 +15,12 @@ export default class Eliminate extends BasePhase {
   }
 
   execute(appState, setAppState) {
-    // console.log('>>>> ELIMINATE PHASE')
+    console.log('>>>> ELIMINATE PHASE')
     const appStateCopy = makeCopy(appState)
     this.syncToLocalState(appStateCopy)
 
     const newPlayField = this.runEliminators()
-
+    
     setAppState({
       currentGamePhase: 'completion',
       playField: newPlayField
@@ -38,7 +38,6 @@ export default class Eliminate extends BasePhase {
     const actions = this.localState.eliminationActions
     let newPlayField = this.localState.playField
 
-
     for (let i = 0; i < actions.length; i += 1) {
       const action = actions[i]
       const { eliminatorName, actionData } = action
@@ -46,11 +45,10 @@ export default class Eliminate extends BasePhase {
     }
 
     return newPlayField
-
   }
 
   lineClear(playField, actionData) {
-    
+    console.log('this runs')
     const filteredPlayField = playField.filter((row, index) => {
       const isTargetRow = actionData.includes(index) 
       return !isTargetRow
@@ -59,7 +57,6 @@ export default class Eliminate extends BasePhase {
     let newRows = new Array(40 - filteredPlayField.length).fill(null)
     newRows = newRows.map(row => new Array(10).fill('[_]', 0, 10))
     return newRows.concat(filteredPlayField)
-     
   }
 
 }

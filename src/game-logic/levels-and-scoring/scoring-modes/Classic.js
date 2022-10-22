@@ -1,76 +1,73 @@
 export class ClassicScoring {
 
-  constructor() {}
+  constructor() {
+
+    this.clearLineBaseScores = new Map([
+      [1, 100],
+      [2, 300],
+      [3, 500],
+      [4, 800],
+      ['miniTSpin1', 200],
+      ['tSpin1', 800],
+      ['tSpin2', 1200],
+      ['tSpin3', 1600]
+    ])
+  }
 
   // scoreContext can be passed from any part of the Application for any reason
-  static updateScore(appState, scoreContext) {
-
-    /**
-     * ex. scoreContext = 
-     * [
-     *   'lineClear',
-     *   {
-     *     totalLines: <number of lines cleared>,
-     *     tSpin: <boolean of whether not achieved by tSpin>,
-     *     level
-     *   }
-     * ]
-     *  
-     * OR
-     * 
-     * [
-     *   'harddrop',
-     *   {
-     *     totalLines: <number of lines dropped>
-     *   }
-     * ]
-     * 
-     * ETC. basically [<context>, <data to calculate on>]
-     *  
-     */
-
+  updateScore(appState, scoreContext) {
     const [scoringMethod, scoringData] = scoreContext
     return this[scoringMethod](scoringData)
 
   }
 
-  static lineClear(scoringData) {
+  // Found in Completion
+  lineClear(scoringData) {
 
-    // Need to know
-      // Current score
-      // Current Level
-      // Amount of lines cleared
-      // If a T-Spin was performed to clear those lines
-      // If backToBack state is true or false
-    const { score, currentLevel, linesCleared, throughTSpin, backToBack } = scoringData
-    let totalScore = 0
+    const { currentScore, currentLevel, linesCleared, performedTSpin, performedMiniTSpin, backToBack } = scoringData
+    const newState = {}
 
-    // Add current score to running score
+    let totalScore = currentScore
+    if (linesCleared > 0 && linesCleared < 4) {
+      if (performedTSpin || performedMiniTSpin) {
+        const tSpinType = performedTSpin ? 'tSpin' : 'miniTSpin'
+        const scoreBeforeBonus = (this.clearLineBaseScores.get(`${tSpinType}${linesCleared}`) * currentLevel)
+        if (backToBack === false) {
+          // Technically a mini T spin can only complete a single line.  If error, check t-spin recognition logic.
+          newState.totalScore = totalScore + scoreBeforeBonus
+          newState.backToBack = true
+          newState.performedTSpin = false
+          newState.performedMiniTSpin = false
+          return newState
+        }
+        newState.totalScore = totalScore + scoreBeforeBonus + (scoreBeforeBonus * 0.5)
+        newState.performedTSpin = false
+        newState.performedMiniTSpin = false
+        return newState
+      }
+      const scoreBeforeBonus = this.clearLineBaseScores.get(linesCleared) * currentLevel
+      if (backToBack) {
+        newState.totalScore = totalScore + scoreBeforeBonus + (scoreBeforeBonus * 0.5)
+        newState.backToBack = false
+        return newState
+      }
+      console.log('this should run')
+      newState.totalScore = totalScore + scoreBeforeBonus
+      return newState
+    }
 
-    // check how many lines cleared
-    // if single, double, and triple lines
-      // Add base score multiplied by level
-      // if achieved through t spin
-        // if backToBack is false
-          // calculate score WITHOUT backToBack bonus 
-          // RETURN calculated score AND backToBack as TRUE AND tSpin as FALSE
-        // calculate score WITH backToBack bonus
-        // RETURN calculated score AND tSpin as FALSE
-      // calculate score WITHOUT backToBack bonus
-      // if backToBack was true
-        // RETURN calculated score AND backToBack as FALSE
-      // RETURN calculated score
-    // Add base Score of Tetris multiplied by level
-    // if backToBack is false
-      // calculate WITHOUT backToBack bonus
-      // RETURN calculated score AND backToBack as TRUE
-    // calculate WITH backToBack bonus
-    // RETURN calculated score
-
-    return totalScore
+    // Tetris case
+    const scoreBeforeBonus = (this.clearLineBaseScores.get(linesCleared) * currentLevel)
+    if (backToBack === false) {
+      newState.totalScore = totalScore + scoreBeforeBonus
+      newState.backToBack = true
+      return newState
+    }
+    newState.totalScore = totalScore + scoreBeforeBonus + (scoreBeforeBonus * 0.5)
+    return newState
   }
 
-  static tSpin(scoringData) {
+  tSpin(scoringData) {
     // Need to know 
       // Current level
     const { currentLevel } = scoringData
@@ -80,7 +77,7 @@ export class ClassicScoring {
     // RETURN normal score
   }
 
-  static tSpinMini(scoringData) {
+  tSpinMini(scoringData) {
     // Need to know 
       // Current level
     const { currentLevel } = scoringData
@@ -90,12 +87,12 @@ export class ClassicScoring {
     // RETURN normal score
   }
 
-  static softdrop(scoringData) {
+  softdrop(scoringData) {
     const { currentScore } = scoringData
     return currentScore + 1
   }
 
-  static harddrop(scoringData) {
+  harddrop(scoringData) {
     const { currentScore, linesDropped } = scoringData
     return currentScore + (linesDropped * 2)
   }
