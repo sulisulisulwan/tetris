@@ -1,5 +1,5 @@
-import { gridCoordsAreClear, makeCopy } from '../../utils/utils.js'
-import { SuperRotationSystem } from '../../rotation-systems/SuperRS.js'
+import { makeCopy } from '../utils/utils.js'
+import { SuperRotationSystem } from '../tetriminos/rotation-systems/SuperRS.js'
 // import { ClassicRotationSystem } from '../rotation-systems/SuperRS'
 
 export class TetriminoMovementHandler {

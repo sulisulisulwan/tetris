@@ -1,6 +1,6 @@
-import { makeCopy } from "../../../utils/utils.js";
-import BasePhase from "./BasePhase.js";
-import { TetriminoMovementHandler } from "../../components/tetriminos/TetriminoMovementHandler.js";
+import { makeCopy } from "../../utils/utils.js";
+import BasePhase from "./../phases/BasePhase.js";
+import { TetriminoMovementHandler } from '../../tetriminos/TetriminoMovementHandler.js'
 
 
 export default class Lock extends BasePhase {
@@ -21,7 +21,7 @@ export default class Lock extends BasePhase {
     this.syncToLocalState(appStateCopy)
 
     // If Lock Phase has just been initiated, set lock timer
-    if (!stateData.lockIntervalId) {
+    if (!appState.lockIntervalId) {
       setAppState(prevState => {
         return {
           ...prevState,
@@ -32,8 +32,8 @@ export default class Lock extends BasePhase {
     }
 
     // Player has made a change so check if player has positioned tetrimino to escape lock phase
-    const tetriminoCopy = makeCopy(this.acquiredState.currentTetrimino)
-    const playFieldCopy = makeCopy(this.acquiredState.playField)
+    const tetriminoCopy = makeCopy(appState.currentTetrimino)
+    const playFieldCopy = makeCopy(appState.playField)
     const { targetCoordsClear } = this.tetriminoMovementHandler.gridCoordsAreClear(tetriminoCopy, playFieldCopy, 'down')
 
     if (targetCoordsClear) {
@@ -56,11 +56,11 @@ export default class Lock extends BasePhase {
 
   lockDownTimeout(setAppState) {
 
-    clearTimeout(this.acquiredState.lockIntervalId)
+    clearTimeout(this.localState.lockIntervalId)
 
     // Final check if tetrimino should be granted falling status before permanent lock
-    const tetriminoCopy = makeCopy(this.acquiredState.currentTetrimino)
-    const playFieldCopy = this.acquiredState.playField
+    const tetriminoCopy = makeCopy(this.localState.currentTetrimino)
+    const playFieldCopy = this.localState.playField
     const { 
       oldCoordsOnPlayfield,
       targetCoordsClear,

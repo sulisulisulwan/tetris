@@ -19,8 +19,8 @@ export default class Off extends BasePhase {
     const appStateCopy = makeCopy(appState)
     this.syncToLocalState(appStateCopy)
 
-    clearInterval(stateData.fallIntervalId)
-    clearTimeout(stateData.lockIntervalId)
+    clearInterval(appState.fallIntervalId)
+    clearTimeout(appState.lockIntervalId)
   }
 
 }

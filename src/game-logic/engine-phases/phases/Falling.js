@@ -1,7 +1,6 @@
 import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
-import { TetriminoMovementHandler } from "../../components/tetriminos/TetriminoMovementHandler.js";
-
+import { TetriminoMovementHandler } from "../../tetriminos/TetriminoMovementHandler.js";
 
 export default class Falling extends BasePhase {
 
@@ -29,14 +28,14 @@ export default class Falling extends BasePhase {
      *   }
      * } 
      */  
-    if (stateData.fallIntervalId === null) {
-      setAppState({ fallIntervalId: this.setContinuousFallEvent(stateData, setAppState) })
+    if (appState.fallIntervalId === null) {
+      setAppState({ fallIntervalId: this.setContinuousFallEvent(appState, setAppState) })
     }
     
   }
 
-  setContinuousFallEvent(stateData, setAppState) {
-    return setInterval(this.continuousFallEvent.bind(this), stateData.fallSpeed, setAppState)
+  setContinuousFallEvent(appState, setAppState) {
+    return setInterval(this.continuousFallEvent.bind(this), appState.fallSpeed, setAppState)
   }
 
   continuousFallEvent(setAppState) {

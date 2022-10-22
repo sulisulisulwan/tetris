@@ -35,8 +35,8 @@ export default class Eliminate extends BasePhase {
   // subsequent actions will break as indices and individual squares 
   // can't be updated in an easy way.
   runEliminators() {
-    const actions = this.acquiredState.eliminationActions
-    let newPlayField = this.acquiredState.playField
+    const actions = this.localState.eliminationActions
+    let newPlayField = this.localState.playField
 
 
     for (let i = 0; i < actions.length; i += 1) {

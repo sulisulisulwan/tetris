@@ -1,6 +1,12 @@
+.game-app-wrapper {
+  display: flex;
+}
+
 .game-title{
+  display: flex;
   font-size: 40px;
-  margin-left: 40px;
+  justify-content: center;
+  /* margin: auto 40px; */
   font-family: monospace;
 }
 
@@ -12,12 +18,14 @@
 
 .playfield-row {
   display: flex;
+  height: 25px;
   flex-direction: row;
 }
 
 .playfield-and-nextqueue {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   margin-left: 40px;
   margin-bottom: 20px;
   margin-top: 20px;
@@ -25,9 +33,13 @@
 
 .playfield-container {
   font-family: monospace;
+  padding: 10px;
+  border: gray 2px solid;
 }
 
 .nextqueue-wrapper {
+  padding: 10px;
+  border: gray 2px solid;
   margin-left: 20px;
   width: 120px;
   background-color: lightgray;
@@ -60,5 +72,7 @@
 
 
 .start-quit-button-wrapper{
+  display: flex;
+  justify-content: center;
   margin-left: 40px;
 }

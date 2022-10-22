@@ -1,7 +1,7 @@
 import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
 import { NextQueue } from '../../next-queue/NextQueue.js'
-import { TetriminoFactory } from '../../components/tetriminos/TetriminoFactory.js'
+import { TetriminoFactory } from '../../tetriminos/TetriminoFactory.js'
 
 export default class Generation extends BasePhase {
 
@@ -27,7 +27,7 @@ export default class Generation extends BasePhase {
     
     
     // Place dequeued tetrimino in playField
-    const playField = makeCopy(stateData.playField)
+    const playField = makeCopy(appState.playField)
     const startingOrientationCoords = newTetrimino.orientations[newTetrimino.currentOrientation].coordsOffOrigin
 
     startingOrientationCoords.forEach(coord => {
@@ -37,7 +37,7 @@ export default class Generation extends BasePhase {
     })
 
     // Update swap status in case hold queue has been used
-    let { swapStatus } = stateData.holdQueue
+    let { swapStatus } = appState.holdQueue
     if (swapStatus === 'justSwapped') {
       swapStatus = 'swapAvailableNextTetrimino'
     } else if (swapStatus === 'swapAvailableNextTetrimino') {

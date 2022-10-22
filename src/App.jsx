@@ -1,9 +1,9 @@
 import React from 'react'
-import PlayFieldGrid from './components/playfield/PlayFieldGrid.jsx'
-import NextQueueDisplay from './NextQueueDisplay.jsx'
-import StartQuitButton from './StartQuitButton.jsx'
-import { PlayerControl } from './playerControl/PlayerControl.js'
-import { Engine } from './engine-phases/Engine.js'
+import PlayFieldGrid from './visual-components/playfield/PlayFieldGrid.jsx'
+import NextQueueDisplay from './visual-components/next-queue/NextQueueDisplay.jsx'
+import StartQuitButton from './visual-components/StartQuitButton.jsx'
+import { PlayerControl } from './game-logic/player-control/PlayerControl.js'
+import { Engine } from './game-logic/engine-phases/Engine.js'
 
 const playerControlHandler = new PlayerControl()
 
@@ -18,6 +18,8 @@ class App extends React.Component {
         swapStatus: 'swapAvailableNow',
         heldTetrimino: null
       },
+      score: 0,
+      fallSpeed: 1000,
       playerAction: {
         autoRepeat: {
           left: false,
@@ -35,10 +37,8 @@ class App extends React.Component {
       possibleActivePatterns: {
         lineClear: true
       },
-
       eliminationActions: [],
 
-      fallSpeed: 250,
       fallIntervalId: null,
       lockIntervalId: null,
       currentTetrimino: null
@@ -68,10 +68,7 @@ class App extends React.Component {
   }
 
   handlePlayerKeyStroke(e) {
-    if (e.type === 'keyup') {
-      // console.log('in ABSOLUTE highest level handler on keyup', this.state)
-
-    }
+    e.preventDefault()
     playerControlHandler.keystrokeHandler(e, this.setState.bind(this), this.state)
   }
 
@@ -81,15 +78,12 @@ class App extends React.Component {
   }
 
   componentDidUpdate() { 
-    if (this.state.playField.every(row => row.every(square => square === '[_]'))) {
-      // console.log('EMPTY')
-    }
     this.engine.handleGameStateUpdate(this.state, this.setState.bind(this))
   }
 
   render() {
     return (
-      <div>
+      <div className="game-app-wrapper">
         <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Suli's Tetris</div>
         <div className="playfield-and-nextqueue">
           <PlayFieldGrid playFieldData={this.state.playField.slice(20)}/>

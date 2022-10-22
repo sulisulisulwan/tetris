@@ -1,10 +1,10 @@
-import { TetriminoMovementHandler } from "../components/tetriminos/TetriminoMovementHandler.js"
-import { TetriminoFactory } from "../components/tetriminos/TetriminoFactory.js"
-import { makeCopy } from '../../utils/utils.js'
+import { TetriminoMovementHandler } from "../tetriminos/TetriminoMovementHandler.js"
+import { TetriminoFactory } from "../tetriminos/TetriminoFactory.js"
+import { makeCopy } from "../utils/utils.js"
+
 export class PlayerControl {
 
   constructor() {
-
     this.tetriminoMovementHandler = new TetriminoMovementHandler()
     this.tetriminoFactory = new TetriminoFactory()
     this.keystrokeMap = new Map([
@@ -30,12 +30,9 @@ export class PlayerControl {
       ['F1','pausegame'],
       ['Escape','pausegame'],
     ])
-
   }
 
   keystrokeHandler(e, setState, state) {
-
-    e.preventDefault()
 
     if (!['falling', 'lock'].includes(state.currentGamePhase)) {
       return 
@@ -48,18 +45,12 @@ export class PlayerControl {
 
     const action = this.keystrokeMap.get(eventData.key)
 
-    if (!action) {
-      return
-    }
-
-    if (state.currentTetrimino.status === 'locked') {
+    if (!action || state.currentTetrimino.status === 'locked') {
       return
     }
 
     eventData.action = action
-
     this[action](setState, state, eventData)
-
   }
 
   left(setState, stateData, eventData) {
@@ -69,6 +60,15 @@ export class PlayerControl {
   right(setState, stateData, eventData) {
     this.leftAndRight(setState, stateData, eventData)
   }
+
+  flipCounterClockwise(setState, stateData, eventData) {
+    this.flip(setState, stateData, eventData)
+  }
+  
+  flipClockwise(setState, stateData, eventData) {
+    this.flip(setState, stateData, eventData)
+  }
+
 
   leftAndRight(setState, stateData, eventData) {
     const { playerAction, playField, currentTetrimino } = stateData
@@ -125,6 +125,32 @@ export class PlayerControl {
     return
   }
 
+  flip(setState, stateData, eventData) {
+
+    const { playField, currentTetrimino } = stateData
+    const { strokeType, action } = eventData
+
+    if (strokeType === 'keydown' && stateData.playerAction[action]) {
+      return
+    }
+
+    const stateCopy = makeCopy(stateData)
+
+    if (strokeType === 'keyup') {
+      stateCopy.playerAction[action] = false
+      setState(stateCopy)
+      return
+    }
+    
+    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler[action](playField, currentTetrimino)
+    
+    stateCopy.playerAction[action] = true
+    stateCopy.currentTetrimino = newTetrimino
+    stateCopy.playField = newPlayField
+    setState(stateCopy)
+
+  }
+
   softdrop(setState, stateData, eventData) {
     /**
      * Instead of calling tetriminoMovementHandler here, we let the falling phase engine
@@ -141,7 +167,6 @@ export class PlayerControl {
     const { softdrop } = stateData.playerAction
     const { playField, currentTetrimino } = stateData
 
-    console.log(softdrop)
     // if (softdrop && strokeType === 'keyup')  {
     if (strokeType === 'keyup')  {
       const stateCopy = makeCopy(stateData)
@@ -172,7 +197,6 @@ export class PlayerControl {
 
     const { strokeType } = eventData
 
-    console.log(strokeType)
     if (strokeType === 'keydown' && stateData.playerAction.harddrop) {
       return
     }
@@ -208,59 +232,6 @@ export class PlayerControl {
     stateCopy.currentTetrimino = currentTetrimino
     setState(stateCopy)
   }
-
-  flipClockwise(setState, stateData, eventData) {
-
-    const { playerAction, playField, currentTetrimino } = stateData
-    const { strokeType } = eventData
-
-    if (strokeType === 'keydown' && stateData.playerAction[playerAction]) {
-      return
-    }
-
-    const stateCopy = makeCopy(stateData)
-
-    if (strokeType === 'keyup') {
-      stateCopy.playerAction.flipClockwise = false
-      setState(stateCopy)
-      return
-    }
-    
-    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.flipClockwise(playField, currentTetrimino)
-    
-    stateCopy.playerAction.flipClockwise = true
-    stateCopy.currentTetrimino = newTetrimino
-    stateCopy.playField = newPlayField
-    setState(stateCopy)
-
-  }
-
-  flipCounterClockwise(setState, stateData, eventData) {
-
-    const { playerAction, playField, currentTetrimino } = stateData
-    const { strokeType } = eventData
-
-    if (strokeType === 'keydown' && stateData.playerAction[playerAction]) {
-      return
-    }
-
-    const stateCopy = makeCopy(stateData)
-
-    if (strokeType === 'keyup') {
-      stateCopy.playerAction.flipCounterClockwise = false
-      setState(stateCopy)
-      return
-    }
-
-    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.flipCounterClockwise(playField, currentTetrimino)
-
-    stateCopy.playerAction.flipCounterClockwise = true
-    stateCopy.playField = newPlayField
-    stateCopy.currentTetrimino = newTetrimino
-    setState(stateCopy)
-
-  }
-
 
   // TODO: 
   hold(setState, stateData, eventData) {
