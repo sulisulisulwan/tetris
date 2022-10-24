@@ -1,4 +1,3 @@
-import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
 
 
@@ -11,9 +10,7 @@ export default class Pregame extends BasePhase {
 
   execute(appState, setAppState) {
     console.log('>>> PREGAME PHASE')
-    const appStateCopy = makeCopy(appState)
-    this.syncToLocalState(appStateCopy)
-
+    this.syncToLocalState(appState)
   }
 
 }

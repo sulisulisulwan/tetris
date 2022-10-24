@@ -1,8 +1,5 @@
-import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
-import { SuperRotationSystem } from "../../tetriminos/movement-handler/rotation-systems/SuperRS.js";
-import { ClassicRotationSystem } from "../../tetriminos/movement-handler/rotation-systems/ClassicRS.js";
-import { ClassicScoring } from "../../levels-and-scoring/scoring-modes/Classic.js";
+
 export default class Falling extends BasePhase {
 
   constructor(sharedHandlers) {
@@ -10,9 +7,8 @@ export default class Falling extends BasePhase {
   }
 
   execute(appState, setAppState) {
-    console.log('>>>> FALLING PHASE')
-    const appStateCopy = makeCopy(appState)
-    this.syncToLocalState(appStateCopy)
+    // console.log('>>>> FALLING PHASE')
+    this.syncToLocalState(appState)
     
     if (appState.playerAction.softDrop === true) {
       if (appState.fallIntervalId) {

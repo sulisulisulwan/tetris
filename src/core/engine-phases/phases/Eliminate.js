@@ -1,7 +1,4 @@
-import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
-
-
 
 export default class Eliminate extends BasePhase {
   
@@ -10,9 +7,8 @@ export default class Eliminate extends BasePhase {
   }
 
   execute(appState, setAppState) {
-    console.log('>>>> ELIMINATE PHASE')
-    const appStateCopy = makeCopy(appState)
-    this.syncToLocalState(appStateCopy)
+    // console.log('>>>> ELIMINATE PHASE')
+    this.syncToLocalState(appState)
 
     const newPlayField = this.runEliminators()
     

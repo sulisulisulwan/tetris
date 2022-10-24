@@ -1,9 +1,9 @@
 import { LevelGoals } from '../levels-and-scoring/LevelGoals.js'
 import { ClassicScoring } from '../levels-and-scoring/scoring-modes/Classic.js'
+import { NextQueue } from '../next-queue/NextQueue.js'
 import { PlayerControl } from '../player-control/PlayerControl.js'
 import { ClassicRotationSystem } from '../tetriminos/movement-handler/rotation-systems/ClassicRS.js'
 import { SuperRotationSystem } from '../tetriminos/movement-handler/rotation-systems/SuperRS.js'
-import { TetriminoMovementHandler } from '../tetriminos/movement-handler/TetriminoMovementHandler.js'
 import { 
   Pregame,
   Generation,
@@ -32,11 +32,13 @@ export class Engine {
     const tetriminoMovementHandler = this.setTetriminoMovementHandler(initialOptions.rotationSystem)
     const scoringHandler = this.setScoringHandler(initialOptions.scoringSystem)
     const levelGoalsHandler = this.setLevelGoalsHandler(initialOptions.levelGoalsSystem)
+    const nextQueueHandler = new NextQueue()
 
     const sharedHandlers = {
       tetriminoMovementHandler,
       scoringHandler,
-      levelGoalsHandler
+      levelGoalsHandler,
+      nextQueueHandler
     }
     
     this.off = new Off(sharedHandlers)
@@ -51,9 +53,19 @@ export class Engine {
     this.iterate = new Iterate(sharedHandlers)
     
     this.playerControl = new PlayerControl(sharedHandlers)
+
     
     this.currentPhaseName = 'off'
     this.currentPhase = this.off
+  }
+
+  handleGameStateUpdate(stateData, setState) {
+    const { currentGamePhase } = stateData
+    if (this.currentPhase !== stateData.currentGamePhase) {
+      this.setCurrentPhaseName(currentGamePhase)
+      this.setCurrentPhase(currentGamePhase)
+    }
+    this.currentPhase.execute(stateData, setState)
   }
 
   setTetriminoMovementHandler(mode) {
@@ -76,18 +88,6 @@ export class Engine {
 
   setCurrentPhaseName(phaseName) {
     this.currentPhaseName = phaseName
-  }
-
-  handleGameStateUpdate(stateData, setState) {
-
-    const { currentGamePhase } = stateData
-
-    if (this.currentPhase !== stateData.currentGamePhase) {
-      this.setCurrentPhaseName(currentGamePhase)
-      this.setCurrentPhase(currentGamePhase)
-    }
-
-    this.currentPhase.execute(stateData, setState)
   }
 
 }

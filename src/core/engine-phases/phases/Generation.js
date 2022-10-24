@@ -1,4 +1,3 @@
-import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
 import { NextQueue } from '../../next-queue/NextQueue.js'
 import { TetriminoFactory } from '../../tetriminos/TetriminoFactory.js'
@@ -11,18 +10,17 @@ export default class Generation extends BasePhase {
   }
 
   execute(appState, setAppState) {
-    console.log('>>> GENERATION PHASE')
-    const appStateCopy = makeCopy(appState)
-    this.syncToLocalState(appStateCopy)
+    // console.log('>>> GENERATION PHASE')
+    this.syncToLocalState(appState)
 
     // Dequeue a new tetrimino and instantiate it.
-    const tetriminoContext = this.nextQueue.dequeue()
-    const nextQueueData = this.nextQueue.queueToArray(5)
+    const tetriminoContext = this.nextQueueHandler.dequeue()
+    const nextQueueData = this.nextQueueHandler.queueToArray(5)
     const newTetrimino = TetriminoFactory.getTetrimino(tetriminoContext)
     
     
     // Place dequeued tetrimino in playField
-    const playField = makeCopy(appState.playField)
+    const playField = this.localState.playField
     const startingOrientationCoords = newTetrimino.orientations[newTetrimino.currentOrientation].coordsOffOrigin
 
     startingOrientationCoords.forEach(coord => {

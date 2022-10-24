@@ -1,7 +1,4 @@
-import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
-
-
 
 export default class Off extends BasePhase {
 
@@ -11,8 +8,7 @@ export default class Off extends BasePhase {
 
   execute(appState, setAppState) {
     console.log('>>>> OFF PHASE')
-    const appStateCopy = makeCopy(appState)
-    this.syncToLocalState(appStateCopy)
+    this.syncToLocalState(appState)
 
     clearInterval(appState.fallIntervalId)
     clearTimeout(appState.lockIntervalId)

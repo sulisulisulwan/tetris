@@ -1,7 +1,5 @@
-import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./../phases/BasePhase.js";
-import { SuperRotationSystem } from "../../tetriminos/movement-handler/rotation-systems/SuperRS.js";
-
+import { makeCopy } from "../../utils/utils.js";
 
 export default class Lock extends BasePhase {
 
@@ -10,9 +8,8 @@ export default class Lock extends BasePhase {
   }
 
   execute(appState, setAppState) {
-    console.log('>>>> LOCK PHASE')
-    const appStateCopy = makeCopy(appState)
-    this.syncToLocalState(appStateCopy)
+    // console.log('>>>> LOCK PHASE')
+    this.syncToLocalState(appState)
 
     // If Lock Phase has just been initiated, set lock timer
     if (!appState.lockIntervalId) {
@@ -26,8 +23,8 @@ export default class Lock extends BasePhase {
     }
 
     // Player has made a change so check if player has positioned tetrimino to escape lock phase
-    const tetriminoCopy = makeCopy(appState.currentTetrimino)
-    const playFieldCopy = makeCopy(appState.playField)
+    const tetriminoCopy = this.localState.currentTetrimino
+    const playFieldCopy = this.localState.playField
 
     const { oldCoordsOnPlayfield, targetCoordsOnPlayfield } = this.tetriminoMovementHandler.getOldAndTargetCoordsOnPlayField(tetriminoCopy, 'down')
     const playFieldNoTetrimino = this.tetriminoMovementHandler.removeTetriminoFromPlayField(oldCoordsOnPlayfield, playFieldCopy)
@@ -83,7 +80,6 @@ export default class Lock extends BasePhase {
       playField: newPlayField
     })
   }
-
 }
 
 /**

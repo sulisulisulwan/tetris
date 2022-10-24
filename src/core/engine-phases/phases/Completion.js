@@ -1,4 +1,3 @@
-import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
 
 export default class Completion extends BasePhase {
@@ -9,8 +8,7 @@ export default class Completion extends BasePhase {
   
   execute(appState, setAppState) {
     // console.log('>>>> COMPLETION PHASE')
-    const appStateCopy = makeCopy(appState)
-    this.syncToLocalState(appStateCopy)
+    this.syncToLocalState(appState)
 
     const scoringContexts = appState.scoringContextsForCompletion
     const newState = {}
@@ -24,7 +22,10 @@ export default class Completion extends BasePhase {
 
     if (appState.totalLinesCleared > appState.levelClearedLinesGoal) {
       const newLevel = appState.currentLevel + 1
-      const { levelClearedLinesGoal, fallSpeed } = this.levelGoalsHandler.getNewLevelSpecs(newLevel)
+      const { 
+        levelClearedLinesGoal, 
+        fallSpeed 
+      } = this.levelGoalsHandler.getNewLevelSpecs(newLevel)
       
       newState.currentLevel = newLevel
       newState.levelClearedLinesGoal = levelClearedLinesGoal

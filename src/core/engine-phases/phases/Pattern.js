@@ -1,7 +1,4 @@
-import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
-
-
 
 export default class Pattern extends BasePhase {
 
@@ -12,8 +9,8 @@ export default class Pattern extends BasePhase {
 
   execute(appState, setAppState) {
     // console.log('>>>> PATTERN PHASE')
-    const appStateCopy = makeCopy(appState)
-    this.syncToLocalState(appStateCopy)
+    this.syncToLocalState(appState)
+
     const newState = {}
     newState.scoringContextsForCompletion = []
     newState.currentGamePhase = 'iterate'

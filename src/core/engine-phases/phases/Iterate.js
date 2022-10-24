@@ -1,7 +1,4 @@
-import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
-
-
 
 export default class Iterate extends BasePhase {
 
@@ -11,8 +8,7 @@ export default class Iterate extends BasePhase {
   
   execute(appState, setAppState) {
     // console.log('>>>> ITERATE PHASE')
-    const appStateCopy = makeCopy(appState)
-    this.syncToLocalState(appStateCopy)
+    this.syncToLocalState(appState)
 
     setAppState({
       currentGamePhase: 'animate'
