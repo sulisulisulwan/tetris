@@ -9,7 +9,7 @@ export default class Generation extends BasePhase {
     this.nextQueue = new NextQueue()
   }
 
-  execute(appState, setAppState) {
+  execute() {
     // console.log('>>> GENERATION PHASE')
 
     // Dequeue a new tetrimino and instantiate it.
@@ -30,7 +30,7 @@ export default class Generation extends BasePhase {
 
     if (this.gameIsOver(targetStartingCoords, playField)) {
       newState.currentGamePhase = 'gameOver'
-      setAppState(newState)
+      this.setAppState(newState)
       return
     }
     
@@ -38,7 +38,7 @@ export default class Generation extends BasePhase {
     const newPlayfield = this.tetriminoMovementHandler.addTetriminoToPlayField(targetStartingCoords, playField, newTetrimino.minoGraphic)
 
     // Update swap status in case hold queue has been used
-    let { swapStatus } = appState.holdQueue
+    let { swapStatus } = this.localState.holdQueue
     if (swapStatus === 'justSwapped') {
       swapStatus = 'swapAvailableNextTetrimino'
     } else if (swapStatus === 'swapAvailableNextTetrimino') {
@@ -52,7 +52,7 @@ export default class Generation extends BasePhase {
     newState.currentGamePhase = 'falling',
     newState.holdQueue.swapStatus = swapStatus
     
-    setAppState(newState)
+    this.setAppState(newState)
   }
 
   gameIsOver(startingOrientationCoords, playField) {

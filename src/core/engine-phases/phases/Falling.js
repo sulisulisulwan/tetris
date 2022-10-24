@@ -6,29 +6,29 @@ export default class Falling extends BasePhase {
     super(sharedHandlers)
   }
 
-  execute(appState, setAppState) {
+  execute() {
     // console.log('>>>> FALLING PHASE')
     
-    if (appState.playerAction.softDrop === true) {
-      if (appState.fallIntervalId) {
+    if (this.localState.playerAction.softDrop === true) {
+      if (this.localState.fallIntervalId) {
         return
       }
       // Kickoff softdrop fall interval
-      setAppState({ fallIntervalId: this.setContinuousFallEvent(appState, setAppState) })
+      this.setAppState({ fallIntervalId: this.setContinuousFallEvent() })
       return
     } 
     
     // Kickoff regular fall interval
-    if (appState.fallIntervalId === null) {
-      setAppState({ fallIntervalId: this.setContinuousFallEvent(appState, setAppState) })
+    if (this.localState.fallIntervalId === null) {
+      this.setAppState({ fallIntervalId: this.setContinuousFallEvent() })
     }
   }
 
-  setContinuousFallEvent(appState, setAppState) {
-    return setInterval(this.continuousFallEvent.bind(this), appState.fallSpeed, setAppState)
+  setContinuousFallEvent() {
+    return setInterval(this.continuousFallEvent.bind(this), this.localState.fallSpeed)
   }
 
-  continuousFallEvent(setAppState) {
+  continuousFallEvent() {
     
     const { playField, currentTetrimino, fallIntervalId } = this.localState
     const newState = {}
@@ -47,14 +47,14 @@ export default class Falling extends BasePhase {
 
       newState.currentTetrimino = newTetrimino
       newState.playField = newPlayField
-      setAppState(newState)
+      this.setAppState(newState)
       return
     }
 
     clearInterval(fallIntervalId)
     newState.fallIntervalId = null
     newState.currentGamePhase = 'lock'
-    setAppState(newState)
+    this.setAppState(newState)
   }
 
   awardSoftDropScore() {

@@ -71,6 +71,7 @@ class App extends React.Component {
   }
 
   setEngine() {
+    initialOptions.setAppState = this.setState.bind(this)
     return new Engine(initialOptions)
   }
 
@@ -88,7 +89,7 @@ class App extends React.Component {
 
   handlePlayerKeyStroke(e) {
     e.preventDefault()
-    this.engine.playerControl.keystrokeHandler(e, this.setState.bind(this), this.state)
+    this.engine.playerControl.keystrokeHandler(this.state, e)
   }
 
   componentDidMount() {

@@ -6,10 +6,10 @@ export default class Animate extends BasePhase {
     super(sharedHandlers)
   }
 
-  execute(appState, setAppState) {
+  execute() {
     // console.log('>>>> ANIMATE PHASE')
 
-    setAppState({
+    this.setAppState({
       currentGamePhase: 'eliminate'
     })
   }

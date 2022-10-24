@@ -6,18 +6,18 @@ export default class Completion extends BasePhase {
     super(sharedHandlers)
   }
   
-  execute(appState, setAppState) {
+  execute() {
     // console.log('>>>> COMPLETION PHASE')
 
     let newState = {}
     this.accrueScore(newState) 
 
-    if (appState.totalLinesCleared > appState.levelClearedLinesGoal) {
+    if (this.localState.totalLinesCleared > this.localState.levelClearedLinesGoal) {
       this.promoteLevel(newState)
     }
 
     newState.currentGamePhase = 'generation'
-    setAppState(newState)
+    this.setAppState(newState)
   }
 
   accrueScore(stateObj) {

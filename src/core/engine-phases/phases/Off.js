@@ -6,11 +6,11 @@ export default class Off extends BasePhase {
     super(sharedHandlers)
   }
 
-  execute(appState, setAppState) {
+  execute() {
     console.log('>>>> OFF PHASE')
 
-    clearInterval(appState.fallIntervalId)
-    clearTimeout(appState.lockTimeoutId)
+    clearInterval(this.localState.fallIntervalId)
+    clearTimeout(this.localState.lockTimeoutId)
   }
 
 }

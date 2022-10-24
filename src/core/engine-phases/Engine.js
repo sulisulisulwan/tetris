@@ -33,13 +33,15 @@ export class Engine {
     const tetriminoMovementHandler = this.setTetriminoMovementHandler(initialOptions.rotationSystem)
     const scoringHandler = this.setScoringHandler(initialOptions.scoringSystem)
     const levelGoalsHandler = this.setLevelGoalsHandler(initialOptions.levelGoalsSystem)
+    const setAppState = initialOptions.setAppState
     const nextQueueHandler = new NextQueue()
 
     const sharedHandlers = {
       tetriminoMovementHandler,
       scoringHandler,
       levelGoalsHandler,
-      nextQueueHandler
+      nextQueueHandler,
+      setAppState
     }
     
     this.off = new Off(sharedHandlers)

@@ -6,10 +6,10 @@ export default class Iterate extends BasePhase {
     super(sharedHandlers)
   }
   
-  execute(appState, setAppState) {
+  execute() {
     // console.log('>>>> ITERATE PHASE')
 
-    setAppState({
+    this.setAppState({
       currentGamePhase: 'animate'
     })
   }

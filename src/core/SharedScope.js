@@ -7,6 +7,7 @@ export class SharedScope {
     this.tetriminoMovementHandler = sharedHandlers.tetriminoMovementHandler
     this.nextQueueHandler = sharedHandlers.nextQueueHandler
     this.localState = {}
+    this.setAppState = sharedHandlers.setAppState
   }
 
   syncToLocalState(appState) {

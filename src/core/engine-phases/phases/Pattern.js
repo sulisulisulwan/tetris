@@ -7,7 +7,7 @@ export default class Pattern extends BasePhase {
     this.loadedPatterns = this.loadPatterns(possibleActivePatterns)
   }
 
-  execute(appState, setAppState) {
+  execute() {
     // console.log('>>>> PATTERN PHASE')
 
     const newState = {}
@@ -21,14 +21,14 @@ export default class Pattern extends BasePhase {
         case 'lineClear':
           newState.scoringContextsForCompletion.push([
             'lineClear', { 
-              currentScore: appState.totalScore,
-              currentLevel: appState.currentLevel,
+              currentScore: this.localState.totalScore,
+              currentLevel: this.localState.currentLevel,
               linesCleared: action.actionData.length,
-              performedTSpin: appState.performedTSpin,
-              backToBack: appState.backToBack
+              performedTSpin: this.localState.performedTSpin,
+              backToBack: this.localState.backToBack
             }
           ])
-          newState.totalLinesCleared = appState.totalLinesCleared + action.actionData.length
+          newState.totalLinesCleared = this.localState.totalLinesCleared + action.actionData.length
           break
         default:
           break
@@ -36,7 +36,7 @@ export default class Pattern extends BasePhase {
 
     })
 
-    setAppState(newState)
+    this.setAppState(newState)
   }
 
   loadPatterns(possibleActivePatterns) {

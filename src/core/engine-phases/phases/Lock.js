@@ -7,7 +7,7 @@ export default class Lock extends BasePhase {
     super(sharedHandlers)
   }
 
-  execute(appState, setAppState) {
+  execute() {
     // console.log('>>>> LOCK PHASE')
     const newState = {}
 
@@ -36,10 +36,10 @@ export default class Lock extends BasePhase {
      * Set to leftover seconds in all other cases
      */
 
-    if (!appState.lockTimeoutId) {
+    if (!this.localState.lockTimeoutId) {
       newState.lowestLockSurfaceRow = this.tetriminoMovementHandler.getLowestPlayfieldRowOfTetrimino(this.localState.currentTetrimino)
-      newState.lockTimeoutId = setTimeout(this.lockDownTimeout.bind(this), 500, setAppState)
-      setAppState(newState)
+      newState.lockTimeoutId = setTimeout(this.lockDownTimeout.bind(this), 500)
+      this.setAppState(newState)
       return
     }
 
@@ -52,17 +52,15 @@ export default class Lock extends BasePhase {
     const targetCoordsClear = this.tetriminoMovementHandler.gridCoordsAreClear(targetCoordsOnPlayfield, playFieldNoTetrimino)
 
     if (targetCoordsClear) {
-
-        clearTimeout(appState.lockTimeoutId)
-        newState.currentGamePhase = 'falling'
-        newState.lockTimeoutId = null
-        setAppState(newState)
-    
+      clearTimeout(this.localState.lockTimeoutId)
+      newState.currentGamePhase = 'falling'
+      newState.lockTimeoutId = null
+      this.setAppState(newState)
     }
     
   }
 
-  lockDownTimeout(setAppState) {
+  lockDownTimeout() {
 
     clearTimeout(this.localState.lockTimeoutId)
 
@@ -83,7 +81,7 @@ export default class Lock extends BasePhase {
       newState.currentTetrimino = tetriminoCopy,
       newState.playField = newPlayField
 
-      setAppState(newState)
+      this.setAppState(newState)
       return
     }
 
@@ -93,7 +91,7 @@ export default class Lock extends BasePhase {
     
     if (this.gameIsOver(tetriminoCopy)) {
       newState.currentGamePhase = 'gameOver'
-      setAppState(newState)
+      this.setAppState(newState)
       return
     }
 
@@ -101,7 +99,7 @@ export default class Lock extends BasePhase {
     newState.lowestLockSurfaceRow = null
     newState.lockTimeoutId = null,
 
-    setAppState(newState)
+    this.setAppState(newState)
   }
 
   gameIsOver(currentTetrimino) {

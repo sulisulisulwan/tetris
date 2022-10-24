@@ -6,12 +6,12 @@ export default class Eliminate extends BasePhase {
     super(sharedHandlers)
   }
 
-  execute(appState, setAppState) {
+  execute() {
     // console.log('>>>> ELIMINATE PHASE')
 
     const newPlayField = this.runEliminators()
     
-    setAppState({
+    this.setAppState({
       currentGamePhase: 'completion',
       playField: newPlayField
     })

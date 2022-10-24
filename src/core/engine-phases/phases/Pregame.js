@@ -8,7 +8,7 @@ export default class Pregame extends BasePhase {
     super(sharedHandlers)
   }
 
-  execute(appState, setAppState) {
+  execute() {
     console.log('>>> PREGAME PHASE')
   }
 

@@ -6,12 +6,12 @@ export default class GameOver extends BasePhase {
     super(sharedHandlers)
   }
   
-  execute(appState, setAppState) {
+  execute() {
     console.log('>>>> GAME OVER')
 
     const newState = {}
     newState.currentGamePhase = 'off'
-    setAppState(newState)
+    this.setAppState(newState)
 
   }
 
