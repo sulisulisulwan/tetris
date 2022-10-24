@@ -11,7 +11,7 @@ export default class Off extends BasePhase {
     this.syncToLocalState(appState)
 
     clearInterval(appState.fallIntervalId)
-    clearTimeout(appState.lockIntervalId)
+    clearTimeout(appState.lockTimeoutId)
   }
 
 }

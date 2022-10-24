@@ -8,7 +8,7 @@ import Lock from './phases/Lock.js'
 import Pattern from './phases/Pattern.js'
 import Pregame from './phases/Pregame.js'
 import Off from './phases/Off.js'
-
+import GameOver from './phases/GameOver.js'
 
 export {
   Animate,
@@ -20,5 +20,6 @@ export {
   Lock,
   Pattern,
   Pregame,
-  Off
+  Off,
+  GameOver
 }

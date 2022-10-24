@@ -1,4 +1,4 @@
-import { FixedGoals } from "./goal-modes/Fixed.js"
+import { FixedGoals } from "./modes/Fixed.js"
 
 export class LevelGoals {
 

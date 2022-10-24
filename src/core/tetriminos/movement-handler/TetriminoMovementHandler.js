@@ -94,6 +94,14 @@ export class TetriminoMovementHandler {
     }) 
   }
 
+  getLowestPlayfieldRowOfTetrimino(tetrimino) {
+    const { currentOrientation } = tetrimino
+    const { currentOriginOnPlayfield } = tetrimino
+    const { lowestRowOffOrigin } = tetrimino.orientations[currentOrientation]
+
+    return currentOriginOnPlayfield[0] + lowestRowOffOrigin
+  }
+
   updateTetrimino(tetrimino, direction, offset, targetOrientation) {
     const [oldVertical, oldHorizontal] = tetrimino.currentOriginOnPlayfield
     const newTetrimino = makeCopy(tetrimino)

@@ -33,19 +33,23 @@ export class TetriminoFactory {
     tetrimino.orientations = {
       north: {
         coordsOffOrigin: [[1,0], [1,1], [1,2], [1,3]],
-        rotationPoints: { 1: [1,1], 2: [1,0], 3: [1,3], 4: [1,0], 5: [1,3] }
+        rotationPoints: { 1: [1,1], 2: [1,0], 3: [1,3], 4: [1,0], 5: [1,3] },
+        lowestRowOffOrigin: 1
       },
       east: {
         coordsOffOrigin: [[0,2], [1,2], [2,2], [3,2]],
-        rotationPoints: { 1: [1,1], 2: [1,2], 3: [1,2], 4: [0,2], 5: [3,2] }      
+        rotationPoints: { 1: [1,1], 2: [1,2], 3: [1,2], 4: [0,2], 5: [3,2] },
+        lowestRowOffOrigin: 3      
       },
       south: {
         coordsOffOrigin: [[2,0], [2,1], [2,2], [2,3]],
-        rotationPoints: { 1: [1,1], 2: [1,3], 3: [1,0], 4: [2,2], 5: [2,0] }
+        rotationPoints: { 1: [1,1], 2: [1,3], 3: [1,0], 4: [2,2], 5: [2,0] },
+        lowestRowOffOrigin: 2
       },
       west: {
         coordsOffOrigin: [[0,1], [1,1], [2,1], [3,1]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [3,1], 5: [0,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [3,1], 5: [0,1] },
+        lowestRowOffOrigin: 3
       }
     }  
 
@@ -61,19 +65,23 @@ export class TetriminoFactory {
     tetrimino.orientations = {
       north: {
         coordsOffOrigin: [[0,1], [0,2], [1,1], [1,2]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 1
       },
       east: {
         coordsOffOrigin: [[0,1], [0,2], [1,1], [1,2]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 1
       },
       south: {
         coordsOffOrigin: [[0,1], [0,2], [1,1], [1,2]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 1
       },
       west: {
         coordsOffOrigin: [[0,1], [0,2], [1,1], [1,2]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 1
       }
     } 
     
@@ -87,19 +95,23 @@ export class TetriminoFactory {
     tetrimino.orientations = {
       north: {
         coordsOffOrigin: [[0,0], [1,0], [1,1], [1,2]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 1
       },
       east: {
         coordsOffOrigin: [[0,1], [0,2], [1,1], [2,1]],
-        rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] }
+        rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] },
+        lowestRowOffOrigin: 2
       },
       south: {
         coordsOffOrigin: [[1,0], [1,1], [1,2], [2,2]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 2
       },
       west: {
         coordsOffOrigin: [[0,1], [1,1], [2,0], [2,1]],
-        rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] }
+        rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] },
+        lowestRowOffOrigin: 2
       }
     }
 
@@ -113,19 +125,23 @@ export class TetriminoFactory {
     tetrimino.orientations = {
       north: {
         coordsOffOrigin: [[0,2], [1,0], [1,1], [1,2]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 1
       },
       east: {
         coordsOffOrigin: [[0,1], [1,1], [2,1], [2,2]],
-        rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] }
+        rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] },
+        lowestRowOffOrigin: 2
       },
       south: {
         coordsOffOrigin: [[1,0], [1,1], [1,2], [2,0]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 2
       },
       west: {
         coordsOffOrigin: [[0,0], [0,1], [1,1], [2,1]],
-        rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] }
+        rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] },
+        lowestRowOffOrigin: 2
       }
     }
 
@@ -139,19 +155,23 @@ export class TetriminoFactory {
     tetrimino.orientations = {
       north: {
         coordsOffOrigin: [[0,1], [0,2], [1,0], [1,1]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 1
       },
       east: {
         coordsOffOrigin: [[0,1], [1,1], [1,2], [2,2]],
-        rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] }
+        rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] },
+        lowestRowOffOrigin: 2
       },
       south: {
         coordsOffOrigin: [[1,1], [1,2], [2,0], [2,1]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 2
       },
       west: {
         coordsOffOrigin: [[0,0], [1,0], [1,1], [2,1]],
-        rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] }
+        rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] },
+        lowestRowOffOrigin: 2
       }
     }
 
@@ -165,19 +185,23 @@ export class TetriminoFactory {
     tetrimino.orientations = {
       north: {
         coordsOffOrigin: [[0,0], [0,1], [1,1], [1,2]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 1
       },
       east: {
         coordsOffOrigin: [[0,2], [1,1], [1,2], [2,1]],
-        rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] }
+        rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] },
+        lowestRowOffOrigin: 2
       },
       south: {
         coordsOffOrigin: [[1,0], [1,1], [2,1], [2,2]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 2
       },
       west: {
         coordsOffOrigin: [[0,1], [1,0], [1,1], [2,0]],
-        rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] }
+        rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] },
+        lowestRowOffOrigin: 2
       }
     } 
 
@@ -191,26 +215,27 @@ export class TetriminoFactory {
     tetrimino.orientations = {
       north: {
         coordsOffOrigin: [[0,1], [1,0], [1,1], [1,2]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 1
       },
       east: {
         coordsOffOrigin: [[0,1], [1,1], [1,2], [2,1]],
-        rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] }
+        rotationPoints: { 1: [1,1], 2: [1,2], 3: [2,2], 4: [-1,1], 5: [-1,2] },
+        lowestRowOffOrigin: 2
       },
       south: {
         coordsOffOrigin: [[1,0], [1,1], [1,2] , [2,1]],
-        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] }
+        rotationPoints: { 1: [1,1], 2: [1,1], 3: [1,1], 4: [1,1], 5: [1,1] },
+        lowestRowOffOrigin: 2
       },
       west: {
         coordsOffOrigin: [[0,1], [1,0], [1,1], [2,1]],
-        rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] }
+        rotationPoints: { 1: [1,1], 2: [1,0], 3: [2,0], 4: [-1,1], 5: [-1,0] },
+        lowestRowOffOrigin: 2
       }
     } 
 
     return tetrimino
   }
-
-
-
 
 }

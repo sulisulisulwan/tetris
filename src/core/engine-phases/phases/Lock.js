@@ -10,15 +10,37 @@ export default class Lock extends BasePhase {
   execute(appState, setAppState) {
     // console.log('>>>> LOCK PHASE')
     this.syncToLocalState(appState)
+    const newState = {}
 
-    // If Lock Phase has just been initiated, set lock timer
-    if (!appState.lockIntervalId) {
-      setAppState(prevState => {
-        return {
-          ...prevState,
-          lockIntervalId: setTimeout(this.lockDownTimeout.bind(this), 500, setAppState)
-        }
-      })
+    const tetriminoCurrentBaseRowIdx = this.tetriminoMovementHandler.getLowestPlayfieldRowOfTetrimino(this.localState.currentTetrimino)
+
+    /**
+     * TODO: Current code shouldn't be breaking.
+     * tetriminoBaseRowIdx will be checked against  
+     * if tetriminoCurrentBaseRowIdx is HIGHER than this.localState.lowestLockSurfaceRow
+     * player can only use leftover time from previous lockTimeoutId
+     * 
+     * To implement this, we need to be able to grab the difference of time left in a
+     * previous lockTimeout and pass it to the new setting of lockDownTimeout
+     * 
+     * This dynamic setTimeout duration value should be held in state and
+     * must be updated at proper times to either the default lock duration 
+     * or the difference duration depending on the situation
+     * 
+     * Set to default 0.5 seconds if:
+     *   tetriminoCurrentBaseRowIdx < this.localState.lowestLockSurfaceRow
+     *   OR this.localState.lowestLockSurfaceRow === null (this means its the first time the tetrimino has landed ever)
+     *     update 
+     *        lockTimeoutId -> new 0.5 second timeoutId
+     *        lowestLockSurfaceRow -> tetriminoCurrentBaseRowIdx
+     * 
+     * Set to leftover seconds in all other cases
+     */
+
+    if (!appState.lockTimeoutId) {
+      newState.lowestLockSurfaceRow = this.tetriminoMovementHandler.getLowestPlayfieldRowOfTetrimino(this.localState.currentTetrimino)
+      newState.lockTimeoutId = setTimeout(this.lockDownTimeout.bind(this), 500, setAppState)
+      setAppState(newState)
       return
     }
 
@@ -31,18 +53,11 @@ export default class Lock extends BasePhase {
     const targetCoordsClear = this.tetriminoMovementHandler.gridCoordsAreClear(targetCoordsOnPlayfield, playFieldNoTetrimino)
 
     if (targetCoordsClear) {
-      /**
-       * if (targetCoords lowest point is lower or at the same level as oldCoords {
-       * TODO: this ^^ will requires 
-       *    - a new field for tetrimino for each orientation that keeps track of lowest point of tetrimino in that orientation
-       *    - a new field for state which keeps track of the lowest point before rotation
-       */
-        clearTimeout(appState.lockIntervalId)
-        setAppState({
-          currentGamePhase: 'falling',
-          lockIntervalId: null,
-          // potential new field for tracking lowest point before rotation
-        })
+
+        clearTimeout(appState.lockTimeoutId)
+        newState.currentGamePhase = 'falling'
+        newState.lockTimeoutId = null
+        setAppState(newState)
     
     }
     
@@ -50,7 +65,7 @@ export default class Lock extends BasePhase {
 
   lockDownTimeout(setAppState) {
 
-    clearTimeout(this.localState.lockIntervalId)
+    clearTimeout(this.localState.lockTimeoutId)
 
     // Final check if tetrimino should be granted falling status before permanent lock
     const tetriminoCopy = makeCopy(this.localState.currentTetrimino)
@@ -59,34 +74,45 @@ export default class Lock extends BasePhase {
     const playFieldNoTetrimino = this.tetriminoMovementHandler.removeTetriminoFromPlayField(oldCoordsOnPlayfield, playFieldCopy)
     const targetCoordsClear = this.tetriminoMovementHandler.gridCoordsAreClear(targetCoordsOnPlayfield, playFieldNoTetrimino)
     
+    const newState = {}
 
     if (targetCoordsClear) {
       const newPlayField = this.tetriminoMovementHandler.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetriminoCopy.minoGraphic)
-      setAppState({
-        currentGamePhase: 'falling',
-        lockIntervalId: null,
-        currentTetrimino: tetriminoCopy,
-        playField: newPlayField
-      })
+      
+      newState.currentGamePhase = 'falling',
+      newState.lockTimeoutId = null,
+      newState.currentTetrimino = tetriminoCopy,
+      newState.playField = newPlayField
+
+      setAppState(newState)
       return
     }
 
-    const newPlayField = this.tetriminoMovementHandler.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetriminoCopy.minoGraphic)
+    newState.playField = this.tetriminoMovementHandler.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetriminoCopy.minoGraphic)
     tetriminoCopy.status = 'locked'
-    setAppState({
-      currentGamePhase: 'pattern',
-      lockIntervalId: null,
-      currentTetrimino: tetriminoCopy,
-      playField: newPlayField
-    })
+    newState.currentTetrimino = tetriminoCopy
+    
+    if (this.gameIsOver(tetriminoCopy)) {
+      newState.currentGamePhase = 'gameOver'
+      setAppState(newState)
+      return
+    }
+
+    newState.currentGamePhase = 'pattern',
+    newState.lowestLockSurfaceRow = null
+    newState.lockTimeoutId = null,
+
+    setAppState(newState)
   }
+
+  gameIsOver(currentTetrimino) {
+    // Lock out - A whole tetrimino locks down above skyline
+    const lowestPlayfieldRowOfTetrimino = this.tetriminoMovementHandler.getLowestPlayfieldRowOfTetrimino(currentTetrimino)
+    const gameIsOver = lowestPlayfieldRowOfTetrimino < 20 ? true : false
+    return gameIsOver
+  }
+
 }
 
-/**
- * TODO:note: using the Super Rotation System, rotating a tetrimino often causes the y-coordinate of the tetrimino to increase, 
- * i.e., it “lifts up” off the Surface it landed on. the Lock down timer does not reset in this case, but it does stop 
- * counting down until the tetrimino lands again on a Surface that has the same (or higher) y-coordinate as it did before 
- * it was rotated. only if it lands on a Surface with a lower y-coordinate will the timer reset.
- */
 
       

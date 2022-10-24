@@ -1,5 +1,5 @@
-import { LevelGoals } from '../levels-and-scoring/LevelGoals.js'
-import { ClassicScoring } from '../levels-and-scoring/scoring-modes/Classic.js'
+import { LevelGoals } from '../level-goals/LevelGoals.js'
+import { ClassicScoring } from '../scoring/modes/Classic.js'
 import { NextQueue } from '../next-queue/NextQueue.js'
 import { PlayerControl } from '../player-control/PlayerControl.js'
 import { ClassicRotationSystem } from '../tetriminos/movement-handler/rotation-systems/ClassicRS.js'
@@ -14,7 +14,8 @@ import {
   Animate,
   Eliminate,
   Completion,
-  Off
+  Off,
+  GameOver
 } from './index.js'
 
 export class Engine {
@@ -51,6 +52,7 @@ export class Engine {
     this.eliminate = new Eliminate(sharedHandlers)
     this.completion = new Completion(sharedHandlers)
     this.iterate = new Iterate(sharedHandlers)
+    this.gameOver = new GameOver(sharedHandlers)
     
     this.playerControl = new PlayerControl(sharedHandlers)
 

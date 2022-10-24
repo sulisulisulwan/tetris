@@ -47,7 +47,7 @@ class App extends React.Component {
       eliminationActions: [],
 
       fallIntervalId: null,
-      lockIntervalId: null,
+      lockTimeoutId: null,
       currentTetrimino: null,
 
       scoringContextsForCompletion: [],
@@ -59,7 +59,9 @@ class App extends React.Component {
 
       backToBack: false,
       performedTSpin: false,
-      performedMiniTSpin: false
+      performedMiniTSpin: false,
+
+      lowestLockSurfaceRow: null
     }
 
     this.startQuitClickHandler = this.startQuitClickHandler.bind(this)

@@ -10,31 +10,39 @@ export default class Completion extends BasePhase {
     // console.log('>>>> COMPLETION PHASE')
     this.syncToLocalState(appState)
 
-    const scoringContexts = appState.scoringContextsForCompletion
-    const newState = {}
-
-    scoringContexts.forEach(scoringContext => {
-      const data = this.scoringHandler.updateScore(appState, scoringContext)
-      for (const field in data) {
-        newState[field] = data[field]
-      }
-    })
+    let newState = {}
+    this.accrueScore(newState) 
 
     if (appState.totalLinesCleared > appState.levelClearedLinesGoal) {
-      const newLevel = appState.currentLevel + 1
-      const { 
-        levelClearedLinesGoal, 
-        fallSpeed 
-      } = this.levelGoalsHandler.getNewLevelSpecs(newLevel)
-      
-      newState.currentLevel = newLevel
-      newState.levelClearedLinesGoal = levelClearedLinesGoal
-      newState.fallSpeed = fallSpeed
+      this.promoteLevel(newState)
     }
 
     newState.currentGamePhase = 'generation'
-
     setAppState(newState)
+  }
+
+  accrueScore(stateObj) {
+
+    const scoringContexts = this.localState.scoringContextsForCompletion
+
+    scoringContexts.forEach(scoringContext => {
+      const data = this.scoringHandler.updateScore(this.localState, scoringContext)
+      for (const field in data) {
+        stateObj[field] = data[field]
+      }
+    })
+  }
+
+  promoteLevel(stateObj) {
+    const newLevel = this.localState.currentLevel + 1
+    const { 
+      levelClearedLinesGoal, 
+      fallSpeed 
+    } = this.levelGoalsHandler.getNewLevelSpecs(newLevel)
+    
+    stateObj.currentLevel = newLevel
+    stateObj.levelClearedLinesGoal = levelClearedLinesGoal
+    stateObj.fallSpeed = fallSpeed
   }
 
 }
