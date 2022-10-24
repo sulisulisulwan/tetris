@@ -4,14 +4,6 @@ export class TetriminoMovementHandler {
 
   constructor() {}
 
-  flipClockwise(playField, tetrimino) {
-    return this.flip(tetrimino, 'flipClockwise', playField)
-  }
-  
-  flipCounterClockwise(playField, tetrimino) {
-    return this.flip(tetrimino, 'flipCounterClockwise', playField)
-  }
-
   right(localOrigin, playFieldOrigin) {
     const oldCoordOnPlayfield = [
       localOrigin[0] + playFieldOrigin[0], 

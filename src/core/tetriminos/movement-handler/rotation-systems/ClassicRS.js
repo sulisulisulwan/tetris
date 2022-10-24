@@ -12,6 +12,14 @@ export class ClassicRotationSystem extends TetriminoMovementHandler{
     }
   }
 
+  flipClockwise(playField, tetrimino) {
+    return this.flip(tetrimino, 'flipClockwise', playField)
+  }
+  
+  flipCounterClockwise(playField, tetrimino) {
+    return this.flip(tetrimino, 'flipCounterClockwise', playField)
+  }
+
   flip(tetrimino, playerInput, playField) {
     const { currentOrientation, currentOriginOnPlayfield } = tetrimino
     const targetOrientation = this.getTargetOrientation(currentOrientation, playerInput)
