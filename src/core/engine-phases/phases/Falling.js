@@ -1,13 +1,22 @@
 import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
-import { TetriminoMovementHandler } from "../../tetriminos/TetriminoMovementHandler.js";
+import { SuperRotationSystem } from "../../tetriminos/rotation-systems/SuperRS.js";
 
 export default class Falling extends BasePhase {
 
   constructor() {
     super()
     this.localState = {}
-    this.tetriminoMovementHandler = new TetriminoMovementHandler()
+    this.tetriminoMovementHandlersMap = new Map([
+      // ['classic', ClassicRotationSystem]
+      ['super', SuperRotationSystem] 
+    ])
+    this.tetriminoMovementHandler = this.setTetriminoMovementHandler('super')
+  }
+
+  setTetriminoMovementHandler(mode) {
+    const ctor = this.tetriminoMovementHandlersMap.get(mode)
+    return new ctor()
   }
 
   syncToLocalState(appState) {

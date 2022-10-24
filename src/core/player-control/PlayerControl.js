@@ -2,13 +2,20 @@ import { TetriminoMovementHandler } from "../tetriminos/TetriminoMovementHandler
 import { TetriminoFactory } from "../tetriminos/TetriminoFactory.js"
 import { makeCopy } from "../utils/utils.js"
 import { Scoring } from "../levels-and-scoring/Scoring.js"
+import { SuperRotationSystem } from "../tetriminos/rotation-systems/SuperRS.js"
+
 
 export class PlayerControl {
 
   constructor(gameMode) {
-    this.tetriminoMovementHandler = new TetriminoMovementHandler()
+    
     this.tetriminoFactory = new TetriminoFactory()
     this.scoringSystem = new Scoring(gameMode)
+    this.tetriminoMovementHandlersMap = new Map([
+      // ['classic', ClassicRotationSystem]
+      ['super', SuperRotationSystem] 
+    ])
+    this.tetriminoMovementHandler = this.setTetriminoMovementHandler('super')
     this.keystrokeMap = new Map([
       ['ArrowLeft','left'],
       ['num4','left'],
@@ -32,6 +39,11 @@ export class PlayerControl {
       ['F1','pausegame'],
       ['Escape','pausegame'],
     ])
+  }
+
+  setTetriminoMovementHandler(mode) {
+    const ctor = this.tetriminoMovementHandlersMap.get(mode)
+    return new ctor()
   }
 
   keystrokeHandler(e, setState, state) {

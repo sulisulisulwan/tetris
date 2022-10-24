@@ -4,8 +4,8 @@ import NextQueueDisplay from './visual-components/next-queue/NextQueueDisplay.js
 import StartQuitButton from './visual-components/StartQuitButton.jsx'
 import ScoreDisplay from './visual-components/ScoreDisplay.jsx'
 
-import { PlayerControl } from './game-logic/player-control/PlayerControl.js'
-import { Engine } from './game-logic/engine-phases/Engine.js'
+import { PlayerControl } from './core/player-control/PlayerControl.js'
+import { Engine } from './core/engine-phases/Engine.js'
 
 class App extends React.Component {
 

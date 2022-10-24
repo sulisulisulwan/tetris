@@ -1,32 +1,17 @@
 import { makeCopy } from '../utils/utils.js'
-import { SuperRotationSystem } from '../tetriminos/rotation-systems/SuperRS.js'
+// import { SuperRotationSystem } from '../tetriminos/rotation-systems/SuperRS.js'
 // import { ClassicRotationSystem } from '../rotation-systems/SuperRS'
 
 export class TetriminoMovementHandler {
 
-  constructor() {
-    this.rotationSystemMap = this.setRotationSystemMap()
-    this.rotationSystem = this.setRotationSystem('super')
-  }
-
-  setRotationSystemMap() {
-    return new Map([
-      ['super', SuperRotationSystem],
-      // ['classic', ClassicRotationSystem]
-    ])
-  }
-
-  setRotationSystem(rotationSystem) {
-    const rotatingSystemCtr = this.rotationSystemMap.get(rotationSystem)
-    return new rotatingSystemCtr()
-  }
+  constructor() {}
 
   flipClockwise(playField, tetrimino) {
-    return this.rotationSystem.flip(tetrimino, 'flipClockwise', playField)
+    return this.flip(tetrimino, 'flipClockwise', playField)
   }
   
   flipCounterClockwise(playField, tetrimino) {
-    return this.rotationSystem.flip(tetrimino, 'flipCounterClockwise', playField)
+    return this.flip(tetrimino, 'flipCounterClockwise', playField)
   }
 
   right(tetrimino, verticalIdx) {
@@ -66,7 +51,7 @@ export class TetriminoMovementHandler {
     }
   
     // Clear out the old coordinates to test new coordinates
-    const playFieldNoTetrimino = this.clearTetriminoFromPlayField(oldCoordsOnPlayfield, playField)
+    const playFieldNoTetrimino = this.removeTetriminoFromPlayField(oldCoordsOnPlayfield, playField)
   
     const targetCoordsClear = targetCoordsOnPlayfield.every(coord => {
       if (playFieldNoTetrimino[coord[0]]) { // This coordinate exists in the playable space
@@ -90,7 +75,6 @@ export class TetriminoMovementHandler {
 
   moveOne(direction, playField, tetrimino) {
     const playFieldCopy = makeCopy(playField)
-
     const {
       oldCoordsOnPlayfield,
       targetCoordsOnPlayfield,
@@ -108,11 +92,8 @@ export class TetriminoMovementHandler {
       }
     }
 
-    // Update tetrimino object 
     const tetriminoCopy = makeCopy(tetrimino)
     const newTetrimino = this.updateTetrimino(tetriminoCopy, direction)
-    
-    // Update the playfield 
     const newPlayField = this.addTetriminoToPlayField(targetCoordsOnPlayfield, playFieldCopy, tetrimino.minoGraphic)
 
     return {
@@ -123,40 +104,35 @@ export class TetriminoMovementHandler {
 
   }
 
-  // This is abstracted further from moveOne, as moveOne
-  softDrop() {
-
-  }
-
-  hardDrop() {
-
-  }
-
   // SHARED METHODS
 
-  updateTetrimino(tetrimino, direction) {
+  updateTetrimino(tetrimino, direction, offset, targetOrientation) {
+
     const [oldVertical, oldHorizontal] = tetrimino.currentOriginOnPlayfield
+    const newTetrimino = makeCopy(tetrimino)
     if (direction === 'left') {
-      tetrimino.currentOriginOnPlayfield = [oldVertical, oldHorizontal - 1]
+      newTetrimino.currentOriginOnPlayfield = [oldVertical, oldHorizontal - 1]
     } else if (direction === 'right') {
-      tetrimino.currentOriginOnPlayfield = [oldVertical, oldHorizontal + 1]
+      newTetrimino.currentOriginOnPlayfield = [oldVertical, oldHorizontal + 1]
     } else if (direction === 'down') {
       const newOne = [oldVertical + 1, oldHorizontal]
-      tetrimino.currentOriginOnPlayfield = newOne
+      newTetrimino.currentOriginOnPlayfield = newOne 
+    } else if ('flipClockwise' || 'flipCounterClockwise') {
+      newTetrimino.currentOriginOnPlayfield = [oldVertical + offset[0], oldHorizontal + offset[1]]
+      newTetrimino.currentOrientation = targetOrientation
     }
-
-    return tetrimino
+    return newTetrimino
   }
 
-  clearTetriminoFromPlayField(coords, playField) {
+  removeTetriminoFromPlayField(coords, playField) {
     coords.forEach(coord => {
       playField[coord[0]][coord[1]] = '[_]'
     })
     return playField
   }
 
-  addTetriminoToPlayField(coords, playField, minoGraphic) {
-    coords.forEach(coord => {
+  addTetriminoToPlayField(tetriminoCoords, playField, minoGraphic) {
+    tetriminoCoords.forEach(coord => {
       playField[coord[0]][coord[1]] = minoGraphic
     })
     return playField
