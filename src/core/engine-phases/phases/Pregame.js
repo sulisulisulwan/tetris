@@ -10,7 +10,6 @@ export default class Pregame extends BasePhase {
 
   execute(appState, setAppState) {
     console.log('>>> PREGAME PHASE')
-    this.syncToLocalState(appState)
   }
 
 }

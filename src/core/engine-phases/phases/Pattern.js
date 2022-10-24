@@ -9,7 +9,6 @@ export default class Pattern extends BasePhase {
 
   execute(appState, setAppState) {
     // console.log('>>>> PATTERN PHASE')
-    this.syncToLocalState(appState)
 
     const newState = {}
     newState.scoringContextsForCompletion = []

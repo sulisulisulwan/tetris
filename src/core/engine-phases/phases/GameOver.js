@@ -8,7 +8,6 @@ export default class GameOver extends BasePhase {
   
   execute(appState, setAppState) {
     console.log('>>>> GAME OVER')
-    this.syncToLocalState(appState)
 
     const newState = {}
     newState.currentGamePhase = 'off'

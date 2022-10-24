@@ -9,7 +9,6 @@ export default class Lock extends BasePhase {
 
   execute(appState, setAppState) {
     // console.log('>>>> LOCK PHASE')
-    this.syncToLocalState(appState)
     const newState = {}
 
     const tetriminoCurrentBaseRowIdx = this.tetriminoMovementHandler.getLowestPlayfieldRowOfTetrimino(this.localState.currentTetrimino)

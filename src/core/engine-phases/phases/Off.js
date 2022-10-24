@@ -8,7 +8,6 @@ export default class Off extends BasePhase {
 
   execute(appState, setAppState) {
     console.log('>>>> OFF PHASE')
-    this.syncToLocalState(appState)
 
     clearInterval(appState.fallIntervalId)
     clearTimeout(appState.lockTimeoutId)

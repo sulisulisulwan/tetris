@@ -8,7 +8,6 @@ export default class Animate extends BasePhase {
 
   execute(appState, setAppState) {
     // console.log('>>>> ANIMATE PHASE')
-    this.syncToLocalState(appState)
 
     setAppState({
       currentGamePhase: 'eliminate'

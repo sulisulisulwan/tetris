@@ -67,6 +67,7 @@ export class Engine {
       this.setCurrentPhaseName(currentGamePhase)
       this.setCurrentPhase(currentGamePhase)
     }
+    this.currentPhase.syncToLocalState(stateData)
     this.currentPhase.execute(stateData, setState)
   }
 

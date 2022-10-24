@@ -8,7 +8,6 @@ export default class Eliminate extends BasePhase {
 
   execute(appState, setAppState) {
     // console.log('>>>> ELIMINATE PHASE')
-    this.syncToLocalState(appState)
 
     const newPlayField = this.runEliminators()
     

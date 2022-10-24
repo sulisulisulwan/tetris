@@ -8,7 +8,6 @@ export default class Completion extends BasePhase {
   
   execute(appState, setAppState) {
     // console.log('>>>> COMPLETION PHASE')
-    this.syncToLocalState(appState)
 
     let newState = {}
     this.accrueScore(newState) 

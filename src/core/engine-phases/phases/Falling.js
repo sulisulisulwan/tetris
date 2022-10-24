@@ -8,7 +8,6 @@ export default class Falling extends BasePhase {
 
   execute(appState, setAppState) {
     // console.log('>>>> FALLING PHASE')
-    this.syncToLocalState(appState)
     
     if (appState.playerAction.softDrop === true) {
       if (appState.fallIntervalId) {

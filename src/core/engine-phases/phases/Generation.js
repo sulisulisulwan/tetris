@@ -11,7 +11,6 @@ export default class Generation extends BasePhase {
 
   execute(appState, setAppState) {
     // console.log('>>> GENERATION PHASE')
-    this.syncToLocalState(appState)
 
     // Dequeue a new tetrimino and instantiate it.
     const tetriminoContext = this.nextQueueHandler.dequeue()

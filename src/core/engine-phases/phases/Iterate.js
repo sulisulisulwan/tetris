@@ -8,7 +8,6 @@ export default class Iterate extends BasePhase {
   
   execute(appState, setAppState) {
     // console.log('>>>> ITERATE PHASE')
-    this.syncToLocalState(appState)
 
     setAppState({
       currentGamePhase: 'animate'
