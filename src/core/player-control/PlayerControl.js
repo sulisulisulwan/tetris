@@ -1,8 +1,7 @@
-import { TetriminoMovementHandler } from "../tetriminos/TetriminoMovementHandler.js"
 import { TetriminoFactory } from "../tetriminos/TetriminoFactory.js"
 import { makeCopy } from "../utils/utils.js"
 import { Scoring } from "../levels-and-scoring/Scoring.js"
-import { SuperRotationSystem } from "../tetriminos/rotation-systems/SuperRS.js"
+import { SuperRotationSystem } from "../tetriminos/movement-handler/rotation-systems/SuperRS.js"
 
 
 export class PlayerControl {

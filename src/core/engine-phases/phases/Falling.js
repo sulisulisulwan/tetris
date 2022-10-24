@@ -1,6 +1,6 @@
 import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
-import { SuperRotationSystem } from "../../tetriminos/rotation-systems/SuperRS.js";
+import { SuperRotationSystem } from "../../tetriminos/movement-handler/rotation-systems/SuperRS.js";
 
 export default class Falling extends BasePhase {
 

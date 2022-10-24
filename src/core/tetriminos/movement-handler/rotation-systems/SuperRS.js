@@ -1,4 +1,4 @@
-import { makeCopy } from "../../utils/utils.js"
+import { makeCopy } from "../../../utils/utils.js"
 import { TetriminoMovementHandler } from "../TetriminoMovementHandler.js"
 export class SuperRotationSystem extends TetriminoMovementHandler{
 

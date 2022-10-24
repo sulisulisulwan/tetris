@@ -1,6 +1,6 @@
 import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./../phases/BasePhase.js";
-import { TetriminoMovementHandler } from '../../tetriminos/TetriminoMovementHandler.js'
+import { TetriminoMovementHandler } from '../../tetriminos/movement-handler/TetriminoMovementHandler.js'
 
 
 export default class Lock extends BasePhase {

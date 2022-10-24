@@ -1,6 +1,4 @@
-import { makeCopy } from '../utils/utils.js'
-// import { SuperRotationSystem } from '../tetriminos/rotation-systems/SuperRS.js'
-// import { ClassicRotationSystem } from '../rotation-systems/SuperRS'
+import { makeCopy } from '../../utils/utils.js'
 
 export class TetriminoMovementHandler {
 
