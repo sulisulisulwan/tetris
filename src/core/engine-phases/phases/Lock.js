@@ -1,6 +1,6 @@
 import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./../phases/BasePhase.js";
-import { TetriminoMovementHandler } from '../../tetriminos/movement-handler/TetriminoMovementHandler.js'
+import { SuperRotationSystem } from "../../tetriminos/movement-handler/rotation-systems/SuperRS.js";
 
 
 export default class Lock extends BasePhase {
@@ -8,7 +8,16 @@ export default class Lock extends BasePhase {
   constructor() {
     super()
     this.localState = {}
-    this.tetriminoMovementHandler = new TetriminoMovementHandler()
+    this.tetriminoMovementHandlersMap = new Map([
+      // ['classic', ClassicRotationSystem]
+      ['super', SuperRotationSystem] 
+    ])
+    this.tetriminoMovementHandler = this.setTetriminoMovementHandler('super')
+  }
+
+  setTetriminoMovementHandler(mode) {
+    const ctor = this.tetriminoMovementHandlersMap.get(mode)
+    return new ctor()
   }
 
   syncToLocalState(appState) {
@@ -16,7 +25,7 @@ export default class Lock extends BasePhase {
   }
 
   execute(appState, setAppState) {
-    // console.log('>>>> LOCK PHASE')
+    console.log('>>>> LOCK PHASE')
     const appStateCopy = makeCopy(appState)
     this.syncToLocalState(appStateCopy)
 
@@ -34,7 +43,10 @@ export default class Lock extends BasePhase {
     // Player has made a change so check if player has positioned tetrimino to escape lock phase
     const tetriminoCopy = makeCopy(appState.currentTetrimino)
     const playFieldCopy = makeCopy(appState.playField)
-    const { targetCoordsClear } = this.tetriminoMovementHandler.gridCoordsAreClear(tetriminoCopy, playFieldCopy, 'down')
+
+    const { oldCoordsOnPlayfield, targetCoordsOnPlayfield } = this.tetriminoMovementHandler.getOldAndTargetCoordsOnPlayField(tetriminoCopy, 'down')
+    const playFieldNoTetrimino = this.tetriminoMovementHandler.removeTetriminoFromPlayField(oldCoordsOnPlayfield, playFieldCopy)
+    const targetCoordsClear = this.tetriminoMovementHandler.gridCoordsAreClear(targetCoordsOnPlayfield, playFieldNoTetrimino)
 
     if (targetCoordsClear) {
       /**
@@ -60,12 +72,10 @@ export default class Lock extends BasePhase {
 
     // Final check if tetrimino should be granted falling status before permanent lock
     const tetriminoCopy = makeCopy(this.localState.currentTetrimino)
-    const playFieldCopy = this.localState.playField
-    const { 
-      oldCoordsOnPlayfield,
-      targetCoordsClear,
-      playFieldNoTetrimino
-    } = this.tetriminoMovementHandler.gridCoordsAreClear(tetriminoCopy, playFieldCopy, 'down')
+    const playFieldCopy = makeCopy(playField)
+    const { oldCoordsOnPlayfield, targetCoordsOnPlayfield } = this.tetriminoMovementHandler.getOldAndTargetCoordsOnPlayField(tetriminoCopy, direction)
+    const playFieldNoTetrimino = this.tetriminoMovementHandler.removeTetriminoFromPlayField(oldCoordsOnPlayfield, playFieldCopy)
+    const targetCoordsClear = this.tetriminoMovementHandler.gridCoordsAreClear(targetCoordsOnPlayfield, playFieldNoTetrimino)
 
     if (targetCoordsClear) {
       const newPlayField = this.tetriminoMovementHandler.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetriminoCopy.minoGraphic)
@@ -78,7 +88,7 @@ export default class Lock extends BasePhase {
       return
     }
 
-    const newPlayField = this.tetriminoMovementHandler.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetriminoCopy.minoGraphic)
+    // const newPlayField = this.tetriminoMovementHandler.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetriminoCopy.minoGraphic)
     tetriminoCopy.status = 'locked'
 
     setAppState({

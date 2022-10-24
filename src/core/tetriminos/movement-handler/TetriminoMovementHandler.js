@@ -12,46 +12,85 @@ export class TetriminoMovementHandler {
     return this.flip(tetrimino, 'flipCounterClockwise', playField)
   }
 
-  right(tetrimino, verticalIdx) {
-    const oldCoordsOffOrigin = tetrimino.orientations[tetrimino.currentOrientation].coordsOffOrigin
-    const oldCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1]]
-    const targetCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1] + 1]
+  right(localOrigin, playFieldOrigin) {
+    const oldCoordOnPlayfield = [
+      localOrigin[0] + playFieldOrigin[0], 
+      localOrigin[1] + playFieldOrigin[1]
+    ]
+    const targetCoordOnPlayfield = [
+      localOrigin[0] + playFieldOrigin[0], 
+      localOrigin[1] + playFieldOrigin[1] + 1
+    ]
     return { oldCoordOnPlayfield, targetCoordOnPlayfield }
   }
 
-  left(tetrimino, verticalIdx) {
-    const oldCoordsOffOrigin = tetrimino.orientations[tetrimino.currentOrientation].coordsOffOrigin
-    const oldCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1]]
-    const targetCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1] - 1]
+  left(localOrigin, playFieldOrigin) {
+    const oldCoordOnPlayfield = [
+      localOrigin[0] + playFieldOrigin[0], 
+      localOrigin[1] + playFieldOrigin[1]
+    ]
+    const targetCoordOnPlayfield = [
+      localOrigin[0] + playFieldOrigin[0], 
+      localOrigin[1] + playFieldOrigin[1] - 1
+    ]
     return { oldCoordOnPlayfield, targetCoordOnPlayfield }
   }
   
-  down(tetrimino, verticalIdx) {
-    const oldCoordsOffOrigin = tetrimino.orientations[tetrimino.currentOrientation].coordsOffOrigin
-    const oldCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0], oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1]]
-    const targetCoordOnPlayfield = [oldCoordsOffOrigin[verticalIdx][0] + tetrimino.currentOriginOnPlayfield[0] + 1, oldCoordsOffOrigin[verticalIdx][1] + tetrimino.currentOriginOnPlayfield[1]]
+  down(localOrigin, playFieldOrigin) {
+    const oldCoordOnPlayfield = [
+      localOrigin[0] + playFieldOrigin[0], 
+      localOrigin[1] + playFieldOrigin[1]
+    ]
+    const targetCoordOnPlayfield = [
+      localOrigin[0] + playFieldOrigin[0] + 1, 
+      localOrigin[1] + playFieldOrigin[1]
+    ]
     return { oldCoordOnPlayfield, targetCoordOnPlayfield }
   }
 
-  gridCoordsAreClear(tetrimino, playField, direction) {
-
+  getOldAndTargetCoordsOnPlayField(tetrimino, direction) {
     const oldCoordsOnPlayfield = []
     const targetCoordsOnPlayfield = []
+    const offLocalOriginCoords = tetrimino.orientations[tetrimino.currentOrientation].coordsOffOrigin
+    const offPlayFieldOriginCoords = tetrimino.currentOriginOnPlayfield
   
-    const { currentOrientation } = tetrimino
-    const oldCoordsOffOrigin = tetrimino.orientations[currentOrientation].coordsOffOrigin
-  
-    // Get old and new coordinates
-    for (let i = 0; i < oldCoordsOffOrigin.length; i += 1) {
-      const { oldCoordOnPlayfield, targetCoordOnPlayfield } = this[direction](tetrimino, i)
+    offLocalOriginCoords.forEach(localCoord => {
+      const { oldCoordOnPlayfield, targetCoordOnPlayfield } = this[direction](localCoord, offPlayFieldOriginCoords)
       oldCoordsOnPlayfield.push(oldCoordOnPlayfield)
       targetCoordsOnPlayfield.push(targetCoordOnPlayfield)
+    })
+  
+    return {
+      oldCoordsOnPlayfield,
+      targetCoordsOnPlayfield
     }
-  
-    // Clear out the old coordinates to test new coordinates
-    const playFieldNoTetrimino = this.removeTetriminoFromPlayField(oldCoordsOnPlayfield, playField)
-  
-    const targetCoordsClear = targetCoordsOnPlayfield.every(coord => {
+  }
+
+  moveOne(direction, playField, tetrimino) {
+    const playFieldCopy = makeCopy(playField)
+    const { oldCoordsOnPlayfield, targetCoordsOnPlayfield } = this.getOldAndTargetCoordsOnPlayField(tetrimino, direction)
+    const playFieldNoTetrimino = this.removeTetriminoFromPlayField(oldCoordsOnPlayfield, playFieldCopy)
+    const targetCoordsClear = this.gridCoordsAreClear(targetCoordsOnPlayfield, playFieldNoTetrimino)
+
+    if (!targetCoordsClear) {
+      return {
+        newPlayField: this.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetrimino.minoGraphic),
+        newTetrimino: tetrimino,
+        successfulMove: false
+      }
+    }
+    return {
+      newPlayField: this.addTetriminoToPlayField(targetCoordsOnPlayfield, playFieldCopy, tetrimino.minoGraphic),
+      newTetrimino: this.updateTetrimino(makeCopy(tetrimino), direction),
+      successfulMove: true
+    }
+
+  }
+
+  // SHARED METHODS
+
+  gridCoordsAreClear(targetCoordsOnPlayfield, playFieldNoTetrimino) {
+    return targetCoordsOnPlayfield.every(coord => {
       if (playFieldNoTetrimino[coord[0]]) { // This coordinate exists in the playable space
         if (playFieldNoTetrimino[coord[0]][coord[1]] !== undefined) { // This square exists in the playable space
           if (playFieldNoTetrimino[coord[0]][coord[1]] === '[_]') { // This square is not yet occupied
@@ -61,51 +100,9 @@ export class TetriminoMovementHandler {
       } 
       return false
     }) 
-  
-    return {
-      oldCoordsOnPlayfield,
-      targetCoordsOnPlayfield,
-      playFieldNoTetrimino,
-      targetCoordsClear
-    }
   }
-  
-
-  moveOne(direction, playField, tetrimino) {
-    const playFieldCopy = makeCopy(playField)
-    const {
-      oldCoordsOnPlayfield,
-      targetCoordsOnPlayfield,
-      playFieldNoTetrimino,
-      targetCoordsClear
-    } = this.gridCoordsAreClear(tetrimino, playFieldCopy, direction)
-
-    if (!targetCoordsClear) {
-      // Revert to old coordinates if failed.
-      const newPlayField = this.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetrimino.minoGraphic)
-      return {
-        newPlayField,
-        newTetrimino: tetrimino,
-        successfulMove: false
-      }
-    }
-
-    const tetriminoCopy = makeCopy(tetrimino)
-    const newTetrimino = this.updateTetrimino(tetriminoCopy, direction)
-    const newPlayField = this.addTetriminoToPlayField(targetCoordsOnPlayfield, playFieldCopy, tetrimino.minoGraphic)
-
-    return {
-      newPlayField, 
-      newTetrimino,
-      successfulMove: true
-    }
-
-  }
-
-  // SHARED METHODS
 
   updateTetrimino(tetrimino, direction, offset, targetOrientation) {
-
     const [oldVertical, oldHorizontal] = tetrimino.currentOriginOnPlayfield
     const newTetrimino = makeCopy(tetrimino)
     if (direction === 'left') {

@@ -24,7 +24,7 @@ export default class Falling extends BasePhase {
   }
 
   execute(appState, setAppState) {
-    // console.log('>>>> FALLING PHASE')
+    console.log('>>>> FALLING PHASE')
     const appStateCopy = makeCopy(appState)
     this.syncToLocalState(appStateCopy)
     /**
@@ -56,7 +56,10 @@ export default class Falling extends BasePhase {
       successfulMove
     } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
 
+    // console.log(newPlayField, newTetrimino, successfulMove)
+
     if (successfulMove)  {
+      console.log('is this every successful')
       setAppState(prevState => {
         return {
           ...prevState,
