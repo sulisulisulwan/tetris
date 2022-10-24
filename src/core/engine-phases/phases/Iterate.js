@@ -5,15 +5,10 @@ import BasePhase from "./BasePhase.js";
 
 export default class Iterate extends BasePhase {
 
-  constructor() {
-    super()
-    this.localState = {}
+  constructor(sharedHandlers) {
+    super(sharedHandlers)
   }
-
-  syncToLocalState(appState) {
-    this.localState = appState
-  }
-
+  
   execute(appState, setAppState) {
     // console.log('>>>> ITERATE PHASE')
     const appStateCopy = makeCopy(appState)

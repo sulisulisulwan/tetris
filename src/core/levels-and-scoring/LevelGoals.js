@@ -2,10 +2,10 @@ import { FixedGoals } from "./goal-modes/Fixed.js"
 
 export class LevelGoals {
 
-  constructor(goalsMode) {
+  constructor(mode) {
     this.fallSpeeds = this.loadFallSpeedsMap()
     this.goalModesMap = this.loadGoalModesMap()
-    this.goalSpecsHandler = this.loadGoalSpecs(goalsMode)    
+    this.goalSpecsHandler = this.loadGoalSpecs(mode)    
   }
 
   loadFallSpeedsMap() {
@@ -34,8 +34,8 @@ export class LevelGoals {
       ['fixed', FixedGoals]
     ])
   }
-  loadGoalSpecs(goalsMode) {
-    const ctor = this.goalModesMap.get(goalsMode)
+  loadGoalSpecs(mode) {
+    const ctor = this.goalModesMap.get(mode)
     return new ctor()
   }
 

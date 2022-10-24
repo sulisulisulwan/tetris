@@ -5,19 +5,9 @@ import BasePhase from "./BasePhase.js";
 
 export default class Pattern extends BasePhase {
 
-  constructor(initialGameState) {
-    super()
-    this.localState = {}
-    this.patternMetadata = {
-      lineClear: {
-        priority: 1
-      }
-    }
-    this.loadedPatterns = this.loadPatterns(initialGameState.possibleActivePatterns)
-  }
-
-  syncToLocalState(appState) {
-    this.localState = appState
+  constructor(sharedHandlers, possibleActivePatterns) {
+    super(sharedHandlers)
+    this.loadedPatterns = this.loadPatterns(possibleActivePatterns)
   }
 
   execute(appState, setAppState) {

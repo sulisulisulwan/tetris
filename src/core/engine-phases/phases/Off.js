@@ -5,13 +5,8 @@ import BasePhase from "./BasePhase.js";
 
 export default class Off extends BasePhase {
 
-  constructor() {
-    super()
-    this.localState = {}
-  }
-
-  syncToLocalState(appState) {
-    this.localState = appState
+  constructor(sharedHandlers) {
+    super(sharedHandlers)
   }
 
   execute(appState, setAppState) {

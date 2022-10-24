@@ -7,6 +7,15 @@ import ScoreDisplay from './visual-components/ScoreDisplay.jsx'
 import { PlayerControl } from './core/player-control/PlayerControl.js'
 import { Engine } from './core/engine-phases/Engine.js'
 
+const initialOptions = {
+  possibleActivePatterns: {
+    lineClear: true
+  },
+  rotationSystem: 'super',
+  scoringSystem: 'classic',
+  levelGoalsSystem: 'fixed'
+}
+
 class App extends React.Component {
 
   constructor(props) {
@@ -35,9 +44,6 @@ class App extends React.Component {
       },
       currentGamePhase: 'off',
 
-      possibleActivePatterns: {
-        lineClear: true
-      },
       eliminationActions: [],
 
       fallIntervalId: null,
@@ -57,19 +63,13 @@ class App extends React.Component {
     }
 
     this.startQuitClickHandler = this.startQuitClickHandler.bind(this)
-    this.handlePlayerKeyStroke = this.handlePlayerKeyStroke.bind(this)
-    
+    this.handlePlayerKeyStroke = this.handlePlayerKeyStroke.bind(this)    
     this.engine = this.setEngine()
-    this.playerControlHandler = this.setPlayerControl()
 
   }
 
   setEngine() {
-    return new Engine(this.state)
-  }
-
-  setPlayerControl() {
-    return new PlayerControl('classic')
+    return new Engine(initialOptions)
   }
 
   getInitialPlayField() {
@@ -86,7 +86,7 @@ class App extends React.Component {
 
   handlePlayerKeyStroke(e) {
     e.preventDefault()
-    this.playerControlHandler.keystrokeHandler(e, this.setState.bind(this), this.state)
+    this.engine.playerControl.keystrokeHandler(e, this.setState.bind(this), this.state)
   }
 
   componentDidMount() {

@@ -1,21 +1,12 @@
 import { makeCopy } from "../../utils/utils.js";
 import BasePhase from "./BasePhase.js";
-import { Scoring } from "../../levels-and-scoring/Scoring.js";
-import { LevelGoals } from "../../levels-and-scoring/LevelGoals.js";
 
 export default class Completion extends BasePhase {
 
-  constructor() {
-    super()
-    this.localState = {}
-    this.scoringSystem = new Scoring('classic')
-    this.levelGoalsSystem = new LevelGoals('fixed')
+  constructor(sharedHandlers) {
+    super(sharedHandlers)
   }
-
-  syncToLocalState(appState) {
-    this.localState = appState
-  }
-
+  
   execute(appState, setAppState) {
     // console.log('>>>> COMPLETION PHASE')
     const appStateCopy = makeCopy(appState)
@@ -25,7 +16,7 @@ export default class Completion extends BasePhase {
     const newState = {}
 
     scoringContexts.forEach(scoringContext => {
-      const data = this.scoringSystem.updateScore(appState, scoringContext)
+      const data = this.scoringHandler.updateScore(appState, scoringContext)
       for (const field in data) {
         newState[field] = data[field]
       }
@@ -33,7 +24,7 @@ export default class Completion extends BasePhase {
 
     if (appState.totalLinesCleared > appState.levelClearedLinesGoal) {
       const newLevel = appState.currentLevel + 1
-      const { levelClearedLinesGoal, fallSpeed } = this.levelGoalsSystem.getNewLevelSpecs(newLevel)
+      const { levelClearedLinesGoal, fallSpeed } = this.levelGoalsHandler.getNewLevelSpecs(newLevel)
       
       newState.currentLevel = newLevel
       newState.levelClearedLinesGoal = levelClearedLinesGoal

@@ -5,23 +5,8 @@ import { SuperRotationSystem } from "../../tetriminos/movement-handler/rotation-
 
 export default class Lock extends BasePhase {
 
-  constructor() {
-    super()
-    this.localState = {}
-    this.tetriminoMovementHandlersMap = new Map([
-      // ['classic', ClassicRotationSystem]
-      ['super', SuperRotationSystem] 
-    ])
-    this.tetriminoMovementHandler = this.setTetriminoMovementHandler('super')
-  }
-
-  setTetriminoMovementHandler(mode) {
-    const ctor = this.tetriminoMovementHandlersMap.get(mode)
-    return new ctor()
-  }
-
-  syncToLocalState(appState) {
-    this.localState = appState
+  constructor(sharedHandlers) {
+    super(sharedHandlers)
   }
 
   execute(appState, setAppState) {
@@ -72,10 +57,11 @@ export default class Lock extends BasePhase {
 
     // Final check if tetrimino should be granted falling status before permanent lock
     const tetriminoCopy = makeCopy(this.localState.currentTetrimino)
-    const playFieldCopy = makeCopy(playField)
-    const { oldCoordsOnPlayfield, targetCoordsOnPlayfield } = this.tetriminoMovementHandler.getOldAndTargetCoordsOnPlayField(tetriminoCopy, direction)
+    const playFieldCopy = makeCopy(this.localState.playField)
+    const { oldCoordsOnPlayfield, targetCoordsOnPlayfield } = this.tetriminoMovementHandler.getOldAndTargetCoordsOnPlayField(tetriminoCopy, 'down')
     const playFieldNoTetrimino = this.tetriminoMovementHandler.removeTetriminoFromPlayField(oldCoordsOnPlayfield, playFieldCopy)
     const targetCoordsClear = this.tetriminoMovementHandler.gridCoordsAreClear(targetCoordsOnPlayfield, playFieldNoTetrimino)
+    
 
     if (targetCoordsClear) {
       const newPlayField = this.tetriminoMovementHandler.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetriminoCopy.minoGraphic)
@@ -88,14 +74,13 @@ export default class Lock extends BasePhase {
       return
     }
 
-    // const newPlayField = this.tetriminoMovementHandler.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetriminoCopy.minoGraphic)
+    const newPlayField = this.tetriminoMovementHandler.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldNoTetrimino, tetriminoCopy.minoGraphic)
     tetriminoCopy.status = 'locked'
-
     setAppState({
       currentGamePhase: 'pattern',
       lockIntervalId: null,
       currentTetrimino: tetriminoCopy,
-      playField: playFieldCopy
+      playField: newPlayField
     })
   }
 

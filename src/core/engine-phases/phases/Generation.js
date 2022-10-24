@@ -5,16 +5,11 @@ import { TetriminoFactory } from '../../tetriminos/TetriminoFactory.js'
 
 export default class Generation extends BasePhase {
 
-  constructor() {
-    super()
-    this.localState = {}
+  constructor(sharedHandlers) {
+    super(sharedHandlers)
     this.nextQueue = new NextQueue()
   }
 
-  syncToLocalState(appState) {
-    this.localState = appState
-  }
-  
   execute(appState, setAppState) {
     console.log('>>> GENERATION PHASE')
     const appStateCopy = makeCopy(appState)

@@ -1,20 +1,12 @@
 import { TetriminoFactory } from "../tetriminos/TetriminoFactory.js"
 import { makeCopy } from "../utils/utils.js"
-import { Scoring } from "../levels-and-scoring/Scoring.js"
-import { SuperRotationSystem } from "../tetriminos/movement-handler/rotation-systems/SuperRS.js"
+import { SharedScope } from "../SharedScope.js"
 
+export class PlayerControl extends SharedScope {
 
-export class PlayerControl {
-
-  constructor(gameMode) {
-    
+  constructor(sharedHandlers) {
+    super(sharedHandlers)
     this.tetriminoFactory = new TetriminoFactory()
-    this.scoringSystem = new Scoring(gameMode)
-    this.tetriminoMovementHandlersMap = new Map([
-      // ['classic', ClassicRotationSystem]
-      ['super', SuperRotationSystem] 
-    ])
-    this.tetriminoMovementHandler = this.setTetriminoMovementHandler('super')
     this.keystrokeMap = new Map([
       ['ArrowLeft','left'],
       ['num4','left'],
@@ -38,11 +30,6 @@ export class PlayerControl {
       ['F1','pausegame'],
       ['Escape','pausegame'],
     ])
-  }
-
-  setTetriminoMovementHandler(mode) {
-    const ctor = this.tetriminoMovementHandlersMap.get(mode)
-    return new ctor()
   }
 
   keystrokeHandler(e, setState, state) {
@@ -165,56 +152,46 @@ export class PlayerControl {
   }
 
   softdrop(setState, stateData, eventData) {
-    /**
-     * Instead of calling tetriminoMovementHandler here, we let the falling phase engine
-     * handle it as it should be an immediate drop.
-     */
     
-    // ArrowDown = softdrop 
-    // Soft drop is 20 times faster than current drop time
-    // This is an immediate auto repeat.  Only ceases when keystroke lifted
-    // Lockdown does not occur till lock timer completed
-    // Softdrop action should continue even after termino is 
-    //locked and new termino generates while key is kept pressed
     const { strokeType } = eventData
     const { softdrop } = stateData.playerAction
     const { playField, currentTetrimino } = stateData
 
-    // if (softdrop && strokeType === 'keyup')  {
     if (strokeType === 'keyup')  {
       const stateCopy = makeCopy(stateData)
+      
+      // Clear interval as soon as possible so that engine can begin next fall interval immediately without rerendering?
+      clearInterval(stateData.fallIntervalId)
+      stateCopy.fallIntervalId = null
+      stateCopy.fallSpeed = stateData.fallSpeed / .02
       stateCopy.playerAction.softdrop = false
       setState(stateCopy)
       return
     }
 
 
-    if (softdrop && strokeType === 'keydown')  {
+    if (strokeType === 'keydown')  {
+
+      if (softdrop) {
+        // Let softdrop continue in the engine
+        return
+      }
+
       const stateCopy = makeCopy(stateData)
       const { newPlayField, newTetrimino, successfulMove } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
-
-      let totalScore
-
-      if (successfulMove) {
-        const scoreData = { currentScore: stateCopy.totalScore }
-        const scoreItem = ['softdrop', scoreData]
-
-        totalScore = this.scoringSystem.updateScore(stateCopy, scoreItem)
-      }
       
-      stateCopy.totalScore = totalScore || stateCopy.totalScore
+      // Clear interval as soon as possible so that engine can begin next fall interval immediately without rerendering?
+      clearInterval(stateData.fallIntervalId)
+  
+      stateCopy.fallIntervalId = null
+      stateCopy.fallSpeed = stateData.fallSpeed * .02
       stateCopy.playField = newPlayField
       stateCopy.currentTetrimino = newTetrimino
+      stateCopy.playerAction.softdrop = true
       setState(stateCopy)
       return
     }
-    
-    const stateCopy = makeCopy(stateData)
-    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
-    stateCopy.playField = newPlayField
-    stateCopy.currentTetrimino = newTetrimino
-    stateCopy.playerAction.softdrop = true
-    setState(stateCopy)
+
   }
   
   harddrop(setState, stateData, eventData) {
@@ -259,7 +236,7 @@ export class PlayerControl {
     }
 
     const scoringItem = ['harddrop', scoringData]
-    stateCopy.totalScore = this.scoringSystem.updateScore(stateData, scoringItem)
+    stateCopy.totalScore = this.scoringHandler.updateScore(stateData, scoringItem)
     
     stateCopy.playerAction.harddrop = true
     stateCopy.currentGamePhase = 'pattern'

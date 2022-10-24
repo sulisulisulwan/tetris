@@ -5,14 +5,8 @@ import BasePhase from "./BasePhase.js";
 
 export default class Pregame extends BasePhase {
   
-  constructor(handlerProps) {
-    super()
-    this.localState = {}
-    this.handlerProps = handlerProps
-  }
-  
-  syncToLocalState(appState) {
-    this.localState = appState
+  constructor(sharedHandlers) {
+    super(sharedHandlers)
   }
 
   execute(appState, setAppState) {
