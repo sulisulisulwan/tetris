@@ -12,15 +12,15 @@ export class ClassicRotationSystem extends TetriminoMovementHandler{
     }
   }
 
-  flipClockwise(playField, tetrimino) {
-    return this.flip(tetrimino, 'flipClockwise', playField)
+  flipClockwise(playfield, tetrimino) {
+    return this.flip(tetrimino, 'flipClockwise', playfield)
   }
   
-  flipCounterClockwise(playField, tetrimino) {
-    return this.flip(tetrimino, 'flipCounterClockwise', playField)
+  flipCounterClockwise(playfield, tetrimino) {
+    return this.flip(tetrimino, 'flipCounterClockwise', playfield)
   }
 
-  flip(tetrimino, playerInput, playField) {
+  flip(tetrimino, playerInput, playfield) {
     const { currentOrientation, currentOriginOnPlayfield } = tetrimino
     const targetOrientation = this.getTargetOrientation(currentOrientation, playerInput)
     const oldCoordsOffOriginAndRotationPoints = tetrimino.orientations[currentOrientation]
@@ -31,7 +31,7 @@ export class ClassicRotationSystem extends TetriminoMovementHandler{
       return [tetrimino.currentOriginOnPlayfield[0] + oldCoordsOffOrigin[0], tetrimino.currentOriginOnPlayfield[1] + oldCoordsOffOrigin[1]]
     })
     
-    let playFieldCopy = makeCopy(playField)
+    let playfieldCopy = makeCopy(playfield)
 
     const flipPoint = 1
     const startPoint = oldCoordsOffOriginAndRotationPoints.rotationPoints[flipPoint]
@@ -39,19 +39,19 @@ export class ClassicRotationSystem extends TetriminoMovementHandler{
     const offset = this.calculateOffsetTowardsStartPoint(startPoint, endPoint)
     const targetCoordsOnPlayfield = this.getTargetPlayfieldCoords(targetCoordsOffOrigin, currentOriginOnPlayfield, offset)
       
-    const playFieldNoTetrimino = this.removeTetriminoFromPlayField(oldCoordsOnPlayfield, playFieldCopy)
+    const playfieldNoTetrimino = this.removeTetriminoFromPlayfield(oldCoordsOnPlayfield, playfieldCopy)
 
-    if (!this.gridCoordsAreClear(targetCoordsOnPlayfield, playFieldNoTetrimino)) {
-      playFieldCopy = this.addTetriminoToPlayField(oldCoordsOnPlayfield, playFieldCopy, tetrimino.minoGraphic)
+    if (!this.gridCoordsAreClear(targetCoordsOnPlayfield, playfieldNoTetrimino)) {
+      playfieldCopy = this.addTetriminoToPlayfield(oldCoordsOnPlayfield, playfieldCopy, tetrimino.minoGraphic)
       return {
-        newPlayField: playFieldCopy, 
+        newPlayfield: playfieldCopy, 
         newTetrimino: tetrimino,
         successfulMove: false
       }
     }
 
     return {
-      newPlayField: this.addTetriminoToPlayField(targetCoordsOnPlayfield, playFieldNoTetrimino, tetrimino.minoGraphic),
+      newPlayfield: this.addTetriminoToPlayfield(targetCoordsOnPlayfield, playfieldNoTetrimino, tetrimino.minoGraphic),
       newTetrimino: this.updateTetrimino(tetrimino, playerInput, offset, targetOrientation) ,
       successfulMove: true
     }

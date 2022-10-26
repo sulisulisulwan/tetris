@@ -30,14 +30,14 @@ export default class Falling extends BasePhase {
 
   continuousFallEvent() {
     
-    const { playField, currentTetrimino, fallIntervalId } = this.localState
+    const { playfield, currentTetrimino, fallIntervalId } = this.localState
     const newState = {}
 
     const { 
-      newPlayField, 
+      newPlayfield, 
       newTetrimino, 
       successfulMove
-    } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
+    } = this.tetriminoMovementHandler.moveOne('down', playfield, currentTetrimino)
     
     if (successfulMove)  {
 
@@ -46,7 +46,7 @@ export default class Falling extends BasePhase {
       }
 
       newState.currentTetrimino = newTetrimino
-      newState.playField = newPlayField
+      newState.playfield = newPlayfield
       this.setAppState(newState)
       return
     }

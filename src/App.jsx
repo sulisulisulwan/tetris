@@ -1,5 +1,5 @@
 import React from 'react'
-import PlayFieldGrid from './visual-components/playfield/PlayFieldGrid.jsx'
+import PlayfieldGrid from './visual-components/playfield/PlayfieldGrid.jsx'
 import NextQueueDisplay from './visual-components/next-queue/NextQueueDisplay.jsx'
 import StartQuitButton from './visual-components/StartQuitButton.jsx'
 import ScoreDisplay from './visual-components/ScoreDisplay.jsx'
@@ -21,7 +21,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      playField: this.getInitialPlayField(),
+      playfield: this.getInitialPlayfield(),
       gameMode: 'classic',
       nextQueueData: null,
       holdQueue: {
@@ -75,9 +75,9 @@ class App extends React.Component {
     return new Engine(initialOptions)
   }
 
-  getInitialPlayField() {
-    const initialPlayField = new Array(40).fill(null)
-    return initialPlayField.map(row => new Array(10).fill('[_]', 0, 10))
+  getInitialPlayfield() {
+    const initialPlayfield = new Array(40).fill(null)
+    return initialPlayfield.map(row => new Array(10).fill('[_]', 0, 10))
   }
 
   startQuitClickHandler(e) {
@@ -110,8 +110,8 @@ class App extends React.Component {
             holdQueue={this.state.holdQueue} 
             currentLevel={this.state.currentLevel}
           />
-          <PlayFieldGrid 
-            playFieldData={this.state.playField.slice(20)}
+          <PlayfieldGrid 
+            playfieldData={this.state.playfield.slice(20)}
             currentLevel={this.state.currentLevel}  
           />
           <div className='sidebar-right'>

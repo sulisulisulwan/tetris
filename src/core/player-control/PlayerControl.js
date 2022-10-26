@@ -72,7 +72,7 @@ export class PlayerControl extends SharedScope {
   }
 
   leftAndRight(eventData) {
-    const { playerAction, playField, currentTetrimino } = this.localState
+    const { playerAction, playfield, currentTetrimino } = this.localState
     const { autoRepeat } = playerAction
     let { right, left, override } = autoRepeat
     const { strokeType, action } = eventData
@@ -95,9 +95,9 @@ export class PlayerControl extends SharedScope {
     // Validate and apply the override action
     if (override === 'left') {
 
-      const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('left', playField, currentTetrimino)
+      const { newPlayfield, newTetrimino } = this.tetriminoMovementHandler.moveOne('left', playfield, currentTetrimino)
       
-      newState.playField = newPlayField
+      newState.playfield = newPlayField
       newState.currentTetrimino = newTetrimino
       newState.playerAction.autoRepeat.override = override
       newState.playerAction.autoRepeat.left = left ? left : newState.playerAction.autoRepeat.left
@@ -106,8 +106,8 @@ export class PlayerControl extends SharedScope {
       this.setAppState(newState)
 
     } else if (override === 'right') {
-      const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('right', playField, currentTetrimino)
-      newState.playField = newPlayField
+      const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('right', playfield, currentTetrimino)
+      newState.playfield = newPlayField
       newState.currentTetrimino = newTetrimino
       newState.playerAction.autoRepeat.override = override
       newState.playerAction.autoRepeat.left = left ? left : newState.playerAction.autoRepeat.left
@@ -128,7 +128,7 @@ export class PlayerControl extends SharedScope {
 
   flip(eventData) {
 
-    const { playField, currentTetrimino } = this.localState
+    const { playfield, currentTetrimino } = this.localState
     const { strokeType, action } = eventData
 
     if (strokeType === 'keydown' && this.localState.playerAction[action]) {
@@ -143,11 +143,11 @@ export class PlayerControl extends SharedScope {
       return
     }
     
-    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler[action](playField, currentTetrimino)
+    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler[action](playfield, currentTetrimino)
     
     newState.playerAction[action] = true
     newState.currentTetrimino = newTetrimino
-    newState.playField = newPlayField
+    newState.playfield = newPlayField
     this.setAppState(newState)
 
   }
@@ -156,7 +156,7 @@ export class PlayerControl extends SharedScope {
     
     const { strokeType } = eventData
     const { softdrop } = this.localState.playerAction
-    const { playField, currentTetrimino } = this.localState
+    const { playfield, currentTetrimino } = this.localState
 
     if (strokeType === 'keyup')  {
       const stateCopy = makeCopy(this.localState)
@@ -179,14 +179,14 @@ export class PlayerControl extends SharedScope {
       }
 
       const newState = makeCopy(this.localState)
-      const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
+      const { newPlayfield, newTetrimino } = this.tetriminoMovementHandler.moveOne('down', playfield, currentTetrimino)
       
       // Clear interval as soon as possible so that engine can begin next fall interval immediately without rerendering?
       clearInterval(this.localState.fallIntervalId)
   
       newState.fallIntervalId = null
       newState.fallSpeed = this.localState.fallSpeed * .02
-      newState.playField = newPlayField
+      newState.playfield = newPlayField
       newState.currentTetrimino = newTetrimino
       newState.playerAction.softdrop = true
       this.setAppState(newState)
@@ -210,18 +210,18 @@ export class PlayerControl extends SharedScope {
       return
     }
 
-    let { playField, currentTetrimino } = newState
+    let { playfield, currentTetrimino } = newState
     let keepDropping = true
     let linesDropped = 0
 
     while (keepDropping) {
       const {       
-        newPlayField,
+        newPlayfield,
         newTetrimino,
         successfulMove
-      } = this.tetriminoMovementHandler.moveOne('down', playField, currentTetrimino)
+      } = this.tetriminoMovementHandler.moveOne('down', playfield, currentTetrimino)
 
-      playField = newPlayField
+      playfield = newPlayfield
       currentTetrimino = newTetrimino
 
       if (!successfulMove) {
@@ -241,7 +241,7 @@ export class PlayerControl extends SharedScope {
     
     newState.playerAction.harddrop = true
     newState.currentGamePhase = 'pattern'
-    newState.playField = playField
+    newState.playfield = playfield
     newState.currentTetrimino = currentTetrimino
     this.setAppState(newState)
   }
@@ -279,21 +279,20 @@ export class PlayerControl extends SharedScope {
     if (swapStatus === 'swapAvailableNow') {
 
       let { heldTetrimino } = this.localState.holdQueue
-      const { currentTetrimino } = this.localState
+      const { currentTetrimino, playfield } = this.localState
 
-      // Remove the swapped out tetrimino from the playField
-      this.tetriminoMovementHandler.
+      // Remove the swapped out tetrimino from the playfield
+      const currentTetriminoCoordsOnPlayfield = this.tetriminoMovementHandler.getTetriminoCoordsOnPlayfield(currentTetrimino)
+      newState.playfield = this.tetriminoMovementHandler.removeTetriminoFromPlayField(currentTetriminoCoordsOnPlayfield, playfield)
 
       // Generate a new tetrimino of the current one to put in the hold queue
       newState.currentGamePhase = 'generation'
       newState.playerAction.hold = strokeType === 'keyup' ? false : true
       newState.holdQueue = {
-          swapStatus: 'justSwapped',
-          heldTetrimino: this.tetriminoFactory.resetTetrimino(currentTetrimino)
-        }
+        swapStatus: 'justSwapped',
+        heldTetrimino: this.tetriminoFactory.resetTetrimino(currentTetrimino)
+      }
       newState.currentTetrimino = heldTetrimino ? heldTetrimino : null
-
-
 
       this.setAppState(newState)
       return

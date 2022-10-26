@@ -9,43 +9,43 @@ export default class Eliminate extends BasePhase {
   execute() {
     // console.log('>>>> ELIMINATE PHASE')
 
-    const newPlayField = this.runEliminators()
+    const newPlayfield = this.runEliminators()
     
     this.setAppState({
       currentGamePhase: 'completion',
-      playField: newPlayField
+      playfield: newPlayfield
     })
   }
 
   // We will have to refactor the pattern/elimination routines so
   // that we create a "marked" playfield as opposed to a list of
   // indices to remove.  This would allow us to eliminate minos from
-  // the playField, update the playField with each eliminate action,
+  // the playfield, update the playfield with each eliminate action,
   // and still be able to target minos with subsequent actions.  currently
   // subsequent actions will break as indices and individual squares 
   // can't be updated in an easy way.
   runEliminators() {
     const actions = this.localState.eliminationActions
-    let newPlayField = this.localState.playField
+    let newPlayfield = this.localState.playfield
 
     for (let i = 0; i < actions.length; i += 1) {
       const action = actions[i]
       const { eliminatorName, actionData } = action
-      newPlayField = this[eliminatorName](newPlayField, actionData)
+      newPlayfield = this[eliminatorName](newPlayfield, actionData)
     }
 
-    return newPlayField
+    return newPlayfield
   }
 
-  lineClear(playField, actionData) {
-    const filteredPlayField = playField.filter((row, index) => {
+  lineClear(playfield, actionData) {
+    const filteredPlayfield = playfield.filter((row, index) => {
       const isTargetRow = actionData.includes(index) 
       return !isTargetRow
     })
 
-    let newRows = new Array(40 - filteredPlayField.length).fill(null)
+    let newRows = new Array(40 - filteredPlayfield.length).fill(null)
     newRows = newRows.map(row => new Array(10).fill('[_]', 0, 10))
-    return newRows.concat(filteredPlayField)
+    return newRows.concat(filteredPlayfield)
   }
 
 }

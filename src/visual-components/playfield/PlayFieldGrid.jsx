@@ -2,7 +2,7 @@ import React from 'react'
 import Row from './Row.jsx'
 import { levelColors } from '../levelColors.js'
 
-const PlayFieldGrid = ({ playFieldData, currentLevel }) => {
+const PlayfieldGrid = ({ playfieldData, currentLevel }) => {
 
   const style = {
     fontFamily: 'monospace',
@@ -12,8 +12,8 @@ const PlayFieldGrid = ({ playFieldData, currentLevel }) => {
   }
 
   return (
-    <div className="playfield-container" style={style}>{ playFieldData.map((rowData, i) => <Row key={`row-${i}`} rowData={rowData}/>) }</div>
+    <div className="playfield-container" style={style}>{ playfieldData.map((rowData, i) => <Row key={`row-${i}`} rowData={rowData}/>) }</div>
   )
 }
 
-export default PlayFieldGrid
+export default PlayfieldGrid

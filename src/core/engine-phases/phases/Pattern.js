@@ -70,9 +70,9 @@ export default class Pattern extends BasePhase {
   // that take care of playfield clearing, animations, etc.
   lineClear() {
     const rowsToClear = []
-    const { playField } = this.localState
+    const { playfield } = this.localState
 
-    playField.forEach((row, index) => {
+    playfield.forEach((row, index) => {
       if (row.every(square => square !== '[_]')) {
         rowsToClear.push(index)
       }

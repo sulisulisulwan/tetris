@@ -51,7 +51,6 @@ export class ClassicScoring {
         newState.backToBack = false
         return newState
       }
-      console.log('this should run')
       newState.totalScore = totalScore + scoreBeforeBonus
       return newState
     }
