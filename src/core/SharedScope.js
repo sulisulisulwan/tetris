@@ -6,8 +6,9 @@ export class SharedScope {
     this.levelGoalsHandler = sharedHandlers.levelGoalsHandler
     this.tetriminoMovementHandler = sharedHandlers.tetriminoMovementHandler
     this.nextQueueHandler = sharedHandlers.nextQueueHandler
-    this.localState = {}
+    this.holdQueueHandler = sharedHandlers.holdQueueHandler
     this.setAppState = sharedHandlers.setAppState
+    this.localState = {}
   }
 
   syncToLocalState(appState) {

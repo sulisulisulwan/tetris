@@ -1,7 +1,10 @@
-import React from "react";
-import TetriminoTile from './../TetriminoTile.jsx'
 import { levelColors } from '../levelColors'
-class NextQueueDisplay extends React.Component {
+
+import React from 'react'
+
+import TetriminoTile from '../TetriminoTile.jsx'
+
+class HoldQueueDisplay extends React.Component {
 
   constructor(props) {
     super(props)
@@ -37,16 +40,32 @@ class NextQueueDisplay extends React.Component {
       ['[_]', '[z]', '[z]'],
       ['[_]', '[_]', '[_]']
     ]
-    this.TTetriminoGraphic = [
-      ['[_]', '[t]', '[_]'],
-      ['[t]', '[t]', '[t]'],
+    this.emptyGraphic = [
+      ['[_]', '[_]', '[_]'],
+      ['[_]', '[_]', '[_]'],
       ['[_]', '[_]', '[_]']
     ]
   }
 
-  render () {
 
-    const { nextQueueData, currentLevel } = this.props
+  render() {
+
+    const { holdQueue, currentLevel } = this.props
+    
+    if (!holdQueue) {
+      return null
+    }
+
+    let tetriminoName
+
+    if (holdQueue.heldTetrimino) {
+      tetriminoName = holdQueue.heldTetrimino.name
+    }
+
+    tetriminoName = tetriminoName || 'empty'
+
+    const graphicGrid = this[`${tetriminoName}Graphic`]
+    
 
     const styles = {
       padding: '10px',
@@ -56,22 +75,21 @@ class NextQueueDisplay extends React.Component {
       backgroundColor: levelColors[currentLevel],
       textAlign: 'center'
     }
-    
-    if (nextQueueData === null) {
-      return <div className="nextqueue-wrapper" style={styles}><div className="text-next">Next</div></div>
+
+    if (holdQueue === null) {
+      return <div className="holdqueue-wrapper" style={styles}><div className="text-hold">Hold</div></div>
     }  
 
-    return(
-      <div className="nextqueue-wrapper" style={styles}>
-        <div className="text-next">Next</div>
-        {nextQueueData.map((tetriminoName, i)=> {
-          const graphicGrid = this[`${tetriminoName}Graphic`]
-          return <TetriminoTile key={`${tetriminoName}-${i}`} graphicGrid={graphicGrid} tetriminoName={tetriminoName} classType={'next'}/>
-          
-        })}
-      </div>
+    console.log()
+
+    return (
+      <div className="holdqueue-wrapper" style={styles}>
+        <div className="text-hold">Hold</div>
+        {<TetriminoTile graphicGrid={graphicGrid} tetriminoName={tetriminoName} classType={'hold'}/>}
+        {/* {<TetriminoTile key={`${tetriminoName}-hold`} graphicGrid={graphicGrid} tetriminoName={holdQueue.heldTetrimino.name} classType={'next'}/>} */}
+    </div>
     )
   }
 }
 
-export default NextQueueDisplay
+export default HoldQueueDisplay

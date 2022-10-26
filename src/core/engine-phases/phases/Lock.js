@@ -47,7 +47,8 @@ export default class Lock extends BasePhase {
     const tetriminoCopy = this.localState.currentTetrimino
     const playFieldCopy = this.localState.playField
 
-    const { oldCoordsOnPlayfield, targetCoordsOnPlayfield } = this.tetriminoMovementHandler.getOldAndTargetCoordsOnPlayField(tetriminoCopy, 'down')
+    const oldCoordsOnPlayfield = this.tetriminoMovementHandler.getTetriminoCoordsOnPlayField(tetriminoCopy)
+    const targetCoordsOnPlayfield = this.tetriminoMovementHandler.getTetriminoCoordsOnPlayField(tetriminoCopy, 'down')
     const playFieldNoTetrimino = this.tetriminoMovementHandler.removeTetriminoFromPlayField(oldCoordsOnPlayfield, playFieldCopy)
     const targetCoordsClear = this.tetriminoMovementHandler.gridCoordsAreClear(targetCoordsOnPlayfield, playFieldNoTetrimino)
 

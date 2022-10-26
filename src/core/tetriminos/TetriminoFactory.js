@@ -15,12 +15,12 @@ export class TetriminoFactory {
   }
 
   static getTetrimino(tetrimino) {
-    const getContext = `get${tetrimino}`
-    return TetriminoFactory[getContext]()
+    console.log('tetrimino in getContext', tetrimino)
+    return TetriminoFactory[`get${tetrimino}`]()
   }
 
   static resetTetrimino(tetrimino) {
-    return getTetrimino(tetrimino.name)
+    return TetriminoFactory.getTetrimino(tetrimino.name)
   }
   
   static getITetrimino() {

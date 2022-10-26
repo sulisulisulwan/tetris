@@ -4,8 +4,8 @@ import NextQueueDisplay from './visual-components/next-queue/NextQueueDisplay.js
 import StartQuitButton from './visual-components/StartQuitButton.jsx'
 import ScoreDisplay from './visual-components/ScoreDisplay.jsx'
 
-import { PlayerControl } from './core/player-control/PlayerControl.js'
 import { Engine } from './core/engine-phases/Engine.js'
+import HoldQueueDisplay from './visual-components/hold-queue/HoldQueueDisplay.jsx'
 
 const initialOptions = {
   possibleActivePatterns: {
@@ -106,6 +106,10 @@ class App extends React.Component {
       <div className="game-app-wrapper">
         <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Suli's Tetris</div>
         <div className="playfield-and-sidebar-right">
+          <HoldQueueDisplay 
+            holdQueue={this.state.holdQueue} 
+            currentLevel={this.state.currentLevel}
+          />
           <PlayFieldGrid 
             playFieldData={this.state.playField.slice(20)}
             currentLevel={this.state.currentLevel}  

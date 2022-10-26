@@ -10,20 +10,21 @@ export class SuperRotationSystem extends ClassicRotationSystem {
   flip(tetrimino, playerInput, playField) {
     const { currentOrientation, currentOriginOnPlayfield } = tetrimino
     const targetOrientation = this.getTargetOrientation(currentOrientation, playerInput)
-    const oldCoordsOffOriginAndRotationPoints = tetrimino.orientations[currentOrientation]
-    const targetCoordsOffOriginAndRotationPoints = tetrimino.orientations[targetOrientation]
-    const targetCoordsOffOrigin = targetCoordsOffOriginAndRotationPoints.coordsOffOrigin
 
-    const oldCoordsOnPlayfield = oldCoordsOffOriginAndRotationPoints.coordsOffOrigin.map(oldCoordsOffOrigin => {
-      return [tetrimino.currentOriginOnPlayfield[0] + oldCoordsOffOrigin[0], tetrimino.currentOriginOnPlayfield[1] + oldCoordsOffOrigin[1]]
-    })
+    const targetCoordsOffOrigin = tetrimino.orientations[targetOrientation].coordsOffOrigin
+
+    const oldRotationPoints = tetrimino.orientations[currentOrientation].rotationPoints
+    const targetRotationPoints = tetrimino.orientations[targetOrientation].rotationPoints
+
+    const oldCoordsOnPlayfield = this.getTetriminoCoordsOnPlayfield(tetrimino)
+
     
     let playFieldCopy = makeCopy(playField)
     let flipPoint = 1
     
     while (flipPoint <= 5) {
-      const startPoint = oldCoordsOffOriginAndRotationPoints.rotationPoints[flipPoint]
-      const endPoint = targetCoordsOffOriginAndRotationPoints.rotationPoints[flipPoint]
+      const startPoint = oldRotationPoints[flipPoint]
+      const endPoint = targetRotationPoints[flipPoint]
       const offset = this.calculateOffsetTowardsStartPoint(startPoint, endPoint)
       const targetCoordsOnPlayfield = this.getTargetPlayfieldCoords(targetCoordsOffOrigin, currentOriginOnPlayfield, offset)
        

@@ -17,6 +17,7 @@ import {
   Off,
   GameOver
 } from './index.js'
+import { HoldQueue } from '../hold-queue/HoldQueue.js'
 
 export class Engine {
 
@@ -35,12 +36,14 @@ export class Engine {
     const levelGoalsHandler = this.setLevelGoalsHandler(initialOptions.levelGoalsSystem)
     const setAppState = initialOptions.setAppState
     const nextQueueHandler = new NextQueue()
+    const holdQueueHandler = new HoldQueue()
 
     const sharedHandlers = {
       tetriminoMovementHandler,
       scoringHandler,
       levelGoalsHandler,
       nextQueueHandler,
+      holdQueueHandler,
       setAppState
     }
     
