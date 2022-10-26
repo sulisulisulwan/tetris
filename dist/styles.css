@@ -81,6 +81,7 @@ body {
   margin-bottom: 12px;
 
 }
+
 .next-tetrimino-tile-row {
   /* margin-bottom: 10px; */
   display: flex;
@@ -88,10 +89,14 @@ body {
   font-family: monospace;
   justify-content: center;
 }
-/* .next-tetrimino-tile-square {
-  background-color: white;
+.hold-tetrimino-tile-row {
+  /* margin-bottom: 10px; */
+  display: flex;
+  flex-direction: row;
   font-family: monospace;
-} */
+  justify-content: center;
+}
+
 
 
 .start-quit-button-wrapper{

@@ -17,6 +17,7 @@ export default class Completion extends BasePhase {
     }
 
     newState.currentGamePhase = 'generation'
+    newState.currentTetrimino = null
     this.setAppState(newState)
   }
 

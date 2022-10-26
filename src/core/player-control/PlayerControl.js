@@ -292,8 +292,8 @@ export class PlayerControl extends SharedScope {
         swapStatus: 'justSwapped',
         heldTetrimino: this.tetriminoFactory.resetTetrimino(currentTetrimino)
       }
-      newState.currentTetrimino = heldTetrimino ? heldTetrimino : null
-
+      newState.currentTetrimino = heldTetrimino
+      
       this.setAppState(newState)
       return
     }

@@ -98,6 +98,7 @@ class App extends React.Component {
   }
 
   componentDidUpdate() { 
+    // console.log(this.state)
     this.engine.handleGameStateUpdate(this.state, this.setState.bind(this))
   }
 

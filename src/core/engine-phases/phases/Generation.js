@@ -13,11 +13,10 @@ export default class Generation extends BasePhase {
     // console.log('>>> GENERATION PHASE')
 
     // Dequeue a new tetrimino and instantiate it.
-    const tetriminoContext = this.nextQueueHandler.dequeue()
-    const nextQueueData = this.nextQueueHandler.queueToArray(5)
 
-    const newTetrimino = swapStatus ===  'justSwapped' ? this.localState.holdQueue.heldTetrimino
-      : TetriminoFactory.getTetrimino(tetriminoContext)
+    const newTetrimino = this.determineIfNewTetriminoSwappedIn()
+    
+    const nextQueueData = this.nextQueueHandler.queueToArray(5)
     
     const coordsOffOrigin = newTetrimino.orientations[newTetrimino.currentOrientation].coordsOffOrigin
 
@@ -64,4 +63,16 @@ export default class Generation extends BasePhase {
     return gameIsOver
   }
 
+  determineIfNewTetriminoSwappedIn() {
+    let newTetrimino 
+
+    // if the game just started OR player held for the first time
+    if (this.localState.currentTetrimino === null) {
+      const tetriminoContext = this.nextQueueHandler.dequeue()
+      newTetrimino = TetriminoFactory.getTetrimino(tetriminoContext) 
+    } else if (this.localState.holdQueue.swapStatus === 'justSwapped') {
+      newTetrimino = this.localState.currentTetrimino
+    }
+    return newTetrimino
+  }
 }

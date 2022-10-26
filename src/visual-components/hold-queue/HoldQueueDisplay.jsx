@@ -40,6 +40,11 @@ class HoldQueueDisplay extends React.Component {
       ['[_]', '[z]', '[z]'],
       ['[_]', '[_]', '[_]']
     ]
+    this.TTetriminoGraphic = [
+      ['[_]', '[t]', '[_]'],
+      ['[t]', '[t]', '[t]'],
+      ['[_]', '[_]', '[_]']
+    ]
     this.emptyGraphic = [
       ['[_]', '[_]', '[_]'],
       ['[_]', '[_]', '[_]'],
@@ -86,7 +91,6 @@ class HoldQueueDisplay extends React.Component {
       <div className="holdqueue-wrapper" style={styles}>
         <div className="text-hold">Hold</div>
         {<TetriminoTile graphicGrid={graphicGrid} tetriminoName={tetriminoName} classType={'hold'}/>}
-        {/* {<TetriminoTile key={`${tetriminoName}-hold`} graphicGrid={graphicGrid} tetriminoName={holdQueue.heldTetrimino.name} classType={'next'}/>} */}
     </div>
     )
   }

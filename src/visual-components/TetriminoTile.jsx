@@ -39,30 +39,49 @@ const TetriminoTile = ({ tetriminoName, graphicGrid, classType }) => {
     fontSize: '10px',
   }
 
-  if (classType === 'hold') {
+  // if (classType === 'hold') {
+  //   console.log(
+  //     'tetriminoName',
+  //     tetriminoName
+  //   )
+  //   console.log(
+  //     'graphicGrid',
+  //     graphicGrid
+  //   )
+  //   console.log(
+  //     'classType',
+  //     classType
+  //   )
+  //   return(
+  //     null
+  //   )
 
-    return (
-      <div className={`${classType}-tetrimino-tile`}>
-        {graphicGrid.map((row, i) => {
-          return (
-            <div className={`${classType}-tetrimino-tile-row`} key={`${classType}-${tetriminoName}-${i}-row`}>
-              {row.map((square, j) => {
-                const style = {
-            backgroundColor: squareColors.get(square),
-            color: squareColors.get(square),
-            borderStyle: 'solid',
-            borderColor: 'black',
-            fontSize: '10px',
-                }
-                return <div className={`${classType}-tetrimino-tile-square`} key={`${classType}-${tetriminoName}-${i}-${j}-square`} style={style}>{graphicGrid}</div>
-              })}
-            </div>
-          )
-        })}
-      </div>
-    )
-  }
+    // return (
+    //   <div className={`${classType}-tetrimino-tile`}>
+    //     {graphicGrid.map((row, i) => {
+    //       // const style = {
+    //       //   backgroundColor: squareColors.get(square),
+    //       //   display: 'flex',
+    //       //   flexDirection: 'column',
+    //       //   color: squareColors.get(square),
+    //       //   borderStyle: 'solid',
+    //       //   borderColor: 'black',
+    //       //   fontSize: '10px',
+    //       //   margin: '1px'
+    //       // }
+    //       return (
+    //         <div className={`${classType}-tetrimino-tile-row`} style={style} key={`${classType}-${tetriminoName}-${i}-row`}>
+    //           {row.map((square, j) => {
+    //             return <div className={`${classType}-tetrimino-tile-square`} key={`${classType}-${tetriminoName}-${i}-${j}-square`}>{graphicGrid}</div>
+    //           })}
+    //         </div>
+    //       )
+    //     })}
+    //   </div>
+    // )
+  // }
 
+  // console.log('graphicGrid before map', graphicGrid)
 
   return (
     <div className={`${classType}-tetrimino-tile`}>{graphicGrid.map((row, i) => {

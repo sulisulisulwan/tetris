@@ -15,6 +15,7 @@ export class TetriminoFactory {
   }
 
   static getTetrimino(tetrimino) {
+    console.log('in getTetrimino', tetrimino)
     return TetriminoFactory[`get${tetrimino}`]()
   }
 
@@ -179,7 +180,7 @@ export class TetriminoFactory {
 
   static getZTetrimino() {
     const tetrimino = this.getBaseTetrimino()
-    tetrimino.name = 'ZITetrimino'
+    tetrimino.name = 'ZTetrimino'
     tetrimino.minoGraphic = '[z]'
     tetrimino.orientations = {
       north: {
