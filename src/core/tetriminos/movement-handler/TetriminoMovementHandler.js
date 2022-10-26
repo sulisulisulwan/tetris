@@ -82,7 +82,7 @@ export class TetriminoMovementHandler {
     return targetCoordsOnPlayfield.every(coord => {
       if (playfieldNoTetrimino[coord[0]]) { // This coordinate exists in the playable space
         if (playfieldNoTetrimino[coord[0]][coord[1]] !== undefined) { // This square exists in the playable space
-          if (playplayfieldNoTetriminoFieldNoTetrimino[coord[0]][coord[1]] === '[_]') { // This square is not yet occupied
+          if (playfieldNoTetrimino[coord[0]][coord[1]] === '[_]') { // This square is not yet occupied
             return true
           }
         }

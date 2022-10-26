@@ -97,7 +97,7 @@ export class PlayerControl extends SharedScope {
 
       const { newPlayfield, newTetrimino } = this.tetriminoMovementHandler.moveOne('left', playfield, currentTetrimino)
       
-      newState.playfield = newPlayField
+      newState.playfield = newPlayfield
       newState.currentTetrimino = newTetrimino
       newState.playerAction.autoRepeat.override = override
       newState.playerAction.autoRepeat.left = left ? left : newState.playerAction.autoRepeat.left
@@ -106,8 +106,8 @@ export class PlayerControl extends SharedScope {
       this.setAppState(newState)
 
     } else if (override === 'right') {
-      const { newPlayField, newTetrimino } = this.tetriminoMovementHandler.moveOne('right', playfield, currentTetrimino)
-      newState.playfield = newPlayField
+      const { newPlayfield, newTetrimino } = this.tetriminoMovementHandler.moveOne('right', playfield, currentTetrimino)
+      newState.playfield = newPlayfield
       newState.currentTetrimino = newTetrimino
       newState.playerAction.autoRepeat.override = override
       newState.playerAction.autoRepeat.left = left ? left : newState.playerAction.autoRepeat.left
@@ -143,11 +143,11 @@ export class PlayerControl extends SharedScope {
       return
     }
     
-    const { newPlayField, newTetrimino } = this.tetriminoMovementHandler[action](playfield, currentTetrimino)
+    const { newPlayfield, newTetrimino } = this.tetriminoMovementHandler[action](playfield, currentTetrimino)
     
     newState.playerAction[action] = true
     newState.currentTetrimino = newTetrimino
-    newState.playfield = newPlayField
+    newState.playfield = newPlayfield
     this.setAppState(newState)
 
   }
@@ -186,7 +186,7 @@ export class PlayerControl extends SharedScope {
   
       newState.fallIntervalId = null
       newState.fallSpeed = this.localState.fallSpeed * .02
-      newState.playfield = newPlayField
+      newState.playfield = newPlayfield
       newState.currentTetrimino = newTetrimino
       newState.playerAction.softdrop = true
       this.setAppState(newState)
@@ -283,7 +283,7 @@ export class PlayerControl extends SharedScope {
 
       // Remove the swapped out tetrimino from the playfield
       const currentTetriminoCoordsOnPlayfield = this.tetriminoMovementHandler.getTetriminoCoordsOnPlayfield(currentTetrimino)
-      newState.playfield = this.tetriminoMovementHandler.removeTetriminoFromPlayField(currentTetriminoCoordsOnPlayfield, playfield)
+      newState.playfield = this.tetriminoMovementHandler.removeTetriminoFromPlayfield(currentTetriminoCoordsOnPlayfield, playfield)
 
       // Generate a new tetrimino of the current one to put in the hold queue
       newState.currentGamePhase = 'generation'
