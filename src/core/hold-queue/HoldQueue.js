@@ -1,3 +1,5 @@
+import { TetriminoFactory } from "../tetriminos/TetriminoFactory.js"
+
 export class HoldQueue {
 
   constructor() {

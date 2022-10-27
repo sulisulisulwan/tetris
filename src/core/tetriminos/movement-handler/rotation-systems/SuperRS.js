@@ -1,6 +1,6 @@
 import { makeCopy } from "../../../utils/utils.js"
-import { TetriminoMovementHandler } from "../TetriminoMovementHandler.js"
 import { ClassicRotationSystem } from "./ClassicRS.js"
+import { TSpinCalculator } from "./TSpinCalculator.js"
 export class SuperRotationSystem extends ClassicRotationSystem {
 
   constructor() {
@@ -36,18 +36,34 @@ export class SuperRotationSystem extends ClassicRotationSystem {
         continue
       }
 
+      // Determine if a t spin or mini t spin was performed
+      let performedTSpin = null
+      let performedMiniTSpin = null
+      if (tetrimino.name === 'TTetrimino') {
+        const tSpinTypes = TSpinCalculator.getTSpinType(targetOrientation, targetCoordsOnPlayfield, playfieldNoTetrimino)
+        performedTSpin = tSpinTypes.performedTSpin
+        performedMiniTSpin = tSpinTypes.performedMiniTSpin
+      }
+
       return {
         newPlayfield: this.addTetriminoToPlayfield(targetCoordsOnPlayfield, playfieldNoTetrimino, tetrimino.minoGraphic),
         newTetrimino: this.updateTetrimino(tetrimino, playerInput, offset, targetOrientation) ,
-        successfulMove: true
+        successfulMove: true,
+        potentialTSpin: {
+          performedTSpin,
+          performedMiniTSpin
+        }
       }
     }
 
     return {
       newPlayfield: playfieldCopy, 
       newTetrimino: tetrimino,
-      successfulMove: false
+      successfulMove: false,
+      potentialTSpin: null
     }
   }
+
+
 
 }

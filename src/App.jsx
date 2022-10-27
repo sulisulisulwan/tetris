@@ -1,4 +1,6 @@
 import React from 'react'
+import { outOfWells, tSpinES, tSpinWS, tSpinSW, tSpinNW, tSpinNE, miniTSpinNEandWN} from './test-playfields/testPlayfields.js'
+
 import PlayfieldGrid from './visual-components/playfield/PlayfieldGrid.jsx'
 import NextQueueDisplay from './visual-components/next-queue/NextQueueDisplay.jsx'
 import StartQuitButton from './visual-components/StartQuitButton.jsx'
@@ -21,13 +23,23 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      playfield: this.getInitialPlayfield(),
+      // playfield: this.getInitialPlayfield(),
+      // playfield: tSpinES,
+      // playfield: tSpinSW,
+      // playfield: tSpinNW,
+      // playfield: tSpinNE,
+      playfield: tSpinWS,
+      // playfield: miniTSpinNEandWN,
+      // playfield: outOfWells,
       gameMode: 'classic',
-      nextQueueData: null,
+      nextQueue: null,
       holdQueue: {
         swapStatus: 'swapAvailableNow',
         heldTetrimino: null
       },
+
+      pregameCounter: 1, // This should be 2
+      pregameIntervalId: null,
 
       totalScore: 0,
       playerAction: {
@@ -84,7 +96,7 @@ class App extends React.Component {
     e.preventDefault()
     // may in the future implement "countdown" gamePhase
     this.state.currentGamePhase === 'off' ?
-      this.setState({ currentGamePhase: 'generation', }) : this.setState({ currentGamePhase: 'off' })
+      this.setState({ currentGamePhase: 'pregame', }) : this.setState({ currentGamePhase: 'off' })
   }
 
   handlePlayerKeyStroke(e) {
@@ -98,7 +110,6 @@ class App extends React.Component {
   }
 
   componentDidUpdate() { 
-    // console.log(this.state)
     this.engine.handleGameStateUpdate(this.state, this.setState.bind(this))
   }
 
@@ -106,6 +117,7 @@ class App extends React.Component {
     return (
       <div className="game-app-wrapper">
         <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Suli's Tetris</div>
+        {this.state.currentGamePhase === 'pregame' ? <div style={{textAlign: 'center'}}>{this.state.pregameCounter + 1}</div> : <div style={{textAlign: 'center'}}> --- </div>}
         <div className="playfield-and-sidebar-right">
           <HoldQueueDisplay 
             holdQueue={this.state.holdQueue} 
@@ -122,7 +134,7 @@ class App extends React.Component {
               linesCleared={this.state.totalLinesCleared}
               />
             <NextQueueDisplay 
-              nextQueueData={this.state.nextQueueData}
+              nextQueueData={this.state.nextQueue}
               currentLevel={this.state.currentLevel} 
             />
           </div>

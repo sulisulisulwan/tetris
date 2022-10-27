@@ -1,30 +1,25 @@
 import BasePhase from "./BasePhase.js";
 import { NextQueue } from '../../next-queue/NextQueue.js'
-import { TetriminoFactory } from '../../tetriminos/TetriminoFactory.js'
 
 export default class Generation extends BasePhase {
 
   constructor(sharedHandlers) {
     super(sharedHandlers)
-    this.nextQueue = new NextQueue()
   }
 
   execute() {
     // console.log('>>> GENERATION PHASE')
 
-    // Dequeue a new tetrimino and instantiate it.
-
     const newTetrimino = this.determineIfNewTetriminoSwappedIn()
     
     const nextQueueData = this.nextQueueHandler.queueToArray(5)
     
-    const coordsOffOrigin = newTetrimino.orientations[newTetrimino.currentOrientation].coordsOffOrigin
-
-    const targetStartingCoords = coordsOffOrigin.map(coord => {
-      const [vertical, horizontal] = coord
-      const [startingVertical, startingHorizontal] = newTetrimino.currentOriginOnPlayfield
-      return [startingVertical + vertical, startingHorizontal + horizontal]
-    })
+    const targetStartingCoords = this.tetriminoMovementHandler.getTetriminoCoordsOnPlayfield(newTetrimino)
+    // const targetStartingCoords = coordsOffOrigin.map(coord => {
+    //   const [vertical, horizontal] = coord
+    //   const [startingVertical, startingHorizontal] = newTetrimino.currentOriginOnPlayfield
+    //   return [startingVertical + vertical, startingHorizontal + horizontal]
+    // })
 
     const playfield = this.localState.playfield
     const newState = this.localState
@@ -47,7 +42,7 @@ export default class Generation extends BasePhase {
     }
 
     // Update state
-    newState.nextQueueData = nextQueueData
+    newState.nextQueue = nextQueueData
     newState.playfield = newPlayfield
     newState.currentTetrimino = newTetrimino,
     newState.currentGamePhase = 'falling',
@@ -68,8 +63,8 @@ export default class Generation extends BasePhase {
 
     // if the game just started OR player held for the first time
     if (this.localState.currentTetrimino === null) {
-      const tetriminoContext = this.nextQueueHandler.dequeue()
-      newTetrimino = TetriminoFactory.getTetrimino(tetriminoContext) 
+      // Dequeue a new tetrimino and instantiate it.
+      newTetrimino = this.nextQueueHandler.dequeue()
     } else if (this.localState.holdQueue.swapStatus === 'justSwapped') {
       newTetrimino = this.localState.currentTetrimino
     }

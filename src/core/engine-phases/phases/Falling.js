@@ -47,6 +47,8 @@ export default class Falling extends BasePhase {
 
       newState.currentTetrimino = newTetrimino
       newState.playfield = newPlayfield
+      newState.performedTSpin = false 
+      newState.performedMiniTSpin = false
       this.setAppState(newState)
       return
     }

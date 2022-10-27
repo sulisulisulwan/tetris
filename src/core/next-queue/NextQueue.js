@@ -1,6 +1,6 @@
 import { VirtualBag } from './VirtualBag.js'
 import { QueueList } from './QueueList.js'
-
+import { TetriminoFactory } from '../tetriminos/TetriminoFactory.js'
 export class NextQueue {
 
   constructor() {
@@ -32,7 +32,9 @@ export class NextQueue {
     }
     const tetrimino = this.virtualBag.popTetriminoFromBag()
     this.queue.enqueueToList(tetrimino)
-    return this.queue.dequeueFromList().tetrimino
+    const context = this.queue.dequeueFromList().tetrimino
+    const newTetrimino = TetriminoFactory[`get${context}`]()
+    return newTetrimino
   }
 
   peek() {

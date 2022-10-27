@@ -72,7 +72,7 @@ export default class Lock extends BasePhase {
     const targetCoordsOnPlayfield = this.tetriminoMovementHandler.getTetriminoCoordsOnPlayfield(tetriminoCopy, 'down')
     const playfieldNoTetrimino = this.tetriminoMovementHandler.removeTetriminoFromPlayfield(oldCoordsOnPlayfield, playfieldCopy)
     const targetCoordsClear = this.tetriminoMovementHandler.gridCoordsAreClear(targetCoordsOnPlayfield, playfieldNoTetrimino)
-    
+
     const newState = {}
 
     if (targetCoordsClear) {
@@ -87,6 +87,7 @@ export default class Lock extends BasePhase {
       return
     }
 
+    
     newState.playfield = this.tetriminoMovementHandler.addTetriminoToPlayfield(oldCoordsOnPlayfield, playfieldNoTetrimino, tetriminoCopy.minoGraphic)
     tetriminoCopy.status = 'locked'
     newState.currentTetrimino = tetriminoCopy
