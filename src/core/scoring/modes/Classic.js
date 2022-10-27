@@ -57,12 +57,16 @@ export class ClassicScoring {
 
     // Tetris case
     const scoreBeforeBonus = (this.clearLineBaseScores.get(linesCleared) * currentLevel)
-    if (backToBack === false) {
-      newState.totalScore = totalScore + scoreBeforeBonus
-      newState.backToBack = true
+    
+    if (backToBack) {
+      const backToBackBonus = scoreBeforeBonus * 0.5
+      console.log(`TETRIS! 4 lines cleared: +${scoreBeforeBonus}`)
+      console.log(`Back to Back BONUS!: +${backToBackBonus}`)
+      newState.totalScore = totalScore + scoreBeforeBonus + backToBackBonus
       return newState
     }
-    newState.totalScore = totalScore + scoreBeforeBonus + (scoreBeforeBonus * 0.5)
+    newState.totalScore = totalScore + scoreBeforeBonus
+    newState.backToBack = true
     return newState
   }
 

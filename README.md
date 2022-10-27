@@ -18,12 +18,9 @@ Refactor pattern marking.
     }
   }
   
-Revising flip points based on specifications for each tetrimino (Some flippoints shouldn't exist)
 T-spin recognition per fall round
 Animation scripts
 Game Statistics
-Hold feature
-
 
 Multiplayer 
 Game Over state: Multiplayer
