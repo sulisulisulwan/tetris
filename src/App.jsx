@@ -1,5 +1,5 @@
 import React from 'react'
-import { outOfWells, tSpinES, tSpinWS, tSpinSW, tSpinNW, tSpinNE, miniTSpinNEandWN} from './test-playfields/testPlayfields.js'
+import { TestPlayfields } from '../__tests__/test-playfields/testPlayfields.js'
 
 import PlayfieldGrid from './visual-components/playfield/PlayfieldGrid.jsx'
 import NextQueueDisplay from './visual-components/next-queue/NextQueueDisplay.jsx'
@@ -18,19 +18,16 @@ const initialOptions = {
   levelGoalsSystem: 'fixed'
 }
 
+
+const testPlayfields = new TestPlayfields()
+
 class App extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
       // playfield: this.getInitialPlayfield(),
-      // playfield: tSpinES,
-      // playfield: tSpinSW,
-      // playfield: tSpinNW,
-      // playfield: tSpinNE,
-      playfield: tSpinWS,
-      // playfield: miniTSpinNEandWN,
-      // playfield: outOfWells,
+      playfield: testPlayfields.getTestPlayfield('outOfWells'),
       gameMode: 'classic',
       nextQueue: null,
       holdQueue: {
