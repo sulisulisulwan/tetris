@@ -26,8 +26,6 @@ export default function flip(eventData) {
 
   newState.scoringContextsForCompletion = this.localState.scoringContextsForCompletion
 
-  console.log(    performedTSpin,
-    performedTSpinMini )
   if (performedTSpin) {
     
     newState.scoringContextsForCompletion.push({

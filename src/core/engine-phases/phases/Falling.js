@@ -60,7 +60,6 @@ export default class Falling extends BasePhase {
       newState.playfield = newPlayfield
       newState.performedTSpin = false 
       newState.performedTSpinMini = false
-      console.log('did this run')
       this.setAppState(newState)
       return
     }

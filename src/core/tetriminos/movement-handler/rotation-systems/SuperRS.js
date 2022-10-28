@@ -45,8 +45,6 @@ export class SuperRotationSystem extends ClassicRotationSystem {
         performedTSpinMini = tSpinTypes.performedTSpinMini
       }
 
-      console.log('straight from the horses mouth', performedTSpinMini)
-
       return {
         newPlayfield: this.addTetriminoToPlayfield(targetCoordsOnPlayfield, playfieldNoTetrimino, tetrimino.minoGraphic),
         newTetrimino: this.updateTetrimino(tetrimino, playerInput, offset, targetOrientation) ,

@@ -24,14 +24,13 @@ export class LineClear {
       return backToBack ? totalScore + scoreBeforeBonus + (scoreBeforeBonus * 0.5) : totalScore + scoreBeforeBonus
     }
 
-    console.log('in completition', performedTSpinMini)
-
     if (performedTSpin || performedTSpinMini) {
       const tSpinType = performedTSpin ? 'tSpin' : 'miniTSpin'
       const tSpinBaseScore = this.clearLineBaseScores.get(`${tSpinType}${linesCleared}`)
-      console.log(`${tSpinType}${linesCleared}`)
-      console.log(tSpinBaseScore)
       const scoreBeforeBonus = (tSpinBaseScore * currentLevel)
+      if (backToBack) {
+        console.log('awarded Back to Back!!')
+      }
       return backToBack ? totalScore + scoreBeforeBonus + (scoreBeforeBonus * 0.5) : totalScore + scoreBeforeBonus
     }
 

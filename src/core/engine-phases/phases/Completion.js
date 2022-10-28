@@ -10,7 +10,6 @@ export default class Completion extends BasePhase {
     // console.log('>>>> COMPLETION PHASE')
 
     let newState = {}
-    console.log('in completition before accrual:', this.localState.performedTSpinMini)
     const newTotalScore =  this.accrueScore() 
 
     if (this.localState.totalLinesCleared > this.localState.levelClearedLinesGoal) {
