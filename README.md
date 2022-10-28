@@ -24,3 +24,9 @@ Game Statistics
 
 Multiplayer 
 Game Over state: Multiplayer
+
+TODO: Scoring refactor underway!
+
+tally and update on demand togetherh
+softdrop and harddrop completed
+

@@ -41,8 +41,15 @@ export default function harddrop(eventData) {
     linesDropped
   }
 
-  const scoringItem = ['harddrop', scoringData]
-  newState.totalScore = this.scoringHandler.updateScore(this.localState, scoringItem)
+  newState.scoringHistoryPerCycle = this.localState.scoringHistoryPerCycle
+  newState.scoringHistoryPerCycle.harddrop = scoringData
+
+  const scoringItem = { 
+    scoringMethodName: 'harddrop', 
+    scoringData 
+  }
+  
+  newState.totalScore = this.scoringHandler.updateScore(this.localState.totalScore, scoringItem)
   
   newState.playerAction.harddrop = true
   newState.currentGamePhase = 'pattern'

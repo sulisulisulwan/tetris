@@ -1,4 +1,38 @@
-class LineClear {
+export class LineClear {
 
+  constructor() {
+    this.clearLineBaseScores = new Map([
+      [1, 100],
+      [2, 300],
+      [3, 500],
+      [4, 800],
+      ['miniTSpin1', 200],
+      ['tSpin1', 800],
+      ['tSpin2', 1200],
+      ['tSpin3', 1600]
+    ])
+  }
+
+
+  calculateScore(currentScore, scoringData) {
+
+    const { currentLevel, linesCleared, performedTSpin, performedMiniTSpin, backToBack } = scoringData
+
+    let totalScore = currentScore
+
+    if (linesCleared === 4) {
+      const scoreBeforeBonus = (this.clearLineBaseScores.get(linesCleared) * currentLevel)
+      return backToBack ? totalScore + scoreBeforeBonus + (scoreBeforeBonus * 0.5) : totalScore + scoreBeforeBonus
+    }
+
+    if (performedTSpin || performedMiniTSpin) {
+      const tSpinType = performedTSpin ? 'tSpin' : 'miniTSpin'
+      const scoreBeforeBonus = (this.clearLineBaseScores.get(`${tSpinType}${linesCleared}`) * currentLevel)
+      return backToBack ? totalScore + scoreBeforeBonus + (scoreBeforeBonus * 0.5) : totalScore + scoreBeforeBonus
+    }
+
+    const scoreBeforeBonus = this.clearLineBaseScores.get(linesCleared) * currentLevel
+    return backToBack ? totalScore + scoreBeforeBonus + (scoreBeforeBonus * 0.5) : totalScore + scoreBeforeBonus
+  }
   
 }

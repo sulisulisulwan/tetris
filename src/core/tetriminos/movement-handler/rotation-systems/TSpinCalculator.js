@@ -119,11 +119,6 @@ export class TSpinCalculator {
     if (cAndDAreTSlotCorners && tSlotCorners.a || aAndBAreTSlotCorners && tSlotCorners.b) {
       performedMiniTSpin = true
     }
-    
-    console.log({
-      performedTSpin,
-      performedMiniTSpin
-    })
 
     return {
       performedTSpin,

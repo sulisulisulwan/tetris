@@ -42,7 +42,18 @@ export default class Falling extends BasePhase {
     if (successfulMove)  {
 
       if (this.localState.playerAction.softdrop) {
-        newState.totalScore = this.awardSoftDropScore()
+        const scoreData = { currentScore: this.localState.totalScore }
+        const scoreItem = { 
+          scoringMethodName: 'softdrop', 
+          scoreData 
+        }
+        newState.scoringHistoryPerCycle = this.localState.scoringHistoryPerCycle
+        
+        if (!newState.scoringHistoryPerCycle.softdrop) {
+          newState.scoringHistoryPerCycle.softdrop = []
+        }
+        newState.scoringHistoryPerCycle.softdrop.push(scoreData)
+        newState.totalScore = this.scoringHandler.updateScore(this.localState.totalScore, scoreItem)
       }
 
       newState.currentTetrimino = newTetrimino
@@ -60,9 +71,7 @@ export default class Falling extends BasePhase {
   }
 
   awardSoftDropScore() {
-    const scoreData = { currentScore: this.localState.totalScore }
-    const scoreItem = ['softdrop', scoreData]
-    return this.scoringHandler.updateScore(this.localState, scoreItem)
+
   }
   
 }

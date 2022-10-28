@@ -14,21 +14,29 @@ export default class Pattern extends BasePhase {
     newState.scoringContextsForCompletion = []
     newState.currentGamePhase = 'iterate'
     newState.eliminationActions = this.runPatternScanners() 
-    
+    newState.scoringHistoryPerCycle = this.localState.scoringHistoryPerCycle
     newState.eliminationActions.forEach(action => {
 
       switch (action.eliminatorName) {
         case 'lineClear':
-          newState.scoringContextsForCompletion.push([
-            'lineClear', { 
-              currentScore: this.localState.totalScore,
-              currentLevel: this.localState.currentLevel,
-              linesCleared: action.actionData.length,
-              performedTSpin: this.localState.performedTSpin,
-              backToBack: this.localState.backToBack
-            }
-          ])
+          const { performedMiniTSpin, performedTSpin, currentLevel } = this.localState
+          const linesCleared = action.actionData.length
+          newState.backToBack = linesCleared === 4 || (performedTSpin || performedMiniTSpin) ? true : false
+          newState.scoringHistoryPerCycle.lineClear = true
           newState.totalLinesCleared = this.localState.totalLinesCleared + action.actionData.length
+
+          const scoringData = { 
+            currentLevel: currentLevel,
+            linesCleared: linesCleared, 
+            performedTSpin: performedTSpin,
+            performedTSpinMini: performedTSpin,
+            backToBack: newState.backToBack && this.localState.backToBack ? true : false // First back to back qualifier in chain doesn't count
+          }
+          newState.scoringContextsForCompletion.push({
+            scoringMethodName: 'lineClear',
+            scoringData
+          })
+
           break
         default:
           break
@@ -85,6 +93,7 @@ export default class Pattern extends BasePhase {
 
     return rowsToClear.length ? actionItem : null
   }
+
 }
 
 /**

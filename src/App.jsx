@@ -70,7 +70,9 @@ class App extends React.Component {
       performedTSpin: false,
       performedTSpinMini: false,
       backToBack: false,
-      lowestLockSurfaceRow: null
+      lowestLockSurfaceRow: null,
+
+      scoringHistoryPerCycle: {}
     }
 
     this.startQuitClickHandler = this.startQuitClickHandler.bind(this)

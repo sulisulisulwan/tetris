@@ -10,27 +10,25 @@ export default class Completion extends BasePhase {
     // console.log('>>>> COMPLETION PHASE')
 
     let newState = {}
-    this.accrueScore(newState) 
+    const newTotalScore =  this.accrueScore() 
 
     if (this.localState.totalLinesCleared > this.localState.levelClearedLinesGoal) {
       this.promoteLevel(newState)
     }
 
+    newState.scoringHistoryPerCycle = {}
     newState.currentGamePhase = 'generation'
     newState.currentTetrimino = null
+    newState.performedTSpin = false
+    newState.performedMiniTSpin = false
+    newState.totalScore = newTotalScore
     this.setAppState(newState)
   }
 
-  accrueScore(stateObj) {
-
-    const scoringContexts = this.localState.scoringContextsForCompletion
-
-    scoringContexts.forEach(scoringContext => {
-      const data = this.scoringHandler.updateScore(this.localState, scoringContext)
-      for (const field in data) {
-        stateObj[field] = data[field]
-      }
-    })
+  accrueScore() {
+    const { scoringHistoryPerCycle, scoringContextsForCompletion, totalScore} = this.localState
+    const newTotalScore = this.scoringHandler.handleCompletionPhaseAccrual(totalScore, scoringContextsForCompletion, scoringHistoryPerCycle)
+    return newTotalScore
   }
 
   promoteLevel(stateObj) {

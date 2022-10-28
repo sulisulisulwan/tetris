@@ -8,8 +8,8 @@ export class Scoring {
     this.updateScore = this.updateScore.bind(this)
   }
 
-  updateScore(appState, scoreContext) {
-    return this.scoringHandler.updateScore(appState, scoreContext)
+  updateScore(scoreContext) {
+    return this.scoringHandler.updateScore(scoreContext)
   }
 
   loadScoringHandler(gameMode) {

@@ -38,6 +38,7 @@ export default function softdrop(eventData) {
     newState.playfield = newPlayfield
     newState.currentTetrimino = newTetrimino
     newState.playerAction.softdrop = true
+    // SEE Falling phase in Engine Phases for handling score updating
     this.setAppState(newState)
     return
   }
