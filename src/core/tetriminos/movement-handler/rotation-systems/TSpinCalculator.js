@@ -68,13 +68,6 @@ export class TSpinCalculator {
     const up1From2 = playfield[mino2[0] - 1] ? playfield[mino2[0] - 1][mino2[1]] : undefined 
     const up1From0 = playfield[mino0[0] - 1] ? playfield[mino0[0] - 1][mino0[1]] : undefined
 
-    console.log(
-      leftOf3,
-      rightOf3,
-      up1From2,
-      up1From0
-    )
-    
     isATSlotCorner.a = rightOf3 !== '[_]' 
     isATSlotCorner.b = leftOf3 !== '[_]'  
     isATSlotCorner.c = up1From2 !== '[_]' 
@@ -106,7 +99,7 @@ export class TSpinCalculator {
     const tSlotCorners = TSpinCalculator[`getTSlotCorners_${newOrientation}`](tetriminoCoordsOnPlayfield, playfield)
     
     let performedTSpin = false
-    let performedMiniTSpin = false
+    let performedTSpinMini = false
     
     const aAndBAreTSlotCorners = tSlotCorners.a && tSlotCorners.b
     const cAndDAreTSlotCorners = tSlotCorners.c && tSlotCorners.d
@@ -117,12 +110,12 @@ export class TSpinCalculator {
     }
     // Check for a mini T-Spin
     if (cAndDAreTSlotCorners && tSlotCorners.a || aAndBAreTSlotCorners && tSlotCorners.b) {
-      performedMiniTSpin = true
+      performedTSpinMini = true
     }
 
     return {
       performedTSpin,
-      performedMiniTSpin
+      performedTSpinMini
     }
 
   }

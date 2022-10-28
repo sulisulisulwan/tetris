@@ -10,17 +10,19 @@ export default class Completion extends BasePhase {
     // console.log('>>>> COMPLETION PHASE')
 
     let newState = {}
+    console.log('in completition before accrual:', this.localState.performedTSpinMini)
     const newTotalScore =  this.accrueScore() 
 
     if (this.localState.totalLinesCleared > this.localState.levelClearedLinesGoal) {
       this.promoteLevel(newState)
     }
 
+    newState.scoringContextsForCompletion = []
     newState.scoringHistoryPerCycle = {}
     newState.currentGamePhase = 'generation'
     newState.currentTetrimino = null
     newState.performedTSpin = false
-    newState.performedMiniTSpin = false
+    newState.performedTSpinMini = false
     newState.totalScore = newTotalScore
     this.setAppState(newState)
   }

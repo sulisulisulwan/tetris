@@ -15,7 +15,6 @@ export class TetriminoFactory {
   }
 
   static getTetrimino(tetrimino) {
-    console.log('in getTetrimino', tetrimino)
     return TetriminoFactory[`get${tetrimino}`]()
   }
 

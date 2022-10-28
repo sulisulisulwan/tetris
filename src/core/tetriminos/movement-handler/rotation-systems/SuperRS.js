@@ -38,21 +38,21 @@ export class SuperRotationSystem extends ClassicRotationSystem {
 
       // Determine if a t spin or mini t spin was performed
       let performedTSpin = null
-      let performedMiniTSpin = null
+      let performedTSpinMini = null
       if (tetrimino.name === 'TTetrimino') {
         const tSpinTypes = TSpinCalculator.getTSpinType(targetOrientation, targetCoordsOnPlayfield, playfieldNoTetrimino)
         performedTSpin = tSpinTypes.performedTSpin
-        performedMiniTSpin = tSpinTypes.performedMiniTSpin
+        performedTSpinMini = tSpinTypes.performedTSpinMini
       }
+
+      console.log('straight from the horses mouth', performedTSpinMini)
 
       return {
         newPlayfield: this.addTetriminoToPlayfield(targetCoordsOnPlayfield, playfieldNoTetrimino, tetrimino.minoGraphic),
         newTetrimino: this.updateTetrimino(tetrimino, playerInput, offset, targetOrientation) ,
         successfulMove: true,
-        potentialTSpin: {
-          performedTSpin,
-          performedMiniTSpin
-        }
+        performedTSpin,
+        performedTSpinMini
       }
     }
 
@@ -60,7 +60,8 @@ export class SuperRotationSystem extends ClassicRotationSystem {
       newPlayfield: playfieldCopy, 
       newTetrimino: tetrimino,
       successfulMove: false,
-      potentialTSpin: null
+      performedTSpin,
+      performedTSpinMini
     }
   }
 

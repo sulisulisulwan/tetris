@@ -18,6 +18,7 @@ export class ClassicScoring {
 
     })
 
+
     const newTotalScore = filteredScoringContexts.reduce((runningScore, scoringContext) => {
       return this.updateScore(runningScore, scoringContext)
     }, currentScore)
@@ -52,7 +53,7 @@ export class ClassicScoring {
     const tSpinAward =  400 * currentLevel
     return currentScore + tSpinAward
   }
-
+  
   tSpinMiniNoLineClear(currentScore, scoringData) {
     const { currentLevel } = scoringData
     const tSpinMiniAward =  100 * currentLevel

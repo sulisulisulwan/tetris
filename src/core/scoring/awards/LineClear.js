@@ -16,8 +16,7 @@ export class LineClear {
 
   calculateScore(currentScore, scoringData) {
 
-    const { currentLevel, linesCleared, performedTSpin, performedMiniTSpin, backToBack } = scoringData
-
+    const { currentLevel, linesCleared, performedTSpin, performedTSpinMini, backToBack } = scoringData
     let totalScore = currentScore
 
     if (linesCleared === 4) {
@@ -25,9 +24,14 @@ export class LineClear {
       return backToBack ? totalScore + scoreBeforeBonus + (scoreBeforeBonus * 0.5) : totalScore + scoreBeforeBonus
     }
 
-    if (performedTSpin || performedMiniTSpin) {
+    console.log('in completition', performedTSpinMini)
+
+    if (performedTSpin || performedTSpinMini) {
       const tSpinType = performedTSpin ? 'tSpin' : 'miniTSpin'
-      const scoreBeforeBonus = (this.clearLineBaseScores.get(`${tSpinType}${linesCleared}`) * currentLevel)
+      const tSpinBaseScore = this.clearLineBaseScores.get(`${tSpinType}${linesCleared}`)
+      console.log(`${tSpinType}${linesCleared}`)
+      console.log(tSpinBaseScore)
+      const scoreBeforeBonus = (tSpinBaseScore * currentLevel)
       return backToBack ? totalScore + scoreBeforeBonus + (scoreBeforeBonus * 0.5) : totalScore + scoreBeforeBonus
     }
 

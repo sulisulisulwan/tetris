@@ -11,7 +11,7 @@ export default class Pattern extends BasePhase {
     // console.log('>>>> PATTERN PHASE')
 
     const newState = {}
-    newState.scoringContextsForCompletion = []
+    newState.scoringContextsForCompletion = this.localState.scoringContextsForCompletion
     newState.currentGamePhase = 'iterate'
     newState.eliminationActions = this.runPatternScanners() 
     newState.scoringHistoryPerCycle = this.localState.scoringHistoryPerCycle
@@ -19,9 +19,9 @@ export default class Pattern extends BasePhase {
 
       switch (action.eliminatorName) {
         case 'lineClear':
-          const { performedMiniTSpin, performedTSpin, currentLevel } = this.localState
+          const { performedTSpinMini, performedTSpin, currentLevel } = this.localState
           const linesCleared = action.actionData.length
-          newState.backToBack = linesCleared === 4 || (performedTSpin || performedMiniTSpin) ? true : false
+          newState.backToBack = linesCleared === 4 || (performedTSpin || performedTSpinMini) ? true : false
           newState.scoringHistoryPerCycle.lineClear = true
           newState.totalLinesCleared = this.localState.totalLinesCleared + action.actionData.length
 
@@ -29,7 +29,7 @@ export default class Pattern extends BasePhase {
             currentLevel: currentLevel,
             linesCleared: linesCleared, 
             performedTSpin: performedTSpin,
-            performedTSpinMini: performedTSpin,
+            performedTSpinMini: performedTSpinMini,
             backToBack: newState.backToBack && this.localState.backToBack ? true : false // First back to back qualifier in chain doesn't count
           }
           newState.scoringContextsForCompletion.push({
@@ -47,20 +47,6 @@ export default class Pattern extends BasePhase {
     this.setAppState(newState)
   }
 
-  loadPatterns(possibleActivePatterns) {
-
-    const patternsToLoad = []
-
-    for (const pattern in possibleActivePatterns) {
-      const currPatternActive = possibleActivePatterns[pattern]
-      if (currPatternActive) {
-        patternsToLoad.push(pattern)
-      }
-    }
-
-    return patternsToLoad
-  }
-
   runPatternScanners() {
     const patterns = this.loadedPatterns
     const actions = []
@@ -72,6 +58,19 @@ export default class Pattern extends BasePhase {
       }
     })
     return actions
+  }
+
+  loadPatterns(possibleActivePatterns) {
+    const patternsToLoad = []
+
+    for (const pattern in possibleActivePatterns) {
+      const currPatternActive = possibleActivePatterns[pattern]
+      if (currPatternActive) {
+        patternsToLoad.push(pattern)
+      }
+    }
+
+    return patternsToLoad
   }
 
   // In this phase, we only mark the lines to be cleared.  We can map the return action object to functions in future phases

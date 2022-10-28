@@ -21,28 +21,34 @@ export default function flip(eventData) {
     newPlayfield, 
     newTetrimino,
     performedTSpin,
-    performedMiniTSpin 
+    performedTSpinMini 
   } = this.tetriminoMovementHandler[action](playfield, currentTetrimino)
 
   newState.scoringContextsForCompletion = this.localState.scoringContextsForCompletion
+
+  console.log(    performedTSpin,
+    performedTSpinMini )
   if (performedTSpin) {
-    newState.scoringContextsForCompletion.push([
-      'tSpinNoLineClear', {
+    
+    newState.scoringContextsForCompletion.push({
+      scoringMethodName: 'tSpinNoLineClear', 
+      scoringData: {
         currentScore: this.localState.totalScore,
         currentLevel: this.localState.currentLevel
       }
-    ])
+    })
   }
 
-  if (performedMiniTSpin) {
-    newState.scoringContextsForCompletion.push([
-      'tSpinMiniNoLineClear', {
+  if (performedTSpinMini) {
+    newState.scoringContextsForCompletion.push({
+      scoringMethodName: 'tSpinMiniNoLineClear', 
+      scoringData: {
         currentScore: this.localState.totalScore,
         currentLevel: this.localState.currentLevel
       }
-    ])
+    })
   }
-  newState.performedMiniTSpin = performedMiniTSpin
+  newState.performedTSpinMini = performedTSpinMini
   newState.performedTSpin = performedTSpin
   newState.playerAction[action] = true
   newState.currentTetrimino = newTetrimino

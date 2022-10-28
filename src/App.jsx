@@ -26,8 +26,8 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      playfield: this.getInitialPlayfield(),
-      // playfield: testPlayfields.getTestPlayfield('tSpinWS'),
+      // playfield: this.getInitialPlayfield(),
+      playfield: testPlayfields.getTestPlayfield('tSpinWS'),
       // playfield: testPlayfields.getTestPlayfield('outOfWells'),
       gameMode: 'classic',
       nextQueue: null,
