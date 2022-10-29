@@ -1,6 +1,16 @@
 
 Next up:
 
+Animation scripts
+Game Statistics
+
+
+Extended lockdown
+
+Tetrimino touches surface.  0.5 seconds lockdown timer starts
+  Player moves/rotates maximum 15 times then lockdown
+    UNLESS:
+
 
 X Refactor HoldQueue and NextQueue to act as static classes
   - Keep NextQueue linked list in state
@@ -18,15 +28,6 @@ Refactor pattern marking.
     }
   }
   
-T-spin recognition per fall round
-Animation scripts
-Game Statistics
 
 Multiplayer 
 Game Over state: Multiplayer
-
-TODO: Scoring refactor underway!
-
-tally and update on demand togetherh
-softdrop and harddrop completed
-
