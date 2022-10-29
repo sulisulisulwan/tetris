@@ -108,7 +108,6 @@ class App extends React.Component {
 
   componentDidUpdate() { 
     console.log('fallspeed: >>>>>>', this.state.fallSpeed)
-    console.log('softdrop: >>>>>>', this.state.playerAction.softdrop)
     this.engine.handleGameStateUpdate(this.state, this.setState.bind(this))
   }
 

@@ -12,7 +12,7 @@ export default class Completion extends BasePhase {
     let newState = {}
     const newTotalScore =  this.accrueScore() 
 
-    if (this.localState.totalLinesCleared ===  this.localState.levelClearedLinesGoal) {
+    if (this.localState.totalLinesCleared >= this.localState.levelClearedLinesGoal) {
       this.promoteLevel(newState)
     }
 

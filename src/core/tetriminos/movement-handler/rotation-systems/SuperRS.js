@@ -58,8 +58,8 @@ export class SuperRotationSystem extends ClassicRotationSystem {
       newPlayfield: playfieldCopy, 
       newTetrimino: tetrimino,
       successfulMove: false,
-      performedTSpin,
-      performedTSpinMini
+      performedTSpin: false,
+      performedTSpinMini: false
     }
   }
 
