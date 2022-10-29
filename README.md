@@ -5,7 +5,13 @@ Animation scripts
 Game Statistics
 
 
-Extended lockdown
+auto repeat for left and right
+
+Options: next queue, hold queue, ghost piece, lock down, background music, sound effects
+
+
+Extended placement lockdown
+classic lockdown
 
 Tetrimino touches surface.  0.5 seconds lockdown timer starts
   Player moves/rotates maximum 15 times then lockdown

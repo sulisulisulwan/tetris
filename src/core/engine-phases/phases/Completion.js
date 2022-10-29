@@ -12,7 +12,7 @@ export default class Completion extends BasePhase {
     let newState = {}
     const newTotalScore =  this.accrueScore() 
 
-    if (this.localState.totalLinesCleared > this.localState.levelClearedLinesGoal) {
+    if (this.localState.totalLinesCleared ===  this.localState.levelClearedLinesGoal) {
       this.promoteLevel(newState)
     }
 
@@ -42,6 +42,8 @@ export default class Completion extends BasePhase {
     stateObj.currentLevel = newLevel
     stateObj.levelClearedLinesGoal = levelClearedLinesGoal
     stateObj.fallSpeed = fallSpeed
+    stateObj.playerAction = this.localState.playerAction
+    stateObj.playerAction.softdrop = false // Fixes math bug for softdrop where button trigger bleeds over to generation phase through level promotion
   }
 
 }

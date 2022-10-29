@@ -37,10 +37,53 @@ body {
 }
 
 .playfield-container {
-  /* font-family: monospace;
+  font-family: monospace;
   padding: 10px;
   border: gray 3px solid;
-  background-color: lightgray; */
+}
+
+.playfield-row {
+  background-color: black;
+}
+
+.playfield-square{
+  border-style: solid;
+  border-color: black;
+  border-radius: 20%;
+  /* height: 25px;
+  width: 25px; */
+}
+.iTet {
+  background-color: green;
+  color: green;
+}
+.tTet {
+  background-color: purple;
+  color: purple;
+}
+.jTet {
+  background-color: red;
+  color: red;
+}
+.oTet {
+  background-color: yellow;
+  color: yellow;
+}
+.sTet {
+  background-color: orange;
+  color: orange;
+}
+.lTet {
+  background-color: cyan;
+  color: cyan;
+}
+.zTet {
+  background-color: white;
+  color: white;
+}
+.empty {
+  background-color: black;
+  color: black;
 }
 
 .sidebar-right {
@@ -113,48 +156,4 @@ body {
 .instruction-block {
   display: flex;
   justify-content: center;
-}
-
-
-/*
-TETRIMINO SQUARES!!
-*/
-
-.playfield-square{
-  border-style: solid;
-  border-color: black;
-  /* height: 25px;
-  width: 25px; */
-}
-.iTet {
-  background-color: green;
-  color: green;
-}
-.tTet {
-  background-color: purple;
-  color: purple;
-}
-.jTet {
-  background-color: red;
-  color: red;
-}
-.oTet {
-  background-color: yellow;
-  color: yellow;
-}
-.sTet {
-  background-color: orange;
-  color: orange;
-}
-.lTet {
-  background-color: cyan;
-  color: cyan;
-}
-.zTet {
-  background-color: white;
-  color: white;
-}
-.empty {
-  background-color: black;
-  color: black;
 }

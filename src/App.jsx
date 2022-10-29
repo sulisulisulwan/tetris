@@ -26,9 +26,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      // playfield: this.getInitialPlayfield(),
-      playfield: testPlayfields.getTestPlayfield('backToBackTSpin'),
-      // playfield: testPlayfields.getTestPlayfield('outOfWells'),
+      playfield: this.getInitialPlayfield(),
       gameMode: 'classic',
       nextQueue: null,
       holdQueue: {
@@ -109,6 +107,8 @@ class App extends React.Component {
   }
 
   componentDidUpdate() { 
+    console.log('fallspeed: >>>>>>', this.state.fallSpeed)
+    console.log('softdrop: >>>>>>', this.state.playerAction.softdrop)
     this.engine.handleGameStateUpdate(this.state, this.setState.bind(this))
   }
 
