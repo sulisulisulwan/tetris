@@ -8,24 +8,54 @@ export default class Falling extends BasePhase {
 
   execute() {
     // console.log('>>>> FALLING PHASE')
+
+    const newState = {}
     
-    if (this.localState.playerAction.softDrop === true) {
-      if (this.localState.fallIntervalId) {
-        return
+    // Kickoff motion intervals
+    
+    if (this.localState.playerAction.autoRepeat.override) {
+      const { override } = this.localState.playerAction.autoRepeat
+      if (this.localState[`${override}IntervalId`] === null) {
+        newState[`${override}IntervalId`] = this.setContinuousLeftOrRight(override)
       }
-      // Kickoff softdrop fall interval
-      this.setAppState({ fallIntervalId: this.setContinuousFallEvent() })
-      return
-    } 
-    
-    // Kickoff regular fall interval
-    if (this.localState.fallIntervalId === null) {
-      this.setAppState({ fallIntervalId: this.setContinuousFallEvent() })
+    } else {
+
+      if (this.localState.playerAction.autoRepeat.right) {
+        if (this.localState.rightIntervalId === null) {
+          newState.rightIntervalId = this.setContinuousLeftOrRight('right')
+        }
+      }
+  
+      if (this.localState.playerAction.autoRepeat.left) {
+  
+        if (this.localState.leftIntervalId === null) {
+          newState.leftIntervalId = this.setContinuousLeftOrRight('left')
+        }
+      }
     }
+
+
+
+    if (this.localState.fallIntervalId === null) {
+      newState.fallIntervalId = this.setContinuousFallEvent()
+    }
+
+    if (Object.keys(newState).length === 0) {
+      return
+    }
+    
+    this.setAppState(newState)
+    // if (this.localState.playerAction.autoRepeat.right || this.localState.playerAction.autoRepeat.left) {
+    //   newState[`${action}IntervalId`] = setInterval(continuousLeftOrRight.bind(this), 1000, action)
+    // }
   }
 
   setContinuousFallEvent() {
     return setInterval(this.continuousFallEvent.bind(this), this.localState.fallSpeed)
+  }
+
+  setContinuousLeftOrRight(action) {
+    return setInterval(this.continuousLeftOrRight.bind(this), 100, action)
   }
 
   continuousFallEvent() {
@@ -70,6 +100,29 @@ export default class Falling extends BasePhase {
     this.setAppState(newState)
   }
 
+  continuousLeftOrRight(action) {
+
+  const { playfield, currentTetrimino } = this.localState
+  const newState = {}
+
+    console.log(action)
+
+  const { 
+    newPlayfield, 
+    newTetrimino, 
+    successfulMove
+  } = this.tetriminoMovementHandler.moveOne(action, playfield, currentTetrimino)
+
+  
+  if (successfulMove)  {
+    newState.currentTetrimino = newTetrimino
+    newState.playfield = newPlayfield
+    this.setAppState(newState)
+    return
+  }
+
+}
+  
   awardSoftDropScore() {
 
   }

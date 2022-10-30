@@ -26,6 +26,10 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+
+      rightIntervalId: null,
+      leftIntervalId: null,
+
       playfield: this.getInitialPlayfield(),
       gameMode: 'classic',
       nextQueue: null,
@@ -107,7 +111,6 @@ class App extends React.Component {
   }
 
   componentDidUpdate() { 
-    console.log('fallspeed: >>>>>>', this.state.fallSpeed)
     this.engine.handleGameStateUpdate(this.state, this.setState.bind(this))
   }
 
