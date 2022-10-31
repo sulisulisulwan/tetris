@@ -13,27 +13,28 @@ export default class Falling extends BasePhase {
     
     // Kickoff motion intervals
     
-    if (this.localState.playerAction.autoRepeat.override) {
-      const { override } = this.localState.playerAction.autoRepeat
+    const { override } = this.localState.playerAction.autoRepeat
+    if (override) {
       if (this.localState[`${override}IntervalId`] === null) {
+        newState.autoRepeatDelayTimeoutId = this.setAutoRepeatDelayTimeout('right')
         newState[`${override}IntervalId`] = this.setContinuousLeftOrRight(override)
       }
     } else {
 
       if (this.localState.playerAction.autoRepeat.right) {
         if (this.localState.rightIntervalId === null) {
+          newState.autoRepeatDelayTimeoutId = this.setAutoRepeatDelayTimeout('right')
           newState.rightIntervalId = this.setContinuousLeftOrRight('right')
         }
       }
   
       if (this.localState.playerAction.autoRepeat.left) {
-  
         if (this.localState.leftIntervalId === null) {
+          newState.autoRepeatDelayTimeoutId = this.setAutoRepeatDelayTimeout('right')
           newState.leftIntervalId = this.setContinuousLeftOrRight('left')
         }
       }
     }
-
 
 
     if (this.localState.fallIntervalId === null) {
@@ -45,17 +46,23 @@ export default class Falling extends BasePhase {
     }
     
     this.setAppState(newState)
-    // if (this.localState.playerAction.autoRepeat.right || this.localState.playerAction.autoRepeat.left) {
-    //   newState[`${action}IntervalId`] = setInterval(continuousLeftOrRight.bind(this), 1000, action)
-    // }
+  }
+
+  setAutoRepeatDelayTimeout() {
+    console.log('here')
+    return setTimeout(this.unsetAutoRepeatDelayTimeoutId.bind(this), 300)
+  }
+
+  unsetAutoRepeatDelayTimeoutId() {
+    this.setAppState({ autoRepeatDelayTimeoutId: null })
   }
 
   setContinuousFallEvent() {
     return setInterval(this.continuousFallEvent.bind(this), this.localState.fallSpeed)
   }
 
-  setContinuousLeftOrRight(action) {
-    return setInterval(this.continuousLeftOrRight.bind(this), 100, action)
+  setContinuousLeftOrRight(direction) {
+    return setInterval(this.continuousLeftOrRight.bind(this), 50, direction)
   }
 
   continuousFallEvent() {
@@ -102,28 +109,25 @@ export default class Falling extends BasePhase {
 
   continuousLeftOrRight(action) {
 
-  const { playfield, currentTetrimino } = this.localState
-  const newState = {}
+    if (this.localState.autoRepeatDelayTimeoutId) { 
+      return 
+    }
 
-    console.log(action)
+    const { playfield, currentTetrimino } = this.localState
+    const newState = {}
 
-  const { 
-    newPlayfield, 
-    newTetrimino, 
-    successfulMove
-  } = this.tetriminoMovementHandler.moveOne(action, playfield, currentTetrimino)
-
-  
-  if (successfulMove)  {
-    newState.currentTetrimino = newTetrimino
-    newState.playfield = newPlayfield
-    this.setAppState(newState)
-    return
-  }
-
-}
-  
-  awardSoftDropScore() {
+    const { 
+      newPlayfield, 
+      newTetrimino, 
+      successfulMove
+    } = this.tetriminoMovementHandler.moveOne(action, playfield, currentTetrimino)
+    
+    if (successfulMove)  {
+      newState.currentTetrimino = newTetrimino
+      newState.playfield = newPlayfield
+      this.setAppState(newState)
+      return
+    }
 
   }
   

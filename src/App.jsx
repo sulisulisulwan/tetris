@@ -29,6 +29,7 @@ class App extends React.Component {
 
       rightIntervalId: null,
       leftIntervalId: null,
+      autoRepeatDelayTimeoutId: null,
 
       playfield: this.getInitialPlayfield(),
       gameMode: 'classic',
