@@ -15,34 +15,31 @@ export default class Lock extends BasePhase {
 
     /**
      * TODO: Current code shouldn't be breaking.
-     * tetriminoBaseRowIdx will be checked against  
-     * if tetriminoCurrentBaseRowIdx is HIGHER than this.localState.lowestLockSurfaceRow
-     * player can only use leftover time from previous lockTimeoutId
      * 
-     * To implement this, we need to be able to grab the difference of time left in a
-     * previous lockTimeout and pass it to the new setting of lockDownTimeout
+     * TODO: EXTENDED PLACEMENT LOCKDOWN
      * 
-     * This dynamic setTimeout duration value should be held in state and
-     * must be updated at proper times to either the default lock duration 
-     * or the difference duration depending on the situation
-     * 
-     * Set to default 0.5 seconds if:
-     *   tetriminoCurrentBaseRowIdx < this.localState.lowestLockSurfaceRow
-     *   OR this.localState.lowestLockSurfaceRow === null (this means its the first time the tetrimino has landed ever)
-     *     update 
-     *        lockTimeoutId -> new 0.5 second timeoutId
-     *        lowestLockSurfaceRow -> tetriminoCurrentBaseRowIdx
-     * 
-     * Set to leftover seconds in all other cases
+     * Tetrimino touches surface.  0.5 seconds lockdown timer starts
+     * Player gets 15 move/rotate counter 
+        - same aportioned counter used when on or above the lowest surface where the counter was first aportioned
+          - Each move within the counter will reset lockdown timer.
+          - Once all 15 used up, 
+            - Tetrimino touching no surface below can still be moved around
+            - Tetrimino touching surface locks down immediately
+        - Counter resets to 15 if the Tetrimino falls below the surface. 
+
+
      */
 
+    // If at the beginning of the lockdown phase (lockTimeout hasn't been set), 
+    // note the index of the surface the Tetrimino is on, and set the lockdown timer
     if (!this.localState.lockTimeoutId) {
-      newState.lowestLockSurfaceRow = this.tetriminoMovementHandler.getLowestPlayfieldRowOfTetrimino(this.localState.currentTetrimino)
+      newState.lowestLockSurfaceRow = tetriminoCurrentBaseRowIdx
       newState.lockTimeoutId = setTimeout(this.lockDownTimeout.bind(this), 500)
       this.setAppState(newState)
       return
     }
 
+    //Lockdown timer has been set
     // Player has made a change so check if player has positioned tetrimino to escape lock phase
     const tetriminoCopy = this.localState.currentTetrimino
     const playfieldCopy = this.localState.playfield

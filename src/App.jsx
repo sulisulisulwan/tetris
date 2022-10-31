@@ -27,11 +27,9 @@ class App extends React.Component {
     super(props)
     this.state = {
 
-      rightIntervalId: null,
-      leftIntervalId: null,
-      autoRepeatDelayTimeoutId: null,
-
+      currentTetrimino: null,
       playfield: this.getInitialPlayfield(),
+
       gameMode: 'classic',
       nextQueue: null,
       holdQueue: {
@@ -39,10 +37,8 @@ class App extends React.Component {
         heldTetrimino: null
       },
 
-      pregameCounter: 1, // This should be 2
-      pregameIntervalId: null,
+      currentGamePhase: 'off',
 
-      totalScore: 0,
       playerAction: {
         autoRepeat: {
           left: false,
@@ -55,25 +51,30 @@ class App extends React.Component {
         flipCounterClockwise: false,
         hold: false
       },
-      currentGamePhase: 'off',
+      rightIntervalId: null,
+      leftIntervalId: null,
+      autoRepeatDelayTimeoutId: null,
+      fallIntervalId: null,
+
+      pregameCounter: 1, // This should be 2
+      pregameIntervalId: null,
+
+      lockTimeoutId: null,
+      extendedLockdownMovesRemaining: 15,
+      lowestLockSurfaceRow: null,
 
       eliminationActions: [],
 
-      fallIntervalId: null,
-      lockTimeoutId: null,
-      currentTetrimino: null,
-
-      scoringContextsForCompletion: [],
-
       currentLevel: 1,
+      scoringContextsForCompletion: [],
       levelClearedLinesGoal: 5, // this is a fixed goal system
       fallSpeed: 1000,
       totalLinesCleared: 0,
-
+      totalScore: 0,
       performedTSpin: false,
       performedTSpinMini: false,
       backToBack: false,
-      lowestLockSurfaceRow: null,
+      
 
       scoringHistoryPerCycle: {}
     }

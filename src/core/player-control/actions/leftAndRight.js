@@ -40,6 +40,7 @@ export default function leftAndRight(eventData) {
     newState.playerAction.autoRepeat.override = newState.playerAction.autoRepeat[oppositeAction] ? action : null
   } 
 
+  // Execute the action if there is an action to be executed
   if (newState.playerAction.autoRepeat.override 
     || newState.playerAction.autoRepeat.left 
     || newState.playerAction.autoRepeat.right
@@ -57,6 +58,7 @@ export default function leftAndRight(eventData) {
     if (successfulMove)  {
       newState.currentTetrimino = newTetrimino
       newState.playfield = newPlayfield
+      newState.extendedLockdownMovesRemaining = this.localState.extendedLockdownMovesRemaining - 1
     }
   
   }

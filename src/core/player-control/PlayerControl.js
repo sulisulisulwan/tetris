@@ -54,6 +54,17 @@ export class PlayerControl extends SharedScope {
 
     const action = this.keystrokeMap.get(eventData.key)
 
+    if (action === 'left' 
+      || action === 'right'
+      || action === 'flipClockwise'
+      || action === 'flipCounterClockwise'
+    ) {
+      if (this.localState.extendedLockdownMovesRemaining === 0) {
+        return
+      }
+    }
+
+
     if (!action || this.localState.currentTetrimino.status === 'locked') {
       return
     }

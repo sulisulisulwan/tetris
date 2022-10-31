@@ -13,7 +13,7 @@ export default class Pregame extends BasePhase {
     console.log('>>> PREGAME PHASE')
     if (this.localState.pregameIntervalId === null) {
       const newState = {}
-      newState.pregameIntervalId = setInterval(this.pregameIntervalEvent.bind(this), 1000)
+      newState.pregameIntervalId = setInterval(this.pregameIntervalEvent.bind(this), 0)
       this.setAppState(newState)
     }
       

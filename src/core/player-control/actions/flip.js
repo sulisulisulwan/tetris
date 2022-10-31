@@ -51,6 +51,7 @@ export default function flip(eventData) {
   newState.playerAction[action] = true
   newState.currentTetrimino = newTetrimino
   newState.playfield = newPlayfield
+  newState.extendedLockdownMovesRemaining = this.localState.extendedLockdownMovesRemaining - 1
   this.setAppState(newState)
 
 }
