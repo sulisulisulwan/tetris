@@ -8,18 +8,8 @@ Game Statistics
 Options: next queue, hold queue, ghost piece, lock down, background music, sound effects
 
 
-Extended placement lockdown
-classic lockdown
-
-Tetrimino touches surface.  0.5 seconds lockdown timer starts
-  Player gets 15 move/rotate counter 
-    - same aportioned counter used when on or above the lowest surface where the counter was first aportioned
-      - Each move within the counter will reset lockdown timer.
-      - Once all 15 used up, 
-        - Tetrimino touching no surface below can still be moved around
-        - Tetrimino touching surface locks down immediately
-    - Counter resets to 15 if the Tetrimino falls below the surface. 
-
+TODO: Extended placement lockdown bug:
+  if rotating Tetrimino up until post 15 move lockdown and continuing the flipping motion, the new generated tetrimino will disappear and be replaced by another
 
 X Refactor HoldQueue and NextQueue to act as static classes
   - Keep NextQueue linked list in state

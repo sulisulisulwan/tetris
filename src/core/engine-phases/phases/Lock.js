@@ -14,6 +14,7 @@ export default class Lock extends BasePhase {
     // First check that extended moves have been used up, and call for lockdown immediately if it's the case
     if (this.localState.extendedLockdownMovesRemaining <= 0) {
       this.lockDownTimeout()
+      return
     }
 
     // If at the beginning of the lockdown phase (lockTimeout hasn't been set), set the lockdown timer
