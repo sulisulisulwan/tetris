@@ -59,16 +59,22 @@ export class PlayerControl extends SharedScope {
       || action === 'flipClockwise'
       || action === 'flipCounterClockwise'
     ) {
-      if (this.localState.extendedLockdownMovesRemaining === 0) {
+
+      // If there are no more extended moves left, and the Tetrimino has touched down on a surface, any keydown actions will be ignored forcing lockdown
+      if (this.localState.extendedLockdownMovesRemaining <= 0 && eventData.strokeType === 'keydown') {
+        const { playfield, currentTetrimino } = this.localState
+        const { successfulMove } = this.tetriminoMovementHandler.moveOne('down', playfield, currentTetrimino)
+        const tetriminoOnSurface = !successfulMove
+        if (tetriminoOnSurface)
         return
       }
     }
-
 
     if (!action || this.localState.currentTetrimino.status === 'locked') {
       return
     }
 
+    // Execute the player's action
     eventData.action = action
     this[action](eventData)
   }

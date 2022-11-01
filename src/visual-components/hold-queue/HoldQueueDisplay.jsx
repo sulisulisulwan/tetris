@@ -85,8 +85,6 @@ class HoldQueueDisplay extends React.Component {
       return <div className="holdqueue-wrapper" style={styles}><div className="text-hold">Hold</div></div>
     }  
 
-    console.log()
-
     return (
       <div className="holdqueue-wrapper" style={styles}>
         <div className="text-hold">Hold</div>

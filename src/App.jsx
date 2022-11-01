@@ -62,6 +62,7 @@ class App extends React.Component {
       lockTimeoutId: null,
       extendedLockdownMovesRemaining: 15,
       lowestLockSurfaceRow: null,
+      postLockMode: false,
 
       eliminationActions: [],
 
@@ -122,6 +123,7 @@ class App extends React.Component {
         <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Suli's Tetris</div>
         {this.state.currentGamePhase === 'pregame' ? <div style={{textAlign: 'center'}}>{this.state.pregameCounter + 1}</div> : <div style={{textAlign: 'center'}}> --- </div>}
         <div className="playfield-and-sidebar-right">
+          <div>Test Fields: <br></br>Moves Remaining: {this.state.extendedLockdownMovesRemaining}</div>
           <HoldQueueDisplay 
             holdQueue={this.state.holdQueue} 
             currentLevel={this.state.currentLevel}

@@ -18,11 +18,7 @@ Tetrimino touches surface.  0.5 seconds lockdown timer starts
       - Once all 15 used up, 
         - Tetrimino touching no surface below can still be moved around
         - Tetrimino touching surface locks down immediately
-    - Counter resets to 15 if the Tetrimino falls below the surface.
-      
-
-
-    UNLESS: 
+    - Counter resets to 15 if the Tetrimino falls below the surface. 
 
 
 X Refactor HoldQueue and NextQueue to act as static classes

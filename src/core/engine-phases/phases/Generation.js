@@ -11,15 +11,11 @@ export default class Generation extends BasePhase {
     // console.log('>>> GENERATION PHASE')
 
     const newTetrimino = this.determineIfNewTetriminoSwappedIn()
-    
+    const newTetriminoBaseRowIdx = this.tetriminoMovementHandler.getLowestPlayfieldRowOfTetrimino(newTetrimino)
+
     const nextQueueData = this.nextQueueHandler.queueToArray(5)
     
     const targetStartingCoords = this.tetriminoMovementHandler.getTetriminoCoordsOnPlayfield(newTetrimino)
-    // const targetStartingCoords = coordsOffOrigin.map(coord => {
-    //   const [vertical, horizontal] = coord
-    //   const [startingVertical, startingHorizontal] = newTetrimino.currentOriginOnPlayfield
-    //   return [startingVertical + vertical, startingHorizontal + horizontal]
-    // })
 
     const playfield = this.localState.playfield
     const newState = this.localState
@@ -46,7 +42,9 @@ export default class Generation extends BasePhase {
     newState.playfield = newPlayfield
     newState.currentTetrimino = newTetrimino,
     newState.currentGamePhase = 'falling',
+    newState.lowestLockSurfaceRow = newTetriminoBaseRowIdx
     newState.holdQueue.swapStatus = swapStatus
+    newState.extendedLockdownMovesRemaining = 15
     
     this.setAppState(newState)
   }

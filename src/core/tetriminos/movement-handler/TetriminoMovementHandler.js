@@ -9,7 +9,6 @@ export class TetriminoMovementHandler {
       localOrigin[0] + playfieldOrigin[0], 
       localOrigin[1] + playfieldOrigin[1] + 1
     ]
-    // console.log(targetCoordOnPlayfield)
     return targetCoordOnPlayfield
   }
 
@@ -100,7 +99,6 @@ export class TetriminoMovementHandler {
   }
 
   updateTetrimino(tetrimino, direction, offset, targetOrientation) {
-    console.log(direction)
     const [oldVertical, oldHorizontal] = tetrimino.currentOriginOnPlayfield
     const newTetrimino = makeCopy(tetrimino)
     if (direction === 'left') {
