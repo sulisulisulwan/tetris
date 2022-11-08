@@ -1,7 +1,6 @@
-
 export default {
   mode: "development",
-  entry: './src/index.js',
+  entry: './src/index.tsx',
   output: {
     filename: 'bundle.js'
   },
@@ -19,8 +18,16 @@ export default {
             ]
           }
         }
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        loader: 'ts-loader'
       }
     ]
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js']
   },
   devtool: 'inline-source-map'
 }

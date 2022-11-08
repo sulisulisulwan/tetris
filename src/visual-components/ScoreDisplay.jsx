@@ -1,7 +1,7 @@
 import React from 'react'
 import { levelColors } from './levelColors'
 
-const ScoreDisplay = ({scoreData, currentLevel, linesCleared}) => {
+const ScoreDisplay = ({totalScore, currentLevel, linesCleared}) => {
 
   const styles = {
     backgroundColor: levelColors[currentLevel],
@@ -20,7 +20,7 @@ const ScoreDisplay = ({scoreData, currentLevel, linesCleared}) => {
       <div>Lines:</div>
       <div><strong>{linesCleared}</strong></div>
       <div>Score:</div>
-      <div><strong>{scoreData}</strong></div>      
+      <div><strong>{totalScore}</strong></div>      
     </div>
   )
 }

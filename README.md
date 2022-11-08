@@ -7,9 +7,11 @@ Game Statistics
 
 Options: next queue, hold queue, ghost piece, lock down, background music, sound effects
 
+Variable Goal system
 
-TODO: Extended placement lockdown bug:
-  if rotating Tetrimino up until post 15 move lockdown and continuing the flipping motion, the new generated tetrimino will disappear and be replaced by another
+
+TODO: Infinite lockdown bug:
+  if rotating Tetrimino like crazy to prevent lockdown and then allowing block to rest on surface, lockdown isn't triggered
 
 X Refactor HoldQueue and NextQueue to act as static classes
   - Keep NextQueue linked list in state
@@ -30,3 +32,24 @@ Refactor pattern marking.
 
 Multiplayer 
 Game Over state: Multiplayer
+
+
+
+NEEDS TESTING:
+
+Classic lockdown (lock and falling)
+Infinite lockdown (lock and falling)
+Extended lockdown (lock and falling)
+
+
+
+
+
+
+
+
+Completion
+Pattern
+leftAndRight
+LevelGoals
+Classic Scoring
