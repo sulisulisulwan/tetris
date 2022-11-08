@@ -1,6 +1,6 @@
 export default {
   mode: "development",
-  entry: './src/index.tsx',
+  entry: './build/index.js',
   output: {
     filename: 'bundle.js'
   },
