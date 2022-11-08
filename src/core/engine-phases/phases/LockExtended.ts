@@ -1,8 +1,6 @@
 import BasePhase from "./BasePhase.js";
 import { makeCopy } from "../../utils/utils.js";
-import { sharedHandlersIF } from "../interfaces/SharedHandlers.js";
-import { appStateIF } from "../../../interfaces/AppState.js";
-import { tetriminoIF } from "../../tetriminos/interfaces/Tetrimino.js";
+import { appStateIF,sharedHandlersIF, tetriminoIF } from "../../../interfaces/index.js";
 
 export default class LockExtended extends BasePhase {
 

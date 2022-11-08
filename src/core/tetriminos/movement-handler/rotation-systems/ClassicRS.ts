@@ -1,18 +1,12 @@
+import { 
+  coordinates, 
+  flipDirections, 
+  orientationsIF, 
+  relativeOrientations, 
+  tetriminoIF 
+} from "../../../../interfaces/index.js"
 import { makeCopy } from "../../../utils/utils.js"
-import { coordinates, orientationsIF, tetriminoIF } from "../../interfaces/Tetrimino.js"
 import { TetriminoMovementHandler } from "../TetriminoMovementHandler.js"
-
-interface relativeOrientations {
-  north: flipDirections
-  south: flipDirections
-  east: flipDirections
-  west: flipDirections
-}
-
-interface flipDirections {
-  flipCounterClockwise: string
-  flipClockwise: string
-}
 export class ClassicRotationSystem extends TetriminoMovementHandler{
 
   readonly relativeOrientations: relativeOrientations

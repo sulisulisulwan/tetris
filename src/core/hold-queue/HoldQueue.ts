@@ -1,5 +1,4 @@
-import { appStateIF, eventDataIF } from "../../interfaces/AppState.js"
-import { TetriminoFactory } from "../tetriminos/TetriminoFactory.js"
+import { appStateIF, eventDataIF } from "../../interfaces/index.js"
 
 export class HoldQueue {
 

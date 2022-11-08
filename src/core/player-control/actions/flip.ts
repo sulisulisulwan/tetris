@@ -1,4 +1,4 @@
-import { eventDataIF } from '../../../interfaces/AppState.js'
+import { eventDataIF } from '../../../interfaces/index.js'
 import { makeCopy } from '../../utils/utils.js'
 
 export default function flip(eventData: eventDataIF) {

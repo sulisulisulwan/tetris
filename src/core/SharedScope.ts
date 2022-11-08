@@ -1,5 +1,4 @@
-import { appStateIF, setAppStateIF } from "../interfaces/AppState.js"
-import { sharedHandlersIF } from "./engine-phases/interfaces/SharedHandlers.js"
+import { appStateIF, setAppStateIF, sharedHandlersIF } from "../interfaces/index.js"
 import { HoldQueue } from "./hold-queue/HoldQueue.js"
 import { LevelGoals } from "./level-goals/LevelGoals.js"
 import { NextQueue } from "./next-queue/NextQueue.js"

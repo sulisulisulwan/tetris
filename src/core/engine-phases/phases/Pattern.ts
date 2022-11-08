@@ -1,5 +1,4 @@
-import { appStateIF, possibleActivePatternsIF, scoringItemsForCompletionIF } from "../../../interfaces/AppState.js";
-import { sharedHandlersIF } from "../interfaces/SharedHandlers.js";
+import { appStateIF, possibleActivePatternsIF, scoringItemsForCompletionIF, sharedHandlersIF } from "../../../interfaces/index.js";
 import BasePhase from "./BasePhase.js";
 
 

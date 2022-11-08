@@ -56,6 +56,7 @@ class App extends React.Component<{}, appStateIF> {
       },
       rightIntervalId: null,
       leftIntervalId: null,
+      
       autoRepeatDelayTimeoutId: null,
       fallIntervalId: null,
 

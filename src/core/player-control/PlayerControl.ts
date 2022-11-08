@@ -1,8 +1,6 @@
 import { SharedScope } from "../SharedScope.js"
 import { leftAndRight, flip, softdrop, harddrop, hold, pauseGame } from "./actions/index.js"
-import { sharedHandlersIF } from "../engine-phases/interfaces/SharedHandlers.js"
-import { appStateIF, eventDataIF, playerActionHandlersIF } from "../../interfaces/AppState.js"
-import * as React from "react"
+import { appStateIF, eventDataIF, playerActionHandlersIF, sharedHandlersIF } from "../../interfaces/index.js"
 
 export class PlayerControl extends SharedScope {
 

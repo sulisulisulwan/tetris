@@ -1,5 +1,5 @@
 import { makeCopy } from "../../../utils/utils.js"
-import { coordinates, orientationsIF, rotationPointsIF, tetriminoIF } from "../../interfaces/Tetrimino.js"
+import { coordinates, orientationsIF, rotationPointsIF, tetriminoIF } from "../../../../interfaces"
 import { ClassicRotationSystem } from "./ClassicRS.js"
 import { TSpinCalculator } from "./TSpinCalculator.js"
 export class SuperRotationSystem extends ClassicRotationSystem {

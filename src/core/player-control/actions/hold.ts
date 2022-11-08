@@ -1,4 +1,4 @@
-import { appStateIF, eventDataIF } from "../../../interfaces/AppState"
+import { appStateIF, eventDataIF } from "../../../interfaces"
 
 export default function hold(eventData: eventDataIF) {
 

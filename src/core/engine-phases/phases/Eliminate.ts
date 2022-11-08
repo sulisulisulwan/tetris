@@ -1,7 +1,11 @@
-import { appStateIF } from "../../../interfaces/AppState.js";
-import { sharedHandlersIF } from "../interfaces/SharedHandlers.js";
+import { 
+  appStateIF, 
+  sharedHandlersIF, 
+  eliminationActionsIF, 
+  eliminatorsIF, 
+  eliminator 
+} from "../../../interfaces/index.js";
 import BasePhase from "./BasePhase.js";
-import { eliminationActionsIF, eliminatorsIF, eliminator } from './interfaces/EliminateIFs'
 
 
 

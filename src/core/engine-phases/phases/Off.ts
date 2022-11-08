@@ -1,4 +1,4 @@
-import { sharedHandlersIF } from "../interfaces/SharedHandlers.js";
+import { sharedHandlersIF } from "../../../interfaces/index.js";
 import BasePhase from "./BasePhase.js";
 
 export default class Off extends BasePhase {

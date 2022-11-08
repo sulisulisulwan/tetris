@@ -1,7 +1,7 @@
 import { VirtualBag } from './VirtualBag.js'
 import { QueueList } from './QueueList.js'
 import { TetriminoFactory } from '../tetriminos/TetriminoFactory.js'
-import { tetriminoIF } from '../tetriminos/interfaces/Tetrimino.js'
+import { tetriminoIF } from '../../interfaces'
 export class NextQueue {
 
   private virtualBag: VirtualBag

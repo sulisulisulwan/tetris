@@ -1,11 +1,5 @@
 import { makeCopy } from '../../utils/utils.js'
-import { tetriminoIF, coordinates, orientationsIF } from '../interfaces/Tetrimino.js'
-
-interface directionsIF {
-  right: Function
-  left: Function
-  down: Function
-}
+import { tetriminoIF, coordinates, orientationsIF, directionsIF } from '../../../interfaces'
 
 export class TetriminoMovementHandler {
 

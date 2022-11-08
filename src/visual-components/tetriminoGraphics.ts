@@ -1,4 +1,4 @@
-import { tetriminoGraphicsIF } from "../interfaces/AppState";
+import { tetriminoGraphicsIF } from "../interfaces";
 
 export const tetriminoGraphics: tetriminoGraphicsIF = {
   OTetriminoGraphic: [

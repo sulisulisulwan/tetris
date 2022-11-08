@@ -1,4 +1,4 @@
-import { tetriminoIF } from "./interfaces"
+import { tetriminoIF } from "../../interfaces"
 
 
 type factoryFuncs = {

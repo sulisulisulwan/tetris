@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import TetriminoTile from '../TetriminoTile.jsx'
 import { tetriminoGraphics } from '../tetriminoGraphics'
-import { holdQueueIF, levelColorsIF, tetriminoGraphicsIF } from '../../interfaces/AppState'
+import { holdQueueIF, levelColorsIF, tetriminoGraphicsIF } from '../../interfaces'
 
 interface holdQueueDisplayProps {
   holdQueue: holdQueueIF

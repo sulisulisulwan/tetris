@@ -1,5 +1,4 @@
-import { appStateIF } from "../../../interfaces/AppState.js";
-import { sharedHandlersIF } from "../interfaces/SharedHandlers.js";
+import { appStateIF, sharedHandlersIF } from "../../../interfaces/index.js";
 import BasePhase from "./BasePhase.js";
 
 export default class Iterate extends BasePhase {

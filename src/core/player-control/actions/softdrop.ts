@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { appStateIF, eventDataIF } from '../../../interfaces/AppState.js'
+import { appStateIF, eventDataIF } from '../../../interfaces/index.js'
 import { makeCopy } from '../../utils/utils.js'
 
 export default function softdrop(eventData: eventDataIF) {

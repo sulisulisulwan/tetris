@@ -1,4 +1,4 @@
-import { scoringDataIF, scoreItemIF, scoringItemsForCompletionIF, scoringHistoryPerCycleIF } from "../../../interfaces/AppState.js"
+import { scoringDataIF, scoreItemIF, scoringItemsForCompletionIF, scoringHistoryPerCycleIF } from "../../../interfaces/index.js"
 import { LineClear } from "../awards/LineClear.js"
 
 

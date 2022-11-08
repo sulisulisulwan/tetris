@@ -1,8 +1,4 @@
-import { coordinates } from "../tetriminos/interfaces"
-
-interface GenericObjectInterface {
-  [key: string]: any
-}
+import { coordinates, GenericObjectInterface } from "../../interfaces"
 
 const makeCopy = (objOrArray: object) => {
 

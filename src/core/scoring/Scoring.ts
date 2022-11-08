@@ -1,4 +1,4 @@
-import { scoreItemIF } from '../../interfaces/AppState.js'
+import { scoreItemIF } from '../../interfaces/index.js'
 import { ClassicScoring } from './modes/Classic.js'
 
 export class Scoring {

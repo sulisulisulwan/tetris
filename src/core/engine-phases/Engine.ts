@@ -5,6 +5,7 @@ import { PlayerControl } from '../player-control/PlayerControl.js'
 import { ClassicRotationSystem } from '../tetriminos/movement-handler/rotation-systems/ClassicRS.js'
 import { SuperRotationSystem } from '../tetriminos/movement-handler/rotation-systems/SuperRS.js'
 import { 
+  BasePhase,
   Pregame,
   Generation,
   FallingClassic,
@@ -20,13 +21,14 @@ import {
   Completion,
   Off,
   GameOver
-} from './index.js'
-import { HoldQueue } from '../hold-queue/HoldQueue.js'
-import { initialOptionsIF } from '../../interfaces/InitialOptions.js'
-import BasePhase from './phases/BasePhase.js'
-import { appStateIF } from '../../interfaces/AppState.js'
-import { sharedHandlersIF } from './interfaces/SharedHandlers.js'
-import { phases } from './interfaces/Phases.js'
+} from './index'
+import { HoldQueue } from '../hold-queue/HoldQueue'
+import { 
+  initialOptionsIF,
+  appStateIF,
+  sharedHandlersIF,
+  phases
+} from '../../interfaces/index'
 
 export class Engine {
 

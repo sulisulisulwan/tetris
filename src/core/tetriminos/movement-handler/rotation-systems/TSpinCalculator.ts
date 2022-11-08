@@ -1,4 +1,4 @@
-import { coordinates } from "../../interfaces"
+import { coordinates, isATSlotCorner, tSlotCornersGetters } from "../../../../interfaces"
 
 
   /**                             0  1 
@@ -17,20 +17,6 @@ import { coordinates } from "../../interfaces"
    * (either it's off the playfield (undefined) or filled with a tetrimino), 
    * it is a tslot
    */ 
-
-interface tSlotCornersGetters {
-  getTSlotCorners_north: Function
-  getTSlotCorners_south: Function
-  getTSlotCorners_east: Function
-  getTSlotCorners_west: Function
-}
-
-interface isATSlotCorner {
-  a: boolean
-  b: boolean
-  c: boolean
-  d: boolean
-}
 
 export class TSpinCalculator {
 

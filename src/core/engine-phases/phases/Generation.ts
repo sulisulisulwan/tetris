@@ -1,7 +1,6 @@
 import BasePhase from "./BasePhase.js";
 import { NextQueue } from '../../next-queue/NextQueue.js'
-import { sharedHandlersIF } from "../interfaces/SharedHandlers.js";
-import { coordinates } from "../../tetriminos/interfaces/Tetrimino.js";
+import { sharedHandlersIF, coordinates } from "../../../interfaces/index.js";
 
 export default class Generation extends BasePhase {
 

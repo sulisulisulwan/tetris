@@ -1,4 +1,4 @@
-import { scoringDataIF } from "../../../interfaces/AppState"
+import { scoringDataIF } from "../../../interfaces"
 
 export class LineClear {
 

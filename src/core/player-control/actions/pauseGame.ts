@@ -1,4 +1,4 @@
-import { eventDataIF } from "../../../interfaces/AppState";
+import { eventDataIF } from "../../../interfaces";
 
 export default function pauseGame(eventData: eventDataIF) {
 
