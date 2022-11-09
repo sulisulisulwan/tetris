@@ -2,7 +2,6 @@ import * as React from "react"
 import { HoldQueue } from "../core/hold-queue/HoldQueue" 
 import { LevelGoals } from "../core/level-goals/LevelGoals"
 import { NextQueue } from "../core/next-queue/NextQueue"
-import { Scoring } from "../core/scoring/Scoring"
 import { TetriminoMovementHandler } from "../core/tetriminos/movement-handler/TetriminoMovementHandler" 
 import { 
   Off,
@@ -21,6 +20,8 @@ import {
   Iterate,
   GameOver
 } from "../core/engine-phases"
+import { Award } from "../core/scoring/awards/Award"
+import { BaseScoringHandler } from "../core/scoring/modes/BaseScoringHandler"
 
 export interface phases {
   off: Off
@@ -72,7 +73,7 @@ export declare interface appStateIF {
   postLockMode: boolean
   eliminationActions: eliminationActionsIF[]
   currentLevel: number
-  scoringItemsForCompletion: scoringItemsForCompletionIF[]
+  scoringItemsForCompletion: scoreItemIF[]
   levelClearedLinesGoal: number
   fallSpeed: number
   totalLinesCleared: number
@@ -101,10 +102,6 @@ export type scoringDataIF = {
 export interface scoreItemIF {
   scoringMethodName: string
   scoringData: scoringDataIF
-}
-
-export interface scoringItemsForCompletionIF {
-  lineClear: any // TODO:
 }
 
 export interface eliminationActionsIF {
@@ -161,7 +158,7 @@ export interface levelColorsIF {
 
 export interface sharedHandlersIF {
   tetriminoMovementHandler: TetriminoMovementHandler
-  scoringHandler: Scoring
+  scoringHandler: BaseScoringHandler
   levelGoalsHandler: LevelGoals
   nextQueueHandler: NextQueue
   holdQueueHandler: HoldQueue
@@ -246,4 +243,17 @@ export interface directionsIF {
   right: Function
   left: Function
   down: Function
+}
+
+export interface scoringMethodsIF {
+  [key: string]: Award
+}
+
+export interface patternScannersIF {
+  lineClear: Function
+}
+
+export interface actionItemIF {
+  eliminatorName: string
+  actionData: any 
 }

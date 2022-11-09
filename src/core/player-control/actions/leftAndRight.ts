@@ -1,4 +1,4 @@
-import { appStateIF, eventDataIF } from "../../../interfaces"
+import { appStateIF, autoRepeatIF, eventDataIF } from "../../../interfaces"
 
 export default function leftAndRight(eventData: eventDataIF) {
   const { playerAction, playfield, currentTetrimino } = this.localState
@@ -38,7 +38,11 @@ export default function leftAndRight(eventData: eventDataIF) {
       newState[`${oppositeAction}IntervalId`] = null
     }
 
-    newState.playerAction.autoRepeat[action] = true
+    if (action === 'left') {
+      newState.playerAction.autoRepeat.left = true  
+    } else if (action === 'right') {
+      newState.playerAction.autoRepeat.right = true
+    }
     newState.playerAction.autoRepeat.override = newState.playerAction.autoRepeat[oppositeAction] ? action : null
   } 
 

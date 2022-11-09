@@ -1,24 +1,26 @@
-import { appStateIF, possibleActivePatternsIF, scoringItemsForCompletionIF, sharedHandlersIF } from "../../../interfaces/index.js";
+import { actionItemIF, appStateIF, patternScannersIF, possibleActivePatternsIF, scoreItemIF, sharedHandlersIF } from "../../../interfaces/index.js";
 import BasePhase from "./BasePhase.js";
-
 
 export default class Pattern extends BasePhase {
 
   private loadedPatterns: string[]
-
+  private patternScanners: patternScannersIF
   constructor(
     sharedHandlers: sharedHandlersIF, 
     possibleActivePatterns: possibleActivePatternsIF
   ) {
     super(sharedHandlers)
     this.loadedPatterns = this.loadPatterns(possibleActivePatterns)
+    this.patternScanners = {
+      lineClear: this.lineClear.bind(this)
+    }
   }
 
   execute() {
     // console.log('>>>> PATTERN PHASE')
 
     const newState = {} as appStateIF
-    newState.scoringItemsForCompletion = this.localState.scoringItemsForCompletion as scoringItemsForCompletionIF[]
+    newState.scoringItemsForCompletion = this.localState.scoringItemsForCompletion as scoreItemIF[]
     newState.currentGamePhase = 'iterate'
     newState.eliminationActions = this.runPatternScanners() 
     newState.scoringHistoryPerCycle = this.localState.scoringHistoryPerCycle
@@ -44,7 +46,7 @@ export default class Pattern extends BasePhase {
             scoringMethodName: 'lineClear',
             scoringData
           }
-          newState.scoringItemsForCompletion.lineClear.push(scoreItem)
+          newState.scoringItemsForCompletion.push(scoreItem)
 
           break
         default:
@@ -58,9 +60,9 @@ export default class Pattern extends BasePhase {
 
   runPatternScanners() {
     const patterns = this.loadedPatterns
-    const actions = []
+    const actions: actionItemIF[] = []
     patterns.forEach(pattern => {
-      const scanner = this[pattern].bind(this)
+      const scanner = this.patternScanners[pattern as keyof patternScannersIF]
       const action = scanner()
       if (action) { 
         actions.push(action)
@@ -69,11 +71,11 @@ export default class Pattern extends BasePhase {
     return actions
   }
 
-  loadPatterns(possibleActivePatterns): string[] {
+  loadPatterns(possibleActivePatterns: possibleActivePatternsIF): string[] {
     const patternsToLoad = []
 
     for (const pattern in possibleActivePatterns) {
-      const currPatternActive = possibleActivePatterns[pattern]
+      const currPatternActive = possibleActivePatterns[pattern as keyof possibleActivePatternsIF]
       if (currPatternActive) {
         patternsToLoad.push(pattern)
       }
@@ -84,8 +86,8 @@ export default class Pattern extends BasePhase {
 
   // In this phase, we only mark the lines to be cleared.  We can map the return action object to functions in future phases
   // that take care of playfield clearing, animations, etc.
-  lineClear() {
-    const rowsToClear = []
+  lineClear(): actionItemIF | null {
+    const rowsToClear: number[] = []
     const { playfield } = this.localState
 
     playfield.forEach((row, index) => {

@@ -1,12 +1,11 @@
-import { BaseGoals } from "./modes/BaseGoals.js"
-import { FixedGoals } from "./modes/Fixed.js"
-import { VariableGoals } from "./modes/Variable.js"
+import { FixedGoalSpecs } from "./modes/FixedGoalSpecs.js"
+import { VariableGoalSpecs } from "./modes/VariableGoalSpecs.js"
 
 export class LevelGoals {
 
   private fallSpeeds: Map<number, number>
-  private goalModesMap: Map<string, BaseGoals>
-  private goalSpecsHandler: BaseGoals 
+  private goalModesMap: Map<string, any>
+  private goalSpecsHandler: any 
 
   constructor(mode: string) {
     this.fallSpeeds = this.loadFallSpeedsMap()
@@ -37,11 +36,12 @@ export class LevelGoals {
 
   loadGoalModesMap(): Map<string, any> {
     return new Map([
-      ['fixed', FixedGoals],
-      ['variable', VariableGoals]
+      ['fixed', FixedGoalSpecs],
+      ['variable', VariableGoalSpecs]
     ])
   }
-  loadGoalSpecs(mode: string): BaseGoals {
+  
+  loadGoalSpecs(mode: string): any {
     const ctor = this.goalModesMap.get(mode)
     return new ctor()
   }

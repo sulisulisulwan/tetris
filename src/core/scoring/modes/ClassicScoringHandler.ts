@@ -1,20 +1,27 @@
-import { scoringDataIF, scoreItemIF, scoringItemsForCompletionIF, scoringHistoryPerCycleIF } from "../../../interfaces/index.js"
+import { scoringDataIF, scoreItemIF, scoringHistoryPerCycleIF } from "../../../interfaces/index.js"
 import { LineClear } from "../awards/LineClear.js"
+import { BaseScoringHandler } from "./BaseScoringHandler.js"
 
 
-export class ClassicScoring {
+export class ClassicScoringHandler extends BaseScoringHandler {
 
   private awardLineClear: LineClear
 
   constructor() {
+    super()
     this.awardLineClear = new LineClear()
+
+    this.scoringMethods = {
+      awardLineClear: this.awardLineClear
+    }
+    
   }
 
-  handleCompletionPhaseAccrual(
+  public handleCompletionPhaseAccrual(
     currentScore: number, 
-    scoreItemsForCompletion: scoringItemsForCompletionIF[], 
+    scoreItemsForCompletion: scoreItemIF[], 
     scoringHistoryPerCycle: scoringHistoryPerCycleIF
-  ) {
+  ): number {
 
     const filteredScoringContexts = scoreItemsForCompletion.filter((scoreItem: scoreItemIF) => {
       const { scoringMethodName } = scoreItem
@@ -35,12 +42,7 @@ export class ClassicScoring {
     return newTotalScore
 
   }
-  // scoreContext can be passed from any part of the Application for any reason
-  updateScore(currentScore: number, scoreItem: scoreItemIF) {
-    const { scoringMethodName, scoringData } = scoreItem
-    return this[scoringMethodName](currentScore, scoringData)
-  }
-
+  
   // Executed within PlayerAction or Falling Phase
   softdrop(currentScore: number, scoringData: scoringDataIF) {
     return currentScore + 1

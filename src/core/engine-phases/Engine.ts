@@ -1,5 +1,5 @@
 import { LevelGoals } from '../level-goals/LevelGoals.js'
-import { ClassicScoring } from '../scoring/modes/Classic.js'
+import { ScoringHandlerFactory } from '../scoring/ScoringHandlerFactory.js'
 import { NextQueue } from '../next-queue/NextQueue.js'
 import { PlayerControl } from '../player-control/PlayerControl.js'
 import { ClassicRotationSystem } from '../tetriminos/movement-handler/rotation-systems/ClassicRS.js'
@@ -45,12 +45,10 @@ export class Engine {
       ['classic', ClassicRotationSystem],
       ['super', SuperRotationSystem] 
     ])
-    this.scoringHandlerMap = new Map([
-      ['classic', ClassicScoring]
-    ])
 
+    ScoringHandlerFactory
     const tetriminoMovementHandler = this.setTetriminoMovementHandler(initialOptions.rotationSystem)
-    const scoringHandler = this.setScoringHandler(initialOptions.scoringSystem)
+    const scoringHandler = ScoringHandlerFactory.loadScoringHandler(initialOptions.scoringSystem) 
     const levelGoalsHandler = this.setLevelGoalsHandler(initialOptions.levelGoalsSystem)
     const setAppState = initialOptions.setAppState
     const nextQueueHandler = new NextQueue()
@@ -120,11 +118,6 @@ export class Engine {
     } else if (mode === 'infinite') {
       return new LockInfinite(sharedHandlers)
     }
-  }
-
-  setScoringHandler(mode: string) {
-    const ctor = this.scoringHandlerMap.get(mode)
-    return new ctor()
   }
 
   setLevelGoalsHandler(mode: string) {

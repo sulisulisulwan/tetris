@@ -2,12 +2,12 @@ import { appStateIF, setAppStateIF, sharedHandlersIF } from "../interfaces/index
 import { HoldQueue } from "./hold-queue/HoldQueue.js"
 import { LevelGoals } from "./level-goals/LevelGoals.js"
 import { NextQueue } from "./next-queue/NextQueue.js"
-import { Scoring } from "./scoring/Scoring.js"
+import { BaseScoringHandler } from "./scoring/modes/BaseScoringHandler.js"
 import { TetriminoMovementHandler } from "./tetriminos/movement-handler/TetriminoMovementHandler.js"
 import { makeCopy } from "./utils/utils.js"
 export class SharedScope {
 
-  public scoringHandler: Scoring
+  public scoringHandler: BaseScoringHandler
   public levelGoalsHandler: LevelGoals
   public tetriminoMovementHandler: TetriminoMovementHandler
   public nextQueueHandler: NextQueue

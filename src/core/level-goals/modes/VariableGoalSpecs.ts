@@ -1,13 +1,8 @@
-import { BaseGoals } from "./BaseGoals"
-
-export class VariableGoals extends BaseGoals {
-
-  constructor() {
-    super()
-  }
+export class VariableGoalSpecs {
 
   public getClearedLinesGoals(level: number, totalLinesCleared: number): number {
     const newGoal = totalLinesCleared + (level * 5)
     return newGoal
   }
+
 }

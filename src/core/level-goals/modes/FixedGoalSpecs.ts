@@ -1,11 +1,8 @@
-import { BaseGoals } from "./BaseGoals"
-
-export class FixedGoals extends BaseGoals {
+export class FixedGoalSpecs {
 
   private clearedLinesGoals: Map<number, number>
 
   constructor() {
-    super()
     this.clearedLinesGoals = this.setClearedLinesGoalsMap()
   }
 

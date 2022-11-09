@@ -1,10 +1,12 @@
 import { scoringDataIF } from "../../../interfaces"
+import { Award } from "./Award"
 
-export class LineClear {
+export class LineClear extends Award {
 
   private clearLineBaseScores: Map<string | number, number>
 
   constructor() {
+    super()
     this.clearLineBaseScores = new Map<string | number, number>([
       [1, 100],
       [2, 300],
@@ -18,7 +20,7 @@ export class LineClear {
   }
 
 
-  calculateScore(currentScore: number, scoringData: scoringDataIF) {
+  public calculateScore(currentScore: number, scoringData: scoringDataIF): number {
 
     const { currentLevel, linesCleared, performedTSpin, performedTSpinMini, backToBack } = scoringData
     let totalScore = currentScore
