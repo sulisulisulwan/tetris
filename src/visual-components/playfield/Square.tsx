@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 
 const squareClasses = new Map([
   ['[i]','iTet playfield-square'],
@@ -11,7 +11,12 @@ const squareClasses = new Map([
   ['[_]','empty playfield-square']
 ])
 
-const Square = ({ squareData }) => {
+interface squarePropsIF {
+  squareData: string
+}
+
+const Square = (props: squarePropsIF) => {
+  const { squareData } = props
   return <div className={squareClasses.get(squareData)}>{squareData}</div>
 }
 

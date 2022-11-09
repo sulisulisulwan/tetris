@@ -1,6 +1,6 @@
-import BasePhase from "./BasePhase.js";
-import { NextQueue } from '../../next-queue/NextQueue.js'
-import { sharedHandlersIF, coordinates } from "../../../interfaces/index.js";
+import BasePhase from "./BasePhase";
+import { NextQueue } from '../../next-queue/NextQueue'
+import { sharedHandlersIF, coordinates } from "../../../interfaces";
 
 export default class Generation extends BasePhase {
 

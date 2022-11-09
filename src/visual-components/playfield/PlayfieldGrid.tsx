@@ -1,8 +1,16 @@
-import React from 'react'
-import Row from './Row.jsx'
-import { levelColors } from '../levelColors.js'
+import * as React from 'react'
+import Row from './Row'
+import { levelColors } from '../levelColors'
 
-const PlayfieldGrid = ({ playfieldData, currentLevel }) => {
+
+interface playfieldGridPropsIF { 
+  playfieldData: string[][]
+  currentLevel: number
+}
+
+const PlayfieldGrid = (props: playfieldGridPropsIF) => {
+
+  const { playfieldData, currentLevel } = props
 
   const style = {
     fontFamily: 'monospace',

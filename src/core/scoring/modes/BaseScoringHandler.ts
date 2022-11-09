@@ -1,4 +1,4 @@
-import { scoringDataIF, scoreItemIF, scoringHistoryPerCycleIF, scoringMethodsIF } from "../../../interfaces/index.js"
+import { scoringDataIF, scoreItemIF, scoringHistoryPerCycleIF, scoringMethodsIF } from "../../../interfaces"
 
 export abstract class BaseScoringHandler {
 

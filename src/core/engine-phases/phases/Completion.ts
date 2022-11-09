@@ -1,5 +1,5 @@
-import { appStateIF, sharedHandlersIF } from "../../../interfaces/index.js";
-import BasePhase from "./BasePhase.js";
+import { appStateIF, sharedHandlersIF } from "../../../interfaces/index";
+import BasePhase from "./BasePhase";
 
 export default class Completion extends BasePhase {
 

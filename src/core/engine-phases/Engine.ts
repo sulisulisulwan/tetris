@@ -1,9 +1,9 @@
-import { LevelGoals } from '../level-goals/LevelGoals.js'
-import { ScoringHandlerFactory } from '../scoring/ScoringHandlerFactory.js'
-import { NextQueue } from '../next-queue/NextQueue.js'
-import { PlayerControl } from '../player-control/PlayerControl.js'
-import { ClassicRotationSystem } from '../tetriminos/movement-handler/rotation-systems/ClassicRS.js'
-import { SuperRotationSystem } from '../tetriminos/movement-handler/rotation-systems/SuperRS.js'
+import { LevelGoals } from '../level-goals/LevelGoals'
+import { ScoringHandlerFactory } from '../scoring/ScoringHandlerFactory'
+import { NextQueue } from '../next-queue/NextQueue'
+import { PlayerControl } from '../player-control/PlayerControl'
+import { ClassicRotationSystem } from '../tetriminos/movement-handler/rotation-systems/ClassicRS'
+import { SuperRotationSystem } from '../tetriminos/movement-handler/rotation-systems/SuperRS'
 import { 
   BasePhase,
   Pregame,
@@ -21,14 +21,14 @@ import {
   Completion,
   Off,
   GameOver
-} from './index'
+} from './'
 import { HoldQueue } from '../hold-queue/HoldQueue'
 import { 
   initialOptionsIF,
   appStateIF,
   sharedHandlersIF,
   phases
-} from '../../interfaces/index'
+} from '../../interfaces'
 
 export class Engine {
 

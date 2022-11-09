@@ -4,9 +4,9 @@ import {
   orientationsIF, 
   relativeOrientations, 
   tetriminoIF 
-} from "../../../../interfaces/index.js"
-import { makeCopy } from "../../../utils/utils.js"
-import { TetriminoMovementHandler } from "../TetriminoMovementHandler.js"
+} from "../../../../interfaces"
+import { makeCopy } from "../../../utils/utils"
+import { TetriminoMovementHandler } from "../TetriminoMovementHandler"
 export class ClassicRotationSystem extends TetriminoMovementHandler{
 
   readonly relativeOrientations: relativeOrientations

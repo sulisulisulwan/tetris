@@ -1,4 +1,4 @@
-import { appStateIF, eventDataIF } from "../../interfaces/index.js"
+import { appStateIF, eventDataIF } from "../../interfaces"
 
 export class HoldQueue {
 

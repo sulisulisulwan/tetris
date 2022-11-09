@@ -2,7 +2,7 @@ import { levelColors } from '../levelColors'
 
 import * as React from 'react'
 
-import TetriminoTile from '../TetriminoTile.jsx'
+import TetriminoTile from '../TetriminoTile'
 import { tetriminoGraphics } from '../tetriminoGraphics'
 import { holdQueueIF, levelColorsIF, tetriminoGraphicsIF } from '../../interfaces'
 

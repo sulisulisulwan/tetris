@@ -1,13 +1,13 @@
 import * as React from 'react'
-import { appStateIF, initialOptionsIF, setAppStateIF } from './interfaces/index'
+import { appStateIF, initialOptionsIF, setAppStateIF } from './interfaces'
 
-import PlayfieldGrid from './visual-components/playfield/PlayfieldGrid.jsx'
-import NextQueueDisplay from './visual-components/next-queue/NextQueueDisplay.jsx'
-import StartQuitButton from './visual-components/StartQuitButton.jsx'
-import ScoreDisplay from './visual-components/ScoreDisplay.jsx'
+import PlayfieldGrid from './visual-components/playfield/PlayfieldGrid'
+import NextQueueDisplay from './visual-components/next-queue/NextQueueDisplay'
+import StartQuitButton from './visual-components/StartQuitButton'
+import ScoreDisplay from './visual-components/ScoreDisplay'
 
-import { Engine } from './core/engine-phases/Engine.js'
-import HoldQueueDisplay from './visual-components/hold-queue/HoldQueueDisplay.jsx'
+import { Engine } from './core/engine-phases/Engine'
+import HoldQueueDisplay from './visual-components/hold-queue/HoldQueueDisplay'
 
 
 const initialOptions: initialOptionsIF = {
@@ -100,12 +100,12 @@ class App extends React.Component<{}, appStateIF> {
     return initialPlayfield.map(row => new Array(10).fill('[_]', 0, 10))
   }
 
-  startQuitClickHandler(e: Event) {
+  startQuitClickHandler(e: Event): void {
     e.preventDefault()
     // may in the future implement "countdown" gamePhase
     this.state.currentGamePhase === 'off' ?
       this.setState({ currentGamePhase: 'pregame', }) : this.setState({ currentGamePhase: 'off' })
-  }
+  } 
 
   handlePlayerKeyStroke(e: KeyboardEvent) {
     e.preventDefault()
@@ -122,6 +122,8 @@ class App extends React.Component<{}, appStateIF> {
   }
 
   render() {
+
+    console.log('this runs')
     return (
       <div className="game-app-wrapper">
         <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Suli's Tetris</div>

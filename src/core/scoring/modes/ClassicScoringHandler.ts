@@ -1,6 +1,6 @@
-import { scoringDataIF, scoreItemIF, scoringHistoryPerCycleIF } from "../../../interfaces/index.js"
-import { LineClear } from "../awards/LineClear.js"
-import { BaseScoringHandler } from "./BaseScoringHandler.js"
+import { scoringDataIF, scoreItemIF, scoringHistoryPerCycleIF } from "../../../interfaces"
+import { LineClear } from "../awards/LineClear"
+import { BaseScoringHandler } from "./BaseScoringHandler"
 
 
 export class ClassicScoringHandler extends BaseScoringHandler {
@@ -42,7 +42,7 @@ export class ClassicScoringHandler extends BaseScoringHandler {
     return newTotalScore
 
   }
-  
+
   // Executed within PlayerAction or Falling Phase
   softdrop(currentScore: number, scoringData: scoringDataIF) {
     return currentScore + 1

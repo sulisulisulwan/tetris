@@ -1,4 +1,4 @@
-import { ClassicScoringHandler } from './modes/ClassicScoringHandler.js'
+import { ClassicScoringHandler } from './modes/ClassicScoringHandler'
 
 export class ScoringHandlerFactory {
 

@@ -1,9 +1,9 @@
-import leftAndRight from './leftAndRight.js'
-import flip from './flip.js'
-import softdrop from './softdrop.js'
-import harddrop from './harddrop.js'
-import hold from './hold.js'
-import pauseGame from './pauseGame.js'
+import leftAndRight from './leftAndRight'
+import flip from './flip'
+import softdrop from './softdrop'
+import harddrop from './harddrop'
+import hold from './hold'
+import pauseGame from './pauseGame'
 
 export {
   leftAndRight,

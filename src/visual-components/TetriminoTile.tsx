@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 
 const squareColors = new Map([
   ['[i]','green'],
@@ -12,7 +12,15 @@ const squareColors = new Map([
   ['[_]','black']
 ])
 
-const TetriminoTile = ({ tetriminoName, graphicGrid, classType }) => {
+interface tetriminoTilePropsIF {
+  tetriminoName: string
+  graphicGrid: string[][]
+  classType: string
+}
+
+const TetriminoTile = (props: tetriminoTilePropsIF) => {
+
+  const { tetriminoName, graphicGrid, classType } = props
 
   if (!tetriminoName) {
     const style = {

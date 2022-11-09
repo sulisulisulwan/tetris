@@ -1,5 +1,5 @@
-import { FixedGoalSpecs } from "./modes/FixedGoalSpecs.js"
-import { VariableGoalSpecs } from "./modes/VariableGoalSpecs.js"
+import { FixedGoalSpecs } from "./modes/FixedGoalSpecs"
+import { VariableGoalSpecs } from "./modes/VariableGoalSpecs"
 
 export class LevelGoals {
 

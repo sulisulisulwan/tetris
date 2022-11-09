@@ -1,9 +1,17 @@
-import React from 'react'
+import * as React from 'react'
 import { levelColors } from './levelColors'
 
-const ScoreDisplay = ({totalScore, currentLevel, linesCleared}) => {
+interface scoreDisplayPropsIF { 
+  currentLevel: number
+  linesCleared: number
+  totalScore: number
+}
 
-  const styles = {
+const ScoreDisplay = (props: scoreDisplayPropsIF) => {
+
+  const { currentLevel, linesCleared, totalScore } = props
+
+  const styles: React.CSSProperties = {
     backgroundColor: levelColors[currentLevel],
     border: 'gray 2px solid',
     marginBottom: '20px',

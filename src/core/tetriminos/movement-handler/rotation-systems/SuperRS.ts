@@ -1,7 +1,7 @@
-import { makeCopy } from "../../../utils/utils.js"
+import { makeCopy } from "../../../utils/utils"
 import { coordinates, orientationsIF, rotationPointsIF, tetriminoIF } from "../../../../interfaces"
-import { ClassicRotationSystem } from "./ClassicRS.js"
-import { TSpinCalculator } from "./TSpinCalculator.js"
+import { ClassicRotationSystem } from "./ClassicRS"
+import { TSpinCalculator } from "./TSpinCalculator"
 export class SuperRotationSystem extends ClassicRotationSystem {
 
   constructor() {

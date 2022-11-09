@@ -4,8 +4,8 @@ import {
   eliminationActionsIF, 
   eliminatorsIF, 
   eliminator 
-} from "../../../interfaces/index.js";
-import BasePhase from "./BasePhase.js";
+} from "../../../interfaces";
+import BasePhase from "./BasePhase";
 
 
 

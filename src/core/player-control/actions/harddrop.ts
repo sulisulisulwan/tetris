@@ -1,5 +1,5 @@
-import { eventDataIF } from '../../../interfaces/index.js'
-import { makeCopy } from '../../utils/utils.js'
+import { eventDataIF } from '../../../interfaces'
+import { makeCopy } from '../../utils/utils'
 
 export default function harddrop(eventData: eventDataIF) {
 

@@ -1,6 +1,6 @@
-import { SharedScope } from "../SharedScope.js"
-import { leftAndRight, flip, softdrop, harddrop, hold, pauseGame } from "./actions/index.js"
-import { appStateIF, eventDataIF, playerActionHandlersIF, sharedHandlersIF } from "../../interfaces/index.js"
+import { SharedScope } from "../SharedScope"
+import { leftAndRight, flip, softdrop, harddrop, hold, pauseGame } from "./actions"
+import { appStateIF, eventDataIF, playerActionHandlersIF, sharedHandlersIF } from "../../interfaces"
 
 export class PlayerControl extends SharedScope {
 

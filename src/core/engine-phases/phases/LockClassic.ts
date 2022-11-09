@@ -1,6 +1,6 @@
-import BasePhase from "./BasePhase.js";
-import { makeCopy } from "../../utils/utils.js";
-import { appStateIF, sharedHandlersIF, tetriminoIF } from "../../../interfaces/index.js";
+import BasePhase from "./BasePhase";
+import { makeCopy } from "../../utils/utils";
+import { appStateIF, sharedHandlersIF, tetriminoIF } from "../../../interfaces";
 
 export default class LockClassic extends BasePhase {
 

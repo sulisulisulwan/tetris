@@ -1,13 +1,20 @@
-import React from "react";
-import TetriminoTile from './../TetriminoTile.jsx'
+import * as React from "react";
+import TetriminoTile from '../TetriminoTile'
 import { levelColors } from '../levelColors'
-import { tetriminoGraphics } from "../tetriminoGraphics.js";
+import { tetriminoGraphics } from "../tetriminoGraphics"; 
+import { tetriminoGraphicsIF } from "../../interfaces";
 
-const NextQueueDisplay = (props) => {
+interface nextQueueDisplayPropsIF {
+  nextQueueData: string[]
+  currentLevel: number
+}
+
+
+const NextQueueDisplay = (props: nextQueueDisplayPropsIF) => {
   
   const { nextQueueData, currentLevel } = props
 
-  const styles = {
+  const styles: React.CSSProperties = {
     padding: '10px',
     border: 'gray 2px solid',
     height: '100%',
@@ -24,7 +31,7 @@ const NextQueueDisplay = (props) => {
     <div className="nextqueue-wrapper" style={styles}>
       <div className="text-next">Next</div>
       {nextQueueData.map((tetriminoName, i)=> {
-        const graphicGrid = tetriminoGraphics[`${tetriminoName}Graphic`]
+        const graphicGrid = tetriminoGraphics[`${tetriminoName}Graphic` as keyof tetriminoGraphicsIF]
         return <TetriminoTile key={`${tetriminoName}-${i}`} graphicGrid={graphicGrid} tetriminoName={tetriminoName} classType={'next'}/>
         
       })}

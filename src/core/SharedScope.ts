@@ -1,10 +1,10 @@
-import { appStateIF, setAppStateIF, sharedHandlersIF } from "../interfaces/index.js"
-import { HoldQueue } from "./hold-queue/HoldQueue.js"
-import { LevelGoals } from "./level-goals/LevelGoals.js"
-import { NextQueue } from "./next-queue/NextQueue.js"
-import { BaseScoringHandler } from "./scoring/modes/BaseScoringHandler.js"
-import { TetriminoMovementHandler } from "./tetriminos/movement-handler/TetriminoMovementHandler.js"
-import { makeCopy } from "./utils/utils.js"
+import { appStateIF, setAppStateIF, sharedHandlersIF } from "../interfaces"
+import { HoldQueue } from "./hold-queue/HoldQueue"
+import { LevelGoals } from "./level-goals/LevelGoals"
+import { NextQueue } from "./next-queue/NextQueue"
+import { BaseScoringHandler } from "./scoring/modes/BaseScoringHandler"
+import { TetriminoMovementHandler } from "./tetriminos/movement-handler/TetriminoMovementHandler"
+import { makeCopy } from "./utils/utils"
 export class SharedScope {
 
   public scoringHandler: BaseScoringHandler

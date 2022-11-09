@@ -1,5 +1,5 @@
-import { SharedScope } from "../../SharedScope.js"
-import { sharedHandlersIF } from "../../../interfaces/index.js"
+import { SharedScope } from "../../SharedScope"
+import { sharedHandlersIF } from "../../../interfaces"
 
 export default abstract class BasePhase extends SharedScope {
   

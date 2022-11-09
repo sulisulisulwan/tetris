@@ -1,5 +1,5 @@
-import { actionItemIF, appStateIF, patternScannersIF, possibleActivePatternsIF, scoreItemIF, sharedHandlersIF } from "../../../interfaces/index.js";
-import BasePhase from "./BasePhase.js";
+import { actionItemIF, appStateIF, patternScannersIF, possibleActivePatternsIF, scoreItemIF, sharedHandlersIF } from "../../../interfaces";
+import BasePhase from "./BasePhase";
 
 export default class Pattern extends BasePhase {
 
