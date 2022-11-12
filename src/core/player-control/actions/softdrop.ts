@@ -1,7 +1,7 @@
 import { appStateIF, eventDataIF } from '../../../interfaces'
 import { makeCopy } from '../../utils/utils'
 
-export default function softdrop(eventData: eventDataIF) {
+export default function actionSoftdrop(eventData: eventDataIF) {
     
   const { strokeType } = eventData
   const { softdrop } = this.localState.playerAction

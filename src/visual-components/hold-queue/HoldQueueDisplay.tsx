@@ -28,7 +28,6 @@ const HoldQueueDisplay = (props: holdQueueDisplayProps) => {
   tetriminoName = tetriminoName || 'empty'
 
   const graphicGrid = tetriminoGraphics[`${tetriminoName}Graphic` as keyof tetriminoGraphicsIF]
-  
   const styles = {
     padding: '10px',
     border: 'gray 2px solid',

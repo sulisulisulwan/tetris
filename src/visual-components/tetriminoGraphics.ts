@@ -11,7 +11,6 @@ export const tetriminoGraphics: tetriminoGraphicsIF = {
     ['[i]', '[i]', '[i]', '[i]'],
     ['[_]', '[_]', '[_]', '[_]'],
     ['[_]', '[_]', '[_]', '[_]'],
-    ['[_]', '[_]', '[_]', '[_]']
   ],
   JTetriminoGraphic: [
     ['[j]', '[_]', '[_]'],
@@ -36,6 +35,11 @@ export const tetriminoGraphics: tetriminoGraphicsIF = {
   TTetriminoGraphic: [
     ['[_]', '[t]', '[_]'],
     ['[t]', '[t]', '[t]'],
+    ['[_]', '[_]', '[_]']
+  ],
+  emptyGraphic: [
+    ['[_]', '[_]', '[_]'],
+    ['[_]', '[_]', '[_]'],
     ['[_]', '[_]', '[_]']
   ]
 }

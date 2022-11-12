@@ -1,6 +1,6 @@
 import { appStateIF, autoRepeatIF, eventDataIF } from "../../../interfaces"
 
-export default function leftAndRight(eventData: eventDataIF) {
+export default function actionLeftAndRight(eventData: eventDataIF) {
   const { playerAction, playfield, currentTetrimino } = this.localState
   const { autoRepeat } = playerAction
   let { override } = autoRepeat
@@ -68,7 +68,6 @@ export default function leftAndRight(eventData: eventDataIF) {
       //TODO: This should account for movements that occur only after lockdown, not before.  This current logic will mistake pre lockdown scenarios as post lockdown
       // Think, at every point in time, the newTetriminoBaseRowIdx will === this.localState.lowestLockSurfaceRow
       const newTetriminoBaseRowIdx = this.tetriminoMovementHandler.getLowestPlayfieldRowOfTetrimino(newTetrimino)
-      console.log(newTetriminoBaseRowIdx <= this.localState.lowestLockSurfaceRow, this.localState.postLockMode)
       if (
         newTetriminoBaseRowIdx <= this.localState.lowestLockSurfaceRow && 
         this.localState.postLockMode &&

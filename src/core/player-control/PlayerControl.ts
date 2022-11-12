@@ -1,16 +1,10 @@
 import { SharedScope } from "../SharedScope"
-import { leftAndRight, flip, softdrop, harddrop, hold, pauseGame } from "./actions"
+import { actionLeftAndRight, actionFlip, actionSoftdrop, actionHarddrop, actionHold, actionPauseGame } from "./actions"
 import { appStateIF, eventDataIF, playerActionHandlersIF, sharedHandlersIF } from "../../interfaces"
 
 export class PlayerControl extends SharedScope {
 
   private keystrokeMap: Map<string, string>
-  private actionLeftAndRight = leftAndRight.bind(this)
-  private actionFlip = flip.bind(this)
-  private actionSoftdrop = softdrop.bind(this)
-  private actionHarddrop = harddrop.bind(this)
-  private actionHold = hold.bind(this)
-  private actionPauseGame = pauseGame.bind(this)
 
   private playerActions: playerActionHandlersIF
   constructor(sharedHandlers: sharedHandlersIF) {
@@ -42,17 +36,19 @@ export class PlayerControl extends SharedScope {
     ])
 
     this.playerActions = {
-      actionLeftAndRight: leftAndRight.bind(this),
-      actionFlip: flip.bind(this),
-      actionSoftdrop: softdrop.bind(this),
-      actionHarddrop: harddrop.bind(this),
-      actionHold: hold.bind(this),
-      actionPauseGame: pauseGame.bind(this)
+      left: actionLeftAndRight.bind(this),
+      right: actionLeftAndRight.bind(this),
+      flipClockwise: actionFlip.bind(this),
+      flipCounterClockwise: actionFlip.bind(this),
+      softdrop: actionSoftdrop.bind(this),
+      harddrop: actionHarddrop.bind(this),
+      hold: actionHold.bind(this),
+      pauseGame: actionPauseGame.bind(this)
     }
 
   }
 
-  keystrokeHandler(appState: appStateIF, e: KeyboardEvent) {
+  public keystrokeHandler(appState: appStateIF, e: KeyboardEvent) {
 
     this.syncToLocalState(appState)
 
@@ -89,39 +85,40 @@ export class PlayerControl extends SharedScope {
     }
 
     // Execute the player's action
-    this.playerActions[eventData.action as keyof playerActionHandlersIF](eventData)
+    const playerActionHandler = this.playerActions[eventData.action as keyof playerActionHandlersIF]
+    playerActionHandler(eventData)
   }
 
   left(eventData: eventDataIF) {
-    this.actionLeftAndRight(eventData)
+    actionLeftAndRight(eventData)
   }
 
   right(eventData: eventDataIF) {
-    this.actionLeftAndRight(eventData)
+    actionLeftAndRight(eventData)
   }
 
   flipCounterClockwise(eventData: eventDataIF) {
-    this.actionFlip(eventData)
+    actionFlip(eventData)
   }
   
   flipClockwise(eventData: eventDataIF) {
-    this.actionFlip(eventData)
+    actionFlip(eventData)
   }
 
   softdrop(eventData: eventDataIF) {
-    this.actionSoftdrop(eventData)
+    actionSoftdrop(eventData)
   }
   
   harddrop(eventData: eventDataIF) {
-    this.actionHarddrop(eventData)
+    actionHarddrop(eventData)
   }
 
   hold(eventData: eventDataIF) {
-    this.actionHold(eventData)
+    actionHold(eventData)
   }
 
   pauseGame(eventData: eventDataIF) {
-    this.actionPauseGame()
+    actionPauseGame(eventData)
   }
   
 }

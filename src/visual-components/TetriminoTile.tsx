@@ -29,80 +29,67 @@ const TetriminoTile = (props: tetriminoTilePropsIF) => {
       borderStyle: 'solid',
       borderColor: 'black',
       fontSize: '10px',
+      margin: 'auto auto',
+      justifyContent: 'center'
     }
     return (
-      <div className={`${classType}-tetrimino-tile`}>
-        <div className={`${classType}-tetrimino-tile-row`}>
-          <div className={`${classType}-tetrimino-tile-square`} style={style}>Empty</div>
+      <div className={`tetrimino-tile`}>
+        <div className={`tetrimino-tile-row`}>
+          <div className={`tetrimino-tile-square`} style={style}>Empty</div>
         </div>
       </div>
     )
   }
 
-  const style = {
+  const tileStyle = {
     backgroundColor: squareColors.get(tetriminoName),
+    opacity: '.9',
     color: squareColors.get(tetriminoName),
-    borderStyle: 'solid',
-    borderColor: 'black',
-    fontSize: '10px',
+    border: 'solid black',
+    marginTop: '10px',
+    marginBottom: '10px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: '60%',
+    maxHeight: '80px',
+    justifyContent: 'center'
   }
 
-  // if (classType === 'hold') {
-  //   console.log(
-  //     'tetriminoName',
-  //     tetriminoName
-  //   )
-  //   console.log(
-  //     'graphicGrid',
-  //     graphicGrid
-  //   )
-  //   console.log(
-  //     'classType',
-  //     classType
-  //   )
-  //   return(
-  //     null
-  //   )
-
-    // return (
-    //   <div className={`${classType}-tetrimino-tile`}>
-    //     {graphicGrid.map((row, i) => {
-    //       // const style = {
-    //       //   backgroundColor: squareColors.get(square),
-    //       //   display: 'flex',
-    //       //   flexDirection: 'column',
-    //       //   color: squareColors.get(square),
-    //       //   borderStyle: 'solid',
-    //       //   borderColor: 'black',
-    //       //   fontSize: '10px',
-    //       //   margin: '1px'
-    //       // }
-    //       return (
-    //         <div className={`${classType}-tetrimino-tile-row`} style={style} key={`${classType}-${tetriminoName}-${i}-row`}>
-    //           {row.map((square, j) => {
-    //             return <div className={`${classType}-tetrimino-tile-square`} key={`${classType}-${tetriminoName}-${i}-${j}-square`}>{graphicGrid}</div>
-    //           })}
-    //         </div>
-    //       )
-    //     })}
-    //   </div>
-    // )
-  // }
-
-  // console.log('graphicGrid before map', graphicGrid)
-
   return (
-    <div className={`${classType}-tetrimino-tile`}>{graphicGrid.map((row, i) => {
-      return <div className={`${classType}-tetrimino-tile-row`} key={`${classType}-${tetriminoName}-${i}-row`}>{row.map((square, j) => {
-        const style = {
-          backgroundColor: squareColors.get(square),
-          color: squareColors.get(square),
-          borderStyle: 'solid',
-          borderColor: 'black',
-          fontSize: '10px',
-        }
-        return <div className={`${classType}-tetrimino-tile-square`} key={`${classType}-${tetriminoName}-${i}-${j}-square`} style={style}>{square}</div>
+    <div className={`${classType}-tetrimino-tile`} style={tileStyle}>
+      {graphicGrid.map((row, i) => {
+        return (
+          <div className={`tetrimino-tile-row`} key={`${classType}-${tetriminoName}-${i}-row`}>{row.map((square, j) => {
+            const emptySquareStyle = {
+              backgroundColor: squareColors.get(square),
+              color: squareColors.get(square),
+              borderStyle: 'solid',
+              fontSize: '10px',
+              height: 15,
+              borderRadius: '20%',
+              overflow: 'hidden'
+            }
+
+            const minoStyle = {
+              backgroundColor: squareColors.get(square),
+              color: squareColors.get(square),
+              borderStyle: 'solid',
+              borderColor: 'black',
+              fontSize: '10px',
+              borderRadius: '20%',
+              overflow: 'hidden',
+            }
+            return (
+              <div 
+                className={`tetrimino-tile-square`} 
+                key={`${classType}-${tetriminoName}-${i}-${j}-square`} 
+                style={square ==='[_]' ? emptySquareStyle : minoStyle}
+              >
+                {square}
+              </div>
+            )
       })}</div>
+        )
     })}</div>
   )
 }

@@ -1,6 +1,6 @@
 import { appStateIF, eventDataIF } from "../../../interfaces"
 
-export default function hold(eventData: eventDataIF) {
+export default function actionHold(eventData: eventDataIF) {
 
   const { strokeType } = eventData
 

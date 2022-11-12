@@ -27,6 +27,8 @@ const NextQueueDisplay = (props: nextQueueDisplayPropsIF) => {
     return <div className="nextqueue-wrapper" style={styles}><div className="text-next">Next</div></div>
   }  
 
+  
+
   return(
     <div className="nextqueue-wrapper" style={styles}>
       <div className="text-next">Next</div>

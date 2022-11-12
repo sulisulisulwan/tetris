@@ -123,22 +123,24 @@ class App extends React.Component<{}, appStateIF> {
 
   render() {
 
-    console.log('this runs')
     return (
       <div className="game-app-wrapper">
         <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Suli's Tetris</div>
         {this.state.currentGamePhase === 'pregame' ? <div style={{textAlign: 'center'}}>{this.state.pregameCounter + 1}</div> : <div style={{textAlign: 'center'}}> --- </div>}
-        <div className="playfield-and-sidebar-right">
-          <div>Test Fields: <br></br>Moves Remaining: {this.state.extendedLockdownMovesRemaining}</div>
-          <HoldQueueDisplay 
-            holdQueue={this.state.holdQueue} 
-            currentLevel={this.state.currentLevel}
-          />
-          <PlayfieldGrid 
-            playfieldData={this.state.playfield.slice(20)}
-            currentLevel={this.state.currentLevel}  
-          />
-          <div className='sidebar-right'>
+        <div className="game-screen">
+          <div className='game-screen-left'>
+            <HoldQueueDisplay 
+              holdQueue={this.state.holdQueue} 
+              currentLevel={this.state.currentLevel}
+            />
+          </div>
+          <div className='game-screen-center'>
+            <PlayfieldGrid 
+              playfieldData={this.state.playfield.slice(20)}
+              currentLevel={this.state.currentLevel}  
+            />
+          </div>
+          <div className='game-screen-right'>
             <ScoreDisplay 
               totalScore={this.state.totalScore} 
               currentLevel={this.state.currentLevel} 
@@ -151,15 +153,6 @@ class App extends React.Component<{}, appStateIF> {
           </div>
         </div>
         <StartQuitButton currentGamePhase={this.state.currentGamePhase} clickHandler={this.startQuitClickHandler}/>
-        <div className="instructions">
-          <div className="instruction-block">Use arrows for left and right</div>
-          <div className="instruction-block">flip left = z</div>
-          <div className="instruction-block">flip right = x</div>
-          <div className="instruction-block">hard drop = space</div>
-          <div className="instruction-block">soft drop = down arrow</div>
-        </div>
-        
-
       </div>
     )
   }

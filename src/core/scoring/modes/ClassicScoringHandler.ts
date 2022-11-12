@@ -1,18 +1,37 @@
 import { scoringDataIF, scoreItemIF, scoringHistoryPerCycleIF } from "../../../interfaces"
-import { LineClear } from "../awards/LineClear"
+import { 
+  LineClearAward,
+  SoftdropAward,
+  HarddropAward,
+  TSpinMiniNoLineClearAward,
+  TSpinNoLineClearAward
+} from "../awards"
 import { BaseScoringHandler } from "./BaseScoringHandler"
 
 
 export class ClassicScoringHandler extends BaseScoringHandler {
 
-  private awardLineClear: LineClear
+  private awardLineClear: LineClearAward
+  private awardSoftdrop: SoftdropAward
+  private awardHarddrop: HarddropAward
+  private awardTSpinNoLineClear: TSpinNoLineClearAward
+  private awardTSpinMiniNoLineClear: TSpinMiniNoLineClearAward
 
   constructor() {
     super()
-    this.awardLineClear = new LineClear()
+
+    this.awardLineClear = new LineClearAward()
+    this.awardSoftdrop = new SoftdropAward()
+    this.awardHarddrop = new HarddropAward()
+    this.awardTSpinNoLineClear = new TSpinNoLineClearAward()
+    this.awardTSpinMiniNoLineClear = new TSpinMiniNoLineClearAward()
 
     this.scoringMethods = {
-      awardLineClear: this.awardLineClear
+      lineClear: this.lineClear.bind(this),
+      softdrop: this.softdrop.bind(this),
+      harddrop: this.harddrop.bind(this),
+      tSpinNoLineClear: this.tSpinNoLineClear.bind(this),
+      tSpinMiniNoLineClear: this.tSpinMiniNoLineClear.bind(this)
     }
     
   }
@@ -34,7 +53,6 @@ export class ClassicScoringHandler extends BaseScoringHandler {
 
     })
 
-
     const newTotalScore = filteredScoringContexts.reduce((runningScore: number, scoreItem: scoreItemIF) => {
       return this.updateScore(runningScore, scoreItem)
     }, currentScore)
@@ -45,12 +63,15 @@ export class ClassicScoringHandler extends BaseScoringHandler {
 
   // Executed within PlayerAction or Falling Phase
   softdrop(currentScore: number, scoringData: scoringDataIF) {
-    return currentScore + 1
+
+    console.log('here')
+    const newTotalScore = this.awardSoftdrop.calculateScore(currentScore, scoringData)
+    return newTotalScore
   }
 
   harddrop(currentScore: number, scoringData: scoringDataIF) {
-    const { linesDropped } = scoringData
-    return currentScore + (linesDropped * 2)
+    const newTotalScore = this.awardHarddrop.calculateScore(currentScore, scoringData)
+    return newTotalScore
   }
 
   // Executed in Completion Phase
@@ -60,16 +81,13 @@ export class ClassicScoringHandler extends BaseScoringHandler {
   }
 
   tSpinNoLineClear(currentScore: number, scoringData: scoringDataIF) {
-    const { currentLevel } = scoringData
-    const tSpinAward =  400 * currentLevel
-    return currentScore + tSpinAward
+    const newTotalScore = this.awardTSpinNoLineClear.calculateScore(currentScore, scoringData)
+    return newTotalScore
   }
   
   tSpinMiniNoLineClear(currentScore: number, scoringData: scoringDataIF) {
-    const { currentLevel } = scoringData
-    const tSpinMiniAward =  100 * currentLevel
-    return currentScore + tSpinMiniAward
-    
+    const newTotalScore = this.awardTSpinMiniNoLineClear.calculateScore(currentScore, scoringData)
+    return newTotalScore  
   }
 
 }

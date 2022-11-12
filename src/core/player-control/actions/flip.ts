@@ -1,7 +1,7 @@
 import { eventDataIF } from '../../../interfaces'
 import { makeCopy } from '../../utils/utils'
 
-export default function flip(eventData: eventDataIF) {
+export default function actionFlip(eventData: eventDataIF) {
 
   const { playfield, currentTetrimino } = this.localState
   const { strokeType, action } = eventData

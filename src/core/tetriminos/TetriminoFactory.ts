@@ -17,12 +17,12 @@ export class TetriminoFactory {
 
   private static factoryFunctions: factoryFuncs = {
     getITetrimino: TetriminoFactory.getITetrimino,
-    getOTetrimino: TetriminoFactory.getITetrimino,
-    getTTetrimino: TetriminoFactory.getITetrimino,
-    getJTetrimino: TetriminoFactory.getITetrimino,
-    getLTetrimino: TetriminoFactory.getITetrimino,
-    getSTetrimino: TetriminoFactory.getITetrimino,
-    getZTetrimino: TetriminoFactory.getITetrimino
+    getOTetrimino: TetriminoFactory.getOTetrimino,
+    getTTetrimino: TetriminoFactory.getTTetrimino,
+    getJTetrimino: TetriminoFactory.getJTetrimino,
+    getLTetrimino: TetriminoFactory.getLTetrimino,
+    getSTetrimino: TetriminoFactory.getSTetrimino,
+    getZTetrimino: TetriminoFactory.getZTetrimino
   }
 
   private static getBaseTetrimino(): tetriminoIF {
@@ -46,7 +46,7 @@ export class TetriminoFactory {
   }
   
   protected static getITetrimino(): tetriminoIF {
-    const tetrimino = this.getBaseTetrimino()
+    const tetrimino = TetriminoFactory.getBaseTetrimino()
     tetrimino.name = 'ITetrimino'
     tetrimino.minoGraphic = '[i]'
     tetrimino.startingGridPosition = [19, 3]
@@ -79,7 +79,7 @@ export class TetriminoFactory {
   }
 
   protected static getOTetrimino(): tetriminoIF {
-    const tetrimino = this.getBaseTetrimino()
+    const tetrimino = TetriminoFactory.getBaseTetrimino()
     tetrimino.name = 'OTetrimino'
     tetrimino.minoGraphic = '[o]',
     tetrimino.startingGridPosition = [18, 3],
@@ -111,7 +111,7 @@ export class TetriminoFactory {
   }
 
   protected static getJTetrimino(): tetriminoIF {
-    const tetrimino = this.getBaseTetrimino()
+    const tetrimino = TetriminoFactory.getBaseTetrimino()
     tetrimino.name = 'JTetrimino'
     tetrimino.minoGraphic = '[j]'
     tetrimino.orientations = {
@@ -141,7 +141,7 @@ export class TetriminoFactory {
   }
 
   protected static getLTetrimino(): tetriminoIF {
-    const tetrimino = this.getBaseTetrimino()
+    const tetrimino = TetriminoFactory.getBaseTetrimino()
     tetrimino.name = 'LTetrimino'
     tetrimino.minoGraphic = '[l]'
     tetrimino.orientations = {
@@ -171,7 +171,7 @@ export class TetriminoFactory {
   }
 
   protected static getSTetrimino(): tetriminoIF {
-    const tetrimino = this.getBaseTetrimino()
+    const tetrimino = TetriminoFactory.getBaseTetrimino()
     tetrimino.name = 'STetrimino'
     tetrimino.minoGraphic = '[s]'
     tetrimino.orientations = {
@@ -201,7 +201,7 @@ export class TetriminoFactory {
   }
 
   protected static getZTetrimino(): tetriminoIF {
-    const tetrimino = this.getBaseTetrimino()
+    const tetrimino = TetriminoFactory.getBaseTetrimino()
     tetrimino.name = 'ZTetrimino'
     tetrimino.minoGraphic = '[z]'
     tetrimino.orientations = {
@@ -231,7 +231,7 @@ export class TetriminoFactory {
   }
 
   protected static getTTetrimino(): tetriminoIF {
-    const tetrimino = this.getBaseTetrimino()
+    const tetrimino = TetriminoFactory.getBaseTetrimino()
     tetrimino.name = 'TTetrimino'
     tetrimino.minoGraphic = '[t]'
     tetrimino.orientations = {

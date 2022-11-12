@@ -4,6 +4,7 @@ export abstract class BaseScoringHandler {
 
 
   protected scoringMethods: scoringMethodsIF
+  
   constructor() {
     this.scoringMethods = {}
   }
@@ -16,8 +17,10 @@ export abstract class BaseScoringHandler {
 
   // scoreContext can be passed from any part of the Application for any reason
   public updateScore(currentScore: number, scoreItem: scoreItemIF) {
+
     const { scoringMethodName, scoringData } = scoreItem
-    return this.scoringMethods[scoringMethodName as keyof scoringMethodsIF].calculateScore(currentScore, scoringData)
+    const scoringMethod = this.scoringMethods[scoringMethodName as keyof scoringMethodsIF]
+    return scoringMethod(currentScore, scoringData)
   }
   // Executed within PlayerAction or Falling Phase
   protected abstract softdrop(currentScore: number, scoringData: scoringDataIF): number

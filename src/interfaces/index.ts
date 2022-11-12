@@ -20,7 +20,7 @@ import {
   Iterate,
   GameOver
 } from "../core/engine-phases"
-import { Award } from "../core/scoring/awards/Award"
+import { BaseAward } from "../core/scoring/awards/BaseAward"
 import { BaseScoringHandler } from "../core/scoring/modes/BaseScoringHandler"
 
 export interface phases {
@@ -124,12 +124,14 @@ export interface eventDataIF {
 }
 
 export interface playerActionHandlersIF {
-  actionLeftAndRight: Function
-  actionFlip: Function
-  actionSoftdrop: Function
-  actionHarddrop: Function
-  actionHold: Function
-  actionPauseGame: Function
+  left: Function
+  right: Function
+  flipClockwise: Function
+  flipCounterClockwise: Function
+  softdrop: Function
+  harddrop: Function
+  hold: Function
+  pauseGame: Function
 }
 
 
@@ -145,6 +147,7 @@ export interface tetriminoGraphicsIF {
   LTetriminoGraphic: string[][]  
   STetriminoGraphic: string[][]  
   ZTetriminoGraphic: string[][]  
+  emptyGraphic: string[][]  
 }
 
 export interface holdQueueIF {
@@ -246,7 +249,7 @@ export interface directionsIF {
 }
 
 export interface scoringMethodsIF {
-  [key: string]: Award
+  [key: string]: Function
 }
 
 export interface patternScannersIF {

@@ -14,8 +14,8 @@ const PlayfieldGrid = (props: playfieldGridPropsIF) => {
 
   const style = {
     fontFamily: 'monospace',
-    padding: '10px',
-    border: 'gray 3px solid',
+    // padding: '10px',
+    // border: 'gray 3px solid',
     backgroundColor: levelColors[currentLevel]
   }
 

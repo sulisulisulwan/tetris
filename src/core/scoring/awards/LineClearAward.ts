@@ -1,7 +1,7 @@
 import { scoringDataIF } from "../../../interfaces"
-import { Award } from "./Award"
+import { BaseAward } from "./BaseAward"
 
-export class LineClear extends Award {
+export class LineClearAward extends BaseAward {
 
   private clearLineBaseScores: Map<string | number, number>
 

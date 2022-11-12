@@ -1,7 +1,7 @@
 import { eventDataIF } from '../../../interfaces'
 import { makeCopy } from '../../utils/utils'
 
-export default function harddrop(eventData: eventDataIF) {
+export default function actionHarddrop(eventData: eventDataIF) {
 
   const { strokeType } = eventData
 
