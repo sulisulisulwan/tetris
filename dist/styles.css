@@ -1,5 +1,10 @@
+html {
+  background-image: url("https://img.freepik.com/free-photo/cool-geometric-triangular-figure-neon-laser-light-great-backgrounds_181624-11068.jpg?w=2000&t=st=1668228722~exp=1668229322~hmac=1e4c1bc515bd4d2d6c9146bb3d43b26bc08bc676904b90c0e8c9f24b026de6ea");
+  background-position: center;
+  /* overflow: hidden; */
+}
+
 body {
-  background-color: darkgrey;
 }
 
 .game-app-wrapper {
@@ -11,14 +16,13 @@ body {
   display: flex;
   font-size: 40px;
   justify-content: center;
-  /* margin: auto 40px; */
-  font-family: monospace;
+  color: white;
+  font-family: Andale mono;
 }
 
 .playfield {
   display: flex;
   flex-direction: row;
-  /* grid-template-columns: auto; */
 }
 
 .playfield-row {
@@ -31,96 +35,132 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-left: 40px;
   margin-bottom: 20px;
   margin-top: 20px;
+  height: 100%;
 }
 .game-screen-left {
   display: flex;
   flex-direction: column;
   margin-right: 20px;
-  /* background-color: blue; */
 }
 
 .game-screen-right {
   display: flex;
   flex-direction: column;
   margin-left: 20px;
-  /* background-color: blue; */
 }
 
 .playfield-container {
+  position: relative;
+  /* bottom: 25px; */
   font-family: monospace;
-  padding: 10px;
-  border: gray 3px solid;
+  box-shadow: 3px 3px 20px white;
 }
 
 .playfield-row {
-  background-color: black;
+  /* background-color: black;
+  opacity: .5; */
 }
 
 .playfield-square{
-  border-style: solid;
-  border-color: black;
-  border-radius: 20%;
-  /* height: 25px;
-  width: 25px; */
+
+}
+
+.tetrimino-shimmer {
+  box-shadow: 3px 3px 20px white;
 }
 .iTet {
   background-color: green;
   color: green;
+  border-style: solid;
+  border-color: black;
+  border-radius: 20%;
 }
+
 .tTet {
-  background-color: purple;
-  color: purple;
+  background-color: #ff00ff;
+  color: #ff00ff;
+  border-style: solid;
+  border-color: black;
+  border-radius: 20%;
 }
+
 .jTet {
   background-color: red;
   color: red;
+  border-style: solid;
+  border-color: black;
+  border-radius: 20%;
 }
+
 .oTet {
   background-color: yellow;
   color: yellow;
+  border-style: solid;
+  border-color: black;
+  border-radius: 20%;
 }
+
 .sTet {
   background-color: orange;
   color: orange;
+  border-style: solid;
+  border-color: black;
+  border-radius: 20%;
 }
+
 .lTet {
   background-color: cyan;
   color: cyan;
+  border-style: solid;
+  border-color: black;
+  border-radius: 20%;
 }
+
 .zTet {
   background-color: white;
   color: white;
+  border-style: solid;
+  border-color: black;
+  border-radius: 20%;
 }
+
+.ghostTet {
+  background-color: black;
+  color: black;
+  border-style: solid;
+  border-color: white;
+  border-radius: 20%;
+  opacity: .5;
+}
+
 .empty {
   background-color: black;
   color: black;
+  border-style: solid;
+  border-color: black;
+  opacity: .5;
 }
 
 .nextqueue-wrapper {
-  /* padding: 10px;
-  border: #808080 2px solid;
-  height: 100%;
+  padding: 10px;
   width: 120px;
-  background-color: lightgray;
-  text-align: center; */
+  text-align: center;
 }
 
 .score-display {
-  /* background-color: lightgray;
-  border: gray 2px solid;
   margin-bottom: 20px;
   height: 20%;
   text-align: center;
-  font-family: monospace;
-  font-size: 15px; */
+  font-family: Andale mono;
+  font-size: 15px; 
+  color: white;
 }
 
 .text-next {
-  color: black;
-  font-family: monospace;
+  color: white;
+  font-family: Andale mono;
   font-size: 30px;
   margin-bottom: 20px;
   align-content: center;
@@ -131,12 +171,10 @@ body {
 }
 
 .tetrimino-tile-row {
-  /* margin-bottom: 10px; */
   display: flex;
   flex-direction: row;
   font-family: monospace;
   justify-content: center;
-  background-color: black;
 }
 
 .start-quit-button-wrapper{

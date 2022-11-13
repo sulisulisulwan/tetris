@@ -2,11 +2,10 @@ import * as React from 'react'
 
 const squareColors = new Map([
   ['[i]','green'],
-  ['[t]','blue'],
+  ['[t]','#ff00ff'],
   ['[j]','red'],
   ['[o]','yellow'],
   ['[s]','orange'],
-  ['[t]','purple'],
   ['[l]','cyan'],
   ['[z]','white'],
   ['[_]','black']
@@ -30,7 +29,7 @@ const TetriminoTile = (props: tetriminoTilePropsIF) => {
       borderColor: 'black',
       fontSize: '10px',
       margin: 'auto auto',
-      justifyContent: 'center'
+      justifyContent: 'center',
     }
     return (
       <div className={`tetrimino-tile`}>
@@ -43,16 +42,14 @@ const TetriminoTile = (props: tetriminoTilePropsIF) => {
 
   const tileStyle = {
     backgroundColor: squareColors.get(tetriminoName),
-    opacity: '.9',
     color: squareColors.get(tetriminoName),
-    border: 'solid black',
     marginTop: '10px',
     marginBottom: '10px',
     marginLeft: 'auto',
     marginRight: 'auto',
     width: '60%',
     maxHeight: '80px',
-    justifyContent: 'center'
+    justifyContent: 'center',
   }
 
   return (
@@ -65,9 +62,8 @@ const TetriminoTile = (props: tetriminoTilePropsIF) => {
               color: squareColors.get(square),
               borderStyle: 'solid',
               fontSize: '10px',
-              height: 15,
-              borderRadius: '20%',
-              overflow: 'hidden'
+              height: 16,
+              opacity: .4
             }
 
             const minoStyle = {
@@ -77,6 +73,7 @@ const TetriminoTile = (props: tetriminoTilePropsIF) => {
               borderColor: 'black',
               fontSize: '10px',
               borderRadius: '20%',
+              height: 16,
               overflow: 'hidden',
             }
             return (

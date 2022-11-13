@@ -31,10 +31,15 @@ export default function actionHold(eventData: eventDataIF) {
   if (swapStatus === 'swapAvailableNow') {
 
     let { heldTetrimino } = this.localState.holdQueue
-    const { currentTetrimino, playfield } = this.localState
+    let { currentTetrimino, playfield } = this.localState
+
+    // Remove the ghost tetrimino
+    if (this.localState.ghostTetriminoOn) {
+      playfield = this.tetriminoMovementHandler.removeTetriminoFromPlayfield(this.localState.ghostCoords, playfield)
+    }
 
     // Remove the swapped out tetrimino from the playfield
-    const currentTetriminoCoordsOnPlayfield = this.tetriminoMovementHandler.getTetriminoCoordsOnPlayfield(currentTetrimino)
+    const currentTetriminoCoordsOnPlayfield = this.tetriminoMovementHandler.calcPlayfieldCoords(currentTetrimino)
     newState.playfield = this.tetriminoMovementHandler.removeTetriminoFromPlayfield(currentTetriminoCoordsOnPlayfield, playfield)
 
     // Generate a new tetrimino of the current one to put in the hold queue

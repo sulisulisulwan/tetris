@@ -3,8 +3,8 @@ import { HoldQueue } from "./hold-queue/HoldQueue"
 import { LevelGoals } from "./level-goals/LevelGoals"
 import { NextQueue } from "./next-queue/NextQueue"
 import { BaseScoringHandler } from "./scoring/modes/BaseScoringHandler"
-import { TetriminoMovementHandler } from "./tetriminos/movement-handler/TetriminoMovementHandler"
-import { TetriminoFactory } from './tetriminos/TetriminoFactory'
+import { TetriminoMovementHandler } from "./tetrimino/movement-handler/TetriminoMovementHandler"
+import { TetriminoFactory } from './tetrimino/TetriminoFactory'
 import { makeCopy } from "./utils/utils"
 export class SharedScope {
 

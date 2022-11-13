@@ -2,7 +2,7 @@ import * as React from "react"
 import { HoldQueue } from "../core/hold-queue/HoldQueue" 
 import { LevelGoals } from "../core/level-goals/LevelGoals"
 import { NextQueue } from "../core/next-queue/NextQueue"
-import { TetriminoMovementHandler } from "../core/tetriminos/movement-handler/TetriminoMovementHandler" 
+import { TetriminoMovementHandler } from "../core/tetrimino/movement-handler/TetriminoMovementHandler" 
 import { 
   Off,
   Pregame,
@@ -54,6 +54,7 @@ export interface playerActionIF {
 }
 
 export declare interface appStateIF {
+  view: string
   currentTetrimino: null | tetriminoIF
   playfield: string[][]
   gameMode: string
@@ -82,6 +83,8 @@ export declare interface appStateIF {
   performedTSpinMini: boolean
   backToBack: boolean
   scoringHistoryPerCycle: scoringHistoryPerCycleIF
+  ghostTetriminoOn: boolean
+  ghostCoords: coordinates[]
 }
 
 export interface scoringHistoryPerCycleIF {
@@ -217,6 +220,7 @@ export interface tetriminoIF {
   orientations?: orientationsIF
   name?: string
   minoGraphic?: string
+  ghostCoordsOnPlayfield: number[]
 }
 
 export interface orientationsIF {
@@ -246,6 +250,7 @@ export interface directionsIF {
   right: Function
   left: Function
   down: Function
+  inPlace: Function
 }
 
 export interface scoringMethodsIF {

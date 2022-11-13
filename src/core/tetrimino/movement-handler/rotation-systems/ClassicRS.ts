@@ -46,7 +46,7 @@ export class ClassicRotationSystem extends TetriminoMovementHandler{
     const startPoint = oldCoordsOffOriginAndRotationPoints.rotationPoints[flipPoint]
     const endPoint = targetCoordsOffOriginAndRotationPoints.rotationPoints[flipPoint]
     const offset = this.calculateOffsetTowardsStartPoint(startPoint, endPoint)
-    const targetCoordsOnPlayfield = this.getTargetPlayfieldCoords(targetCoordsOffOrigin, currentOriginOnPlayfield, offset)
+    const targetCoordsOnPlayfield = this.getFlippedPlayfieldCoords(targetCoordsOffOrigin, currentOriginOnPlayfield, offset)
       
     const playfieldNoTetrimino = this.removeTetriminoFromPlayfield(oldCoordsOnPlayfield, playfieldCopy)
 
@@ -73,7 +73,7 @@ export class ClassicRotationSystem extends TetriminoMovementHandler{
     return targetOrientation
   }
 
-  getTargetPlayfieldCoords(targetCoordsOffOrigin: coordinates[], currentOriginOnPlayfield: coordinates, offset: coordinates): coordinates[] {
+  getFlippedPlayfieldCoords(targetCoordsOffOrigin: coordinates[], currentOriginOnPlayfield: coordinates, offset: coordinates): coordinates[] {
     
     const [verticalOrigin, horizontalOrigin] = currentOriginOnPlayfield
     const [verticalOffset, horizontalOffset] = offset

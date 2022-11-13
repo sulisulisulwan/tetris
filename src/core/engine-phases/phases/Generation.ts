@@ -16,7 +16,7 @@ export default class Generation extends BasePhase {
 
     const nextQueueData = this.nextQueueHandler.queueToArray(5)
     
-    const targetStartingCoords = this.tetriminoMovementHandler.getTetriminoCoordsOnPlayfield(newTetrimino)
+    const targetStartingCoords = this.tetriminoMovementHandler.getPlayfieldCoords(newTetrimino)
 
     const playfield = this.localState.playfield
     const newState = this.localState
@@ -28,7 +28,15 @@ export default class Generation extends BasePhase {
     }
     
     // Place dequeued tetrimino in playfield
-    const newPlayfield = this.tetriminoMovementHandler.addTetriminoToPlayfield(targetStartingCoords, playfield, newTetrimino.minoGraphic)
+    let newPlayfield = this.tetriminoMovementHandler.addTetriminoToPlayfield(targetStartingCoords, playfield, newTetrimino.minoGraphic)
+
+    if (this.localState.ghostTetriminoOn) {
+      const ghostCoords = this.tetriminoMovementHandler.getGhostCoords(newTetrimino, newPlayfield)
+      newState.playfield = this.tetriminoMovementHandler.addTetriminoToPlayfield(ghostCoords, playfield, '[g]')
+      newState.ghostCoords = ghostCoords
+    } else {
+      newState.playfield = newPlayfield
+    }
 
     // Update swap status in case hold queue has been used
     let { swapStatus } = this.localState.holdQueue
@@ -40,7 +48,7 @@ export default class Generation extends BasePhase {
 
     // Update state
     newState.nextQueue = nextQueueData
-    newState.playfield = newPlayfield
+    
     newState.currentTetrimino = newTetrimino,
     newState.currentGamePhase = 'falling',
     newState.lowestLockSurfaceRow = newTetriminoBaseRowIdx

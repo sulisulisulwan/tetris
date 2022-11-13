@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import TetriminoTile from '../TetriminoTile'
 import { tetriminoGraphics } from '../tetriminoGraphics'
-import { holdQueueIF, levelColorsIF, tetriminoGraphicsIF } from '../../interfaces'
+import { holdQueueIF, levelColorsIF, tetriminoGraphicsIF } from '../../../interfaces'
 
 interface holdQueueDisplayProps {
   holdQueue: holdQueueIF
@@ -30,11 +30,12 @@ const HoldQueueDisplay = (props: holdQueueDisplayProps) => {
   const graphicGrid = tetriminoGraphics[`${tetriminoName}Graphic` as keyof tetriminoGraphicsIF]
   const styles = {
     padding: '10px',
-    border: 'gray 2px solid',
-    height: '100%',
+    height: '10 0%',
     width: '120px',
-    backgroundColor: levelColors[currentLevel as keyof levelColorsIF],
-    textAlign: 'center' as 'center'
+    textAlign: 'center' as 'center',
+    color: 'white',
+    fontSize: '30px',
+    fontFamily: 'Andale Mono'
   }
 
   if (holdQueue === null) {
@@ -43,7 +44,7 @@ const HoldQueueDisplay = (props: holdQueueDisplayProps) => {
 
   return (
     <div className="holdqueue-wrapper" style={styles}>
-      <div className="text-hold">Hold</div>
+      <div className="text-hold">HOLD</div>
       {<TetriminoTile graphicGrid={graphicGrid} tetriminoName={tetriminoName} classType={'hold'}/>}
     </div>
   )

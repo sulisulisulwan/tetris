@@ -17,25 +17,18 @@ export default function actionHarddrop(eventData: eventDataIF) {
   }
 
   let { playfield, currentTetrimino } = newState
-  let keepDropping = true
-  let linesDropped = 0
 
-  while (keepDropping) {
-    const {       
-      newPlayfield,
-      newTetrimino,
-      successfulMove
-    } = this.tetriminoMovementHandler.moveOne('down', playfield, currentTetrimino)
-
-    playfield = newPlayfield
-    currentTetrimino = newTetrimino
-
-    if (!successfulMove) {
-      keepDropping = false
-    }
-
-    linesDropped += 1
+  //Remove the ghost tetrimino
+  if (this.localState.ghostTetriminoOn) {
+    playfield = this.tetriminoMovementHandler.removeTetriminoFromPlayfield(this.localState.ghostCoords, playfield)
   }
+
+  const harddroppedTetrimino = this.tetriminoMovementHandler.getProjectedLandedTetrimino(playfield, currentTetrimino)
+
+  const harddroppedTetriminoCoords = this.tetriminoMovementHandler.getPlayfieldCoords(harddroppedTetrimino)
+  const currentTetriminoCoords = this.tetriminoMovementHandler.getPlayfieldCoords(currentTetrimino)
+  
+  const linesDropped = harddroppedTetriminoCoords[0] - currentTetriminoCoords[0]
 
   const scoringData = {
     currentScore: this.localState.totalScore,
@@ -47,14 +40,13 @@ export default function actionHarddrop(eventData: eventDataIF) {
     scoringMethodName: 'harddrop',
     scoringData
   })
-  
 
   newState.scoringHistoryPerCycle = this.localState.scoringHistoryPerCycle
   newState.scoringHistoryPerCycle.harddrop = scoringData
   newState.playerAction.harddrop = true
   newState.currentGamePhase = 'pattern'
-  newState.playfield = playfield
-  newState.currentTetrimino = currentTetrimino
+  newState.playfield = this.tetriminoMovementHandler.moveTetriminoOnPlayfield(currentTetriminoCoords, harddroppedTetriminoCoords, playfield, currentTetrimino.minoGraphic)
+  newState.currentTetrimino = harddroppedTetrimino
 
   this.setAppState(newState)
 }

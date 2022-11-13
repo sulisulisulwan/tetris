@@ -3,7 +3,7 @@ import { makeCopy } from '../../utils/utils'
 
 export default function actionFlip(eventData: eventDataIF) {
 
-  const { playfield, currentTetrimino } = this.localState
+  
   const { strokeType, action } = eventData
 
   if (strokeType === 'keydown' && this.localState.playerAction[action]) {
@@ -11,6 +11,7 @@ export default function actionFlip(eventData: eventDataIF) {
   }
 
   const newState = makeCopy(this.localState)
+  let { playfield, currentTetrimino } = newState
 
   if (strokeType === 'keyup') {
     newState.playerAction[action] = false
@@ -18,6 +19,11 @@ export default function actionFlip(eventData: eventDataIF) {
     return
   }
   
+  // Remove the ghost tetrimino if that mode is on
+  if (this.localState.ghostTetriminoOn) {
+    playfield = this.tetriminoMovementHandler.removeTetriminoFromPlayfield(this.localState.ghostCoords, playfield)
+  }
+
   const { 
     newPlayfield, 
     newTetrimino,
@@ -47,12 +53,20 @@ export default function actionFlip(eventData: eventDataIF) {
       }
     })
   }
+
+
   newState.performedTSpinMini = performedTSpinMini
   newState.performedTSpin = performedTSpin
   newState.playerAction[action] = true
   newState.currentTetrimino = newTetrimino
-  newState.playfield = newPlayfield
-  
+
+  if (this.localState.ghostTetriminoOn) {
+    const newGhostCoords = this.tetriminoMovementHandler.getGhostCoords(newTetrimino, newPlayfield)
+    newState.ghostCoords = newGhostCoords
+    newState.playfield = this.tetriminoMovementHandler.addTetriminoToPlayfield(newGhostCoords, newPlayfield, '[g]')
+  } else {
+    newState.playfield = newPlayfield
+  }
 
   //TODO: This should account for movements that occur only after lockdown, not before.  This current logic will mistake pre lockdown scenarios as post lockdown
   // Think, at every point in time, the newTetriminoBaseRowIdx will === this.localState.lowestLockSurfaceRow

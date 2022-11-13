@@ -1,4 +1,4 @@
-import { levelColorsIF } from "../interfaces";
+import { levelColorsIF } from "../../interfaces";
 
 export const levelColors: levelColorsIF = {
   1: 'lightgray',

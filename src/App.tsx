@@ -1,14 +1,11 @@
 import * as React from 'react'
-import { appStateIF, initialOptionsIF, setAppStateIF } from './interfaces'
 
-import PlayfieldGrid from './visual-components/playfield/PlayfieldGrid'
-import NextQueueDisplay from './visual-components/next-queue/NextQueueDisplay'
-import StartQuitButton from './visual-components/StartQuitButton'
-import ScoreDisplay from './visual-components/ScoreDisplay'
+import PlayView from './visual-components/PlayView/PlayView'
+
 
 import { Engine } from './core/engine-phases/Engine'
-import HoldQueueDisplay from './visual-components/hold-queue/HoldQueueDisplay'
 
+import { appStateIF, initialOptionsIF, setAppStateIF } from './interfaces'
 
 const initialOptions: initialOptionsIF = {
   possibleActivePatterns: {
@@ -29,6 +26,8 @@ class App extends React.Component<{}, appStateIF> {
   constructor(props: appStateIF) {
     super(props)
     this.state = {
+
+      view: 'titleScreen',
 
       currentTetrimino: null,
       playfield: this.getInitialPlayfield(),
@@ -80,8 +79,10 @@ class App extends React.Component<{}, appStateIF> {
       performedTSpinMini: false,
       backToBack: false,
       
+      scoringHistoryPerCycle: {},
 
-      scoringHistoryPerCycle: {}
+      ghostTetriminoOn: false,
+      ghostCoords: []
     }
 
     this.startQuitClickHandler = this.startQuitClickHandler.bind(this)
@@ -122,41 +123,18 @@ class App extends React.Component<{}, appStateIF> {
   }
 
   render() {
-
-    return (
-      <div className="game-app-wrapper">
-        <div className="game-title" onKeyDown={this.playerKeystrokeHandler}>Suli's Tetris</div>
-        {this.state.currentGamePhase === 'pregame' ? <div style={{textAlign: 'center'}}>{this.state.pregameCounter + 1}</div> : <div style={{textAlign: 'center'}}> --- </div>}
-        <div className="game-screen">
-          <div className='game-screen-left'>
-            <HoldQueueDisplay 
-              holdQueue={this.state.holdQueue} 
-              currentLevel={this.state.currentLevel}
-            />
-          </div>
-          <div className='game-screen-center'>
-            <PlayfieldGrid 
-              playfieldData={this.state.playfield.slice(20)}
-              currentLevel={this.state.currentLevel}  
-            />
-          </div>
-          <div className='game-screen-right'>
-            <ScoreDisplay 
-              totalScore={this.state.totalScore} 
-              currentLevel={this.state.currentLevel} 
-              linesCleared={this.state.totalLinesCleared}
-              />
-            <NextQueueDisplay 
-              nextQueueData={this.state.nextQueue}
-              currentLevel={this.state.currentLevel} 
-            />
-          </div>
-        </div>
-        <StartQuitButton currentGamePhase={this.state.currentGamePhase} clickHandler={this.startQuitClickHandler}/>
-      </div>
-    )
-  }
   
+    // if (this.state.view === 'play') {
+      return (
+        <PlayView 
+          appState={this.state} 
+          startQuitClickHandler={this.startQuitClickHandler} 
+          playerKeystrokeHandler={this.playerKeystrokeHandler}
+        />
+      )
+    // }
+
+  }
 } 
 
 export default App

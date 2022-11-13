@@ -17,7 +17,7 @@ export class SuperRotationSystem extends ClassicRotationSystem {
     const oldRotationPoints = tetrimino.orientations[currentOrientation as keyof orientationsIF].rotationPoints
     const targetRotationPoints = tetrimino.orientations[targetOrientation as keyof orientationsIF].rotationPoints
 
-    const oldCoordsOnPlayfield = this.getTetriminoCoordsOnPlayfield(tetrimino)
+    const oldCoordsOnPlayfield = this.getPlayfieldCoords(tetrimino)
 
     
     let playfieldCopy = makeCopy(playfield)
@@ -27,7 +27,7 @@ export class SuperRotationSystem extends ClassicRotationSystem {
       const startPoint: coordinates = oldRotationPoints[flipPoint.toString() as keyof rotationPointsIF]
       const endPoint: coordinates = targetRotationPoints[flipPoint.toString() as keyof rotationPointsIF]
       const offset = this.calculateOffsetTowardsStartPoint(startPoint, endPoint)
-      const targetCoordsOnPlayfield = this.getTargetPlayfieldCoords(targetCoordsOffOrigin, currentOriginOnPlayfield, offset)
+      const targetCoordsOnPlayfield = this.getFlippedPlayfieldCoords(targetCoordsOffOrigin, currentOriginOnPlayfield, offset)
        
       const playfieldNoTetrimino = this.removeTetriminoFromPlayfield(oldCoordsOnPlayfield, playfieldCopy)
 

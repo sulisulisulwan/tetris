@@ -2,8 +2,8 @@ import { LevelGoals } from '../level-goals/LevelGoals'
 import { ScoringHandlerFactory } from '../scoring/ScoringHandlerFactory'
 import { NextQueue } from '../next-queue/NextQueue'
 import { PlayerControl } from '../player-control/PlayerControl'
-import { ClassicRotationSystem } from '../tetriminos/movement-handler/rotation-systems/ClassicRS'
-import { SuperRotationSystem } from '../tetriminos/movement-handler/rotation-systems/SuperRS'
+import { ClassicRotationSystem } from '../tetrimino/movement-handler/rotation-systems/ClassicRS'
+import { SuperRotationSystem } from '../tetrimino/movement-handler/rotation-systems/SuperRS'
 import { 
   BasePhase,
   Pregame,

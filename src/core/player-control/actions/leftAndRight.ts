@@ -1,7 +1,7 @@
 import { appStateIF, autoRepeatIF, eventDataIF } from "../../../interfaces"
 
 export default function actionLeftAndRight(eventData: eventDataIF) {
-  const { playerAction, playfield, currentTetrimino } = this.localState
+  let { playerAction, playfield, currentTetrimino } = this.localState
   const { autoRepeat } = playerAction
   let { override } = autoRepeat
   const { strokeType, action } = eventData
@@ -55,6 +55,10 @@ export default function actionLeftAndRight(eventData: eventDataIF) {
     const { override, left } = newState.playerAction.autoRepeat
     let direction = override ? override : (left ? 'left' : 'right')
 
+    if (this.localState.ghostTetriminoOn) {
+      playfield = this.tetriminoMovementHandler.removeTetriminoFromPlayfield(this.localState.ghostCoords, playfield)
+    }
+
     const { 
       newPlayfield, 
       newTetrimino, 
@@ -62,8 +66,16 @@ export default function actionLeftAndRight(eventData: eventDataIF) {
     } = this.tetriminoMovementHandler.moveOne(direction, playfield, currentTetrimino)
   
     if (successfulMove)  {
+
       newState.currentTetrimino = newTetrimino
-      newState.playfield = newPlayfield
+
+      if (this.localState.ghostTetriminoOn) {
+        const newGhostCoords = this.tetriminoMovementHandler.getGhostCoords(newTetrimino, newPlayfield)
+        newState.ghostCoords = newGhostCoords
+        newState.playfield = this.tetriminoMovementHandler.addTetriminoToPlayfield(newGhostCoords, newPlayfield, '[g]')
+      } else {
+        newState.playfield = newPlayfield
+      }
 
       //TODO: This should account for movements that occur only after lockdown, not before.  This current logic will mistake pre lockdown scenarios as post lockdown
       // Think, at every point in time, the newTetriminoBaseRowIdx will === this.localState.lowestLockSurfaceRow

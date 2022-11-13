@@ -7,6 +7,12 @@ export default class FallingExtended extends BasePhase {
     super(sharedHandlers)
   }
 
+  /**
+   * Will re-trigger when:
+   * - Player makes any kind of move 
+   * - Continuous fall event set, triggered, or unset
+   * -  
+   */
   execute() {
     console.log('>>>> FALLING EXTENDED PHASE')
 

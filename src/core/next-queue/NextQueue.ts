@@ -1,6 +1,6 @@
 import { VirtualBag } from './VirtualBag'
 import { QueueList } from './QueueList'
-import { TetriminoFactory } from '../tetriminos/TetriminoFactory'
+import { TetriminoFactory } from '../tetrimino/TetriminoFactory'
 import { tetriminoIF } from '../../interfaces'
 export class NextQueue {
 

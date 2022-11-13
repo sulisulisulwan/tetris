@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 interface startQuitButtonPropsIF {
-  currentGamePhase: string,
+  currentGamePhase: string
   clickHandler: (e: Event) => void
 }
 

@@ -120,5 +120,5 @@ export class PlayerControl extends SharedScope {
   pauseGame(eventData: eventDataIF) {
     actionPauseGame(eventData)
   }
-  
+
 }

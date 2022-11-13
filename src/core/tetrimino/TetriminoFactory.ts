@@ -31,7 +31,8 @@ export class TetriminoFactory {
       currentOriginOnPlayfield: [18, 2],
       localGridSize: 3,
       currentOrientation: 'north',
-      status: 'inQueue'
+      status: 'inQueue',
+      ghostCoordsOnPlayfield: []
     }
   }
 
