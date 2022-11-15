@@ -169,6 +169,7 @@ export interface sharedHandlersIF {
   levelGoalsHandler: LevelGoals
   nextQueueHandler: NextQueue
   holdQueueHandler: HoldQueue
+  soundEffects: soundEffectsIF
   setAppState: setAppStateIF
 }
 
@@ -275,4 +276,8 @@ export interface patternScannersIF {
 export interface actionItemIF {
   eliminatorName: string
   actionData: any 
+}
+
+export interface soundEffectsIF {
+  [key:string]: HTMLAudioElement
 }

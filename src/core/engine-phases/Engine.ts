@@ -27,7 +27,8 @@ import {
   initialOptionsIF,
   appStateIF,
   sharedHandlersIF,
-  phases
+  phases,
+  soundEffectsIF
 } from '../../interfaces'
 
 export class Engine {
@@ -39,7 +40,7 @@ export class Engine {
   private currentPhaseName: string
   private currentPhase: BasePhase
 
-  constructor(initialOptions: initialOptionsIF) {
+  constructor(initialOptions: initialOptionsIF, soundEffects: soundEffectsIF) {
 
     this.tetriminoMovementHandlersMap = new Map([
       ['classic', ClassicRotationSystem],
@@ -60,6 +61,7 @@ export class Engine {
       levelGoalsHandler,
       nextQueueHandler,
       holdQueueHandler,
+      soundEffects,
       setAppState
     }
 
@@ -79,7 +81,6 @@ export class Engine {
     
     
     this.playerControl = new PlayerControl(sharedHandlers)
-
     
     this.currentPhaseName = 'off'
     this.currentPhase = this.phases.off

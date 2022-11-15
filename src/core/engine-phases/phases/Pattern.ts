@@ -46,6 +46,9 @@ export default class Pattern extends BasePhase {
             scoringMethodName: 'lineClear',
             scoringData
           }
+
+          this.soundEffects.lineClear.play()
+          
           newState.scoringItemsForCompletion.push(scoreItem)
 
           break

@@ -66,7 +66,11 @@ export default function actionLeftAndRight(eventData: eventDataIF) {
     } = this.tetriminoMovementHandler.moveOne(direction, playfield, currentTetrimino)
   
     if (successfulMove)  {
+      console.dir(this.soundEffects.tetriminoMove)
 
+      this.soundEffects.tetriminoMove.currentTime = 0
+      this.soundEffects.tetriminoMove.play()
+      
       newState.currentTetrimino = newTetrimino
 
       if (this.localState.ghostTetriminoOn) {

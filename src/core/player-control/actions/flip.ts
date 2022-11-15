@@ -80,6 +80,10 @@ export default function actionFlip(eventData: eventDataIF) {
     newState.lockTimeoutId = null
     newState.extendedLockdownMovesRemaining = this.localState.extendedLockdownMovesRemaining - 1
   }
+
+  this.soundEffects.tetriminoMove.currentTime = 0
+  this.soundEffects.tetriminoMove.play()
+
   this.setAppState(newState)
 
 }

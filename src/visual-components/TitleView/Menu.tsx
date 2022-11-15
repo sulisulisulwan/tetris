@@ -15,6 +15,8 @@ const Menu = (props: menuPropsIF) => {
         <li onClick={() => { setAppState((currentState) => { return { ...currentState, view: 'singlePlayer'}}) }}>Single Player</li>
         <li onClick={() => { setAppState((currentState) => { return { ...currentState,  view: 'multiPlayer'}}) }}>Multi Player</li>
         <li onClick={() => { setAppState((currentState) => { return { ...currentState,  view: 'options'}}) }}>Options</li>
+        <li onClick={() => { setAppState((currentState) => { return { ...currentState,  view: 'highScore'}}) }}>HighScore</li>
+        <li onClick={() => { setAppState((currentState) => { return { ...currentState,  view: 'help'}}) }}>Help</li>
       </ul>
     </div>
   )

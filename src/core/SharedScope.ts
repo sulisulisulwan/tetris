@@ -1,4 +1,4 @@
-import { appStateIF, setAppStateIF, sharedHandlersIF } from "../interfaces"
+import { appStateIF, setAppStateIF, sharedHandlersIF, soundEffectsIF } from "../interfaces"
 import { HoldQueue } from "./hold-queue/HoldQueue"
 import { LevelGoals } from "./level-goals/LevelGoals"
 import { NextQueue } from "./next-queue/NextQueue"
@@ -16,6 +16,7 @@ export class SharedScope {
   public holdQueueHandler: HoldQueue
   public setAppState: setAppStateIF
   public localState: appStateIF
+  public soundEffects: soundEffectsIF
 
 
   constructor(sharedHandlers: sharedHandlersIF) {
@@ -27,6 +28,7 @@ export class SharedScope {
     this.holdQueueHandler = sharedHandlers.holdQueueHandler
     this.setAppState = sharedHandlers.setAppState
     this.localState = null
+    this.soundEffects = sharedHandlers.soundEffects
   }
 
   syncToLocalState(appState: appStateIF) {

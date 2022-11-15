@@ -94,14 +94,17 @@ export class PlayerControl extends SharedScope {
 
   right(eventData: eventDataIF) {
     actionLeftAndRight(eventData)
+    this.soundEffects.tetriminoMove.play()
   }
 
   flipCounterClockwise(eventData: eventDataIF) {
     actionFlip(eventData)
+    this.soundEffects.tetriminoMove.play()
   }
   
   flipClockwise(eventData: eventDataIF) {
     actionFlip(eventData)
+    this.soundEffects.tetriminoMove.play()
   }
 
   softdrop(eventData: eventDataIF) {

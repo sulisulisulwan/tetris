@@ -40,6 +40,8 @@ export default class Completion extends BasePhase {
       fallSpeed 
     } = this.levelGoalsHandler.getNewLevelSpecs(newLevel, this.localState.totalLinesCleared)
     
+    this.soundEffects.levelUp.play()
+
     newState.currentLevel = newLevel
     newState.levelClearedLinesGoal = levelClearedLinesGoal
     newState.fallSpeed = fallSpeed
