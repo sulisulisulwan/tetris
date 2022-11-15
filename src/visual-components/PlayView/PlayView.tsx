@@ -36,6 +36,7 @@ interface playViewPropsIF {
         </div>
         <div className='game-screen-center'>
           <PlayfieldGrid 
+            currentGamePhase={appState.currentGamePhase}
             playfieldData={appState.playfield.slice(20)}
             currentLevel={appState.currentLevel}  
           />

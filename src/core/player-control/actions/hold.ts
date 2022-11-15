@@ -39,7 +39,7 @@ export default function actionHold(eventData: eventDataIF) {
     }
 
     // Remove the swapped out tetrimino from the playfield
-    const currentTetriminoCoordsOnPlayfield = this.tetriminoMovementHandler.calcPlayfieldCoords(currentTetrimino)
+    const currentTetriminoCoordsOnPlayfield = this.tetriminoMovementHandler.getPlayfieldCoords(currentTetrimino)
     newState.playfield = this.tetriminoMovementHandler.removeTetriminoFromPlayfield(currentTetriminoCoordsOnPlayfield, playfield)
 
     // Generate a new tetrimino of the current one to put in the hold queue

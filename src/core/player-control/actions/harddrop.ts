@@ -41,6 +41,8 @@ export default function actionHarddrop(eventData: eventDataIF) {
     scoringData
   })
 
+  clearTimeout(this.localState.fallIntervalId)
+  newState.fallIntervalId = null
   newState.scoringHistoryPerCycle = this.localState.scoringHistoryPerCycle
   newState.scoringHistoryPerCycle.harddrop = scoringData
   newState.playerAction.harddrop = true

@@ -11,8 +11,8 @@ export default class GameOver extends BasePhase {
     console.log('>>>> GAME OVER')
 
     const newState = {} as appStateIF
-    newState.currentGamePhase = 'off'
-    this.setAppState(newState)
+    // newState.currentGamePhase = 'gameover'
+    // this.setAppState(newState)
 
   }
 

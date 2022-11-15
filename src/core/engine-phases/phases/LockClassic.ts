@@ -99,6 +99,8 @@ export default class LockClassic extends BasePhase {
     newState.currentTetrimino.status = 'locked'
     
     if (this.gameIsOver(tetriminoCopy)) {
+      clearTimeout(this.localState.lockTimeoutId)
+      newState.lockTimeoutId = null
       newState.currentGamePhase = 'gameOver'
       this.setAppState(newState)
       return

@@ -9,7 +9,6 @@ export class PlayerControl extends SharedScope {
   private playerActions: playerActionHandlersIF
   constructor(sharedHandlers: sharedHandlersIF) {
 
-
     super(sharedHandlers)
     this.keystrokeMap = new Map([
       ['ArrowLeft','left'],

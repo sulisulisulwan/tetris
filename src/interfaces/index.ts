@@ -54,6 +54,7 @@ export interface playerActionIF {
 }
 
 export declare interface appStateIF {
+  gameOptions: gameOptionsIF
   view: string
   currentTetrimino: null | tetriminoIF
   playfield: string[][]
@@ -172,6 +173,16 @@ export interface sharedHandlersIF {
 }
 
 export interface initialOptionsIF {
+  possibleActivePatterns: {
+    lineClear: boolean
+  }
+  rotationSystem: string
+  scoringSystem: string
+  levelGoalsSystem: string
+  lockMode: string
+  setAppState: null | setAppStateIF
+}
+export interface gameOptionsIF {
   possibleActivePatterns: {
     lineClear: boolean
   }
