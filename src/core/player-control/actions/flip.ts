@@ -2,7 +2,6 @@ import { eventDataIF } from '../../../interfaces'
 import { makeCopy } from '../../utils/utils'
 
 export default function actionFlip(eventData: eventDataIF) {
-
   
   const { strokeType, action } = eventData
 

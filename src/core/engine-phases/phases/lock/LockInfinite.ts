@@ -1,6 +1,6 @@
-import BasePhase from "./BasePhase";
-import { makeCopy } from "../../utils/utils";
-import { appStateIF, sharedHandlersIF, tetriminoIF } from "../../../interfaces";
+import BasePhase from "../BasePhase";
+import { makeCopy } from "../../../utils/utils";
+import { appStateIF, sharedHandlersIF, tetriminoIF } from "../../../../interfaces";
 
 export default class LockInfinite extends BasePhase {
 

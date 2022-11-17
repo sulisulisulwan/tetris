@@ -1,24 +1,34 @@
-import BasePhase from "./BasePhase";
-import { makeCopy } from "../../utils/utils";
-import { appStateIF, sharedHandlersIF, tetriminoIF } from "../../../interfaces";
+import BasePhase from "../BasePhase";
+import { makeCopy } from "../../../utils/utils";
+import { appStateIF,sharedHandlersIF, tetriminoIF } from "../../../../interfaces";
 
-export default class LockClassic extends BasePhase {
+export default class LockExtended extends BasePhase {
 
   constructor(sharedHandlers: sharedHandlersIF) {
     super(sharedHandlers)
   }
 
   execute() {
+    console.log('>>>> LOCK PHASE')
     const newState = {} as appStateIF
+
+    // First check that extended moves have been used up, and call for lockdown immediately if it's the case
+    if (this.localState.extendedLockdownMovesRemaining <= 0) {
+      this.lockDownTimeout()
+      return
+    }
 
     // If at the beginning of the lockdown phase (lockTimeout hasn't been set), set the lockdown timer
     if (!this.localState.lockTimeoutId) {
+
+      newState.postLockMode = true
       newState.lockTimeoutId = setTimeout(this.lockDownTimeout.bind(this), 500)
       this.setAppState(newState)
       return
     }
 
-    // Lockdown timer had already been set, so check if player has positioned the tetrimino to escape lock phase
+    // Lockdown timer had already been set, extended moves still exist, and player has made a change, 
+    // so check if player has positioned the tetrimino to escape lock phase
     const tetriminoCopy = makeCopy(this.localState.currentTetrimino)
     const playfieldCopy = makeCopy(this.localState.playfield)
 
@@ -88,7 +98,7 @@ export default class LockClassic extends BasePhase {
     const targetCoordsOnPlayfield = this.tetriminoMovementHandler.getPlayfieldCoords(tetriminoCopy, 'down')
     const playfieldNoTetrimino = this.tetriminoMovementHandler.removeTetriminoFromPlayfield(oldCoordsOnPlayfield, playfieldCopy)
     const targetCoordsClear = this.tetriminoMovementHandler.gridCoordsAreClear(targetCoordsOnPlayfield, playfieldNoTetrimino)
-
+    
     if (targetCoordsClear) {
       // Grant falling status if there is no surface below.
       newState.currentGamePhase = 'falling',

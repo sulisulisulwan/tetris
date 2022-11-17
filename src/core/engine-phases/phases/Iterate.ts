@@ -17,7 +17,6 @@ export default class Iterate extends BasePhase {
     this.setAppState(newState)
   }
 
-
 }
 
 /**

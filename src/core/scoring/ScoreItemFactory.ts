@@ -1,5 +1,4 @@
 import { appStateIF, genericObjectIF, lineClearPatternDataIF, patternDataIF, patternItemIF, scoreItemIF, sharedHandlersIF } from "../../interfaces"
-import { SharedScope } from "../SharedScope"
 
 export default class ScoreItemFactory {
 

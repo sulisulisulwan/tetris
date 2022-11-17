@@ -4,9 +4,10 @@ import {
   eliminatorsIF, 
   eliminator, 
   patternItemIF,
-  lineClearPatternDataIF
-} from "../../../interfaces";
-import BasePhase from "./BasePhase";
+} from "../../../../interfaces";
+
+import lineClearEliminator from "./eliminators/lineClear";
+import BasePhase from "../BasePhase";
 
 
 
@@ -18,7 +19,7 @@ export default class Eliminate extends BasePhase {
     super(sharedHandlers)
 
     this.eliminators = {
-      lineClear: this.lineClearEliminator.bind(this)
+      lineClear: lineClearEliminator.bind(this)
     }
   }
 
@@ -46,20 +47,6 @@ export default class Eliminate extends BasePhase {
       }
     })
 
-    return newPlayfield
-  }
-
-  private lineClearEliminator(playfield: string[][], patternData: lineClearPatternDataIF ): string[][] {
-
-    const filteredPlayfield = playfield.filter((row, index) => {
-      const isTargetRow = patternData.rowsToClear.includes(index) 
-      return !isTargetRow
-    })
-
-    let newRows = new Array(40 - filteredPlayfield.length).fill(null)
-    newRows = newRows.map(row => new Array(10).fill('[_]', 0, 10))
-    const newPlayfield = newRows.concat(filteredPlayfield)
-    this.soundEffects.lineClear.play()
     return newPlayfield
   }
 

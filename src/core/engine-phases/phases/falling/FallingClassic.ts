@@ -1,6 +1,6 @@
-import { appStateIF, sharedHandlersIF } from "../../../interfaces";
-import BasePhase from "./BasePhase";
-import ScoreItemFactory from "../../scoring/ScoreItemFactory";
+import { appStateIF, sharedHandlersIF } from "../../../../interfaces";
+import BasePhase from "../BasePhase";
+import ScoreItemFactory from "../../../scoring/ScoreItemFactory";
 
 export default class FallingClassic extends BasePhase {
 

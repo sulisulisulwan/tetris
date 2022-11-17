@@ -1,8 +1,6 @@
-import { actionItemIF, appStateIF, genericObjectIF, patternScannersIF, patternItemIF, possibleActivePatternsIF, scoreItemIF, sharedHandlersIF } from "../../../interfaces";
-import BasePhase from "./BasePhase";
-
-
-
+import { actionItemIF, appStateIF, genericObjectIF, patternScannersIF, patternItemIF, possibleActivePatternsIF, scoreItemIF, sharedHandlersIF } from "../../../../interfaces";
+import BasePhase from "../BasePhase";
+import lineClear from './scanners/lineClear'
 
 export default class Pattern extends BasePhase {
 
@@ -15,7 +13,7 @@ export default class Pattern extends BasePhase {
     super(sharedHandlers)
     this.patternsToMatch = this.loadPatternsToMatch(possibleActivePatterns)
     this.patternScanners = {
-      lineClear: this.lineClear.bind(this)
+      lineClear: lineClear.bind(this)
     }
   }
 
@@ -68,38 +66,6 @@ export default class Pattern extends BasePhase {
     }
 
     return patternsToLoad
-  }
-
-  private lineClear(): patternItemIF | null {
-    const rowsToClear: number[] = []
-    const { playfield } = this.localState
-
-    playfield.forEach((row, index) => {
-      if (row.every(square => square !== '[_]')) {
-        rowsToClear.push(index)
-      }
-    })
-
-    let lineClearPatternItem: patternItemIF | null = null
-
-    if (rowsToClear.length) {
-      lineClearPatternItem = {
-        type: 'lineClear',
-        action: 'eliminate',
-        stateUpdate: [
-          {
-            field: 'totalLinesCleared',
-            value: rowsToClear.length + this.localState.totalLinesCleared
-          }
-        ],
-        data: {
-          linesCleared: rowsToClear.length,
-          rowsToClear: rowsToClear
-        }
-      }  
-    }
-
-    return lineClearPatternItem
   }
 
 }

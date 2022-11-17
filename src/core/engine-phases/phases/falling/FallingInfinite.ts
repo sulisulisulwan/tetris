@@ -1,8 +1,8 @@
-import { appStateIF, sharedHandlersIF } from "../../../interfaces";
-import ScoreItemFactory from "../../scoring/ScoreItemFactory";
-import BasePhase from "./BasePhase";
+import { appStateIF, sharedHandlersIF } from "../../../../interfaces";
+import ScoreItemFactory from '../../../scoring/ScoreItemFactory'
+import BasePhase from "../BasePhase";
 
-export default class FallingExtended extends BasePhase {
+export default class FallingInfinite extends BasePhase {
 
   private scoreItemFactory: ScoreItemFactory
 
@@ -11,14 +11,8 @@ export default class FallingExtended extends BasePhase {
     this.scoreItemFactory = new ScoreItemFactory()
   }
 
-  /**
-   * Will re-trigger when:
-   * - Player makes any kind of move 
-   * - Continuous fall event set, triggered, or unset
-   * -  
-   */
   execute() {
-    console.log('>>>> FALLING EXTENDED PHASE')
+    console.log('>>>> FALLING PHASE')
 
     const newState = {} as appStateIF
 
@@ -98,19 +92,10 @@ export default class FallingExtended extends BasePhase {
         newState.totalScore = this.scoringHandler.updateScore(this.localState.totalScore, scoreItem)
       }
 
-
-      // If new tetrimino row is the newest low, update the newest low and reset the extended move count
-      const newTetriminoBaseRowIdx = this.tetriminoMovementHandler.getLowestPlayfieldRowOfTetrimino(newTetrimino)
-      if (newTetriminoBaseRowIdx > this.localState.lowestLockSurfaceRow) {
-        newState.lowestLockSurfaceRow = newTetriminoBaseRowIdx
-        newState.extendedLockdownMovesRemaining = 15
-      }
-
       newState.currentTetrimino = newTetrimino
       newState.playfield = newPlayfield
       newState.performedTSpin = false 
       newState.performedTSpinMini = false
-      newState.postLockMode = false
 
       // If new Tetrimino location has reached a surface, trigger lock phase
       const { successfulMove } = this.tetriminoMovementHandler.moveOne('down', newPlayfield, newTetrimino)
@@ -127,6 +112,7 @@ export default class FallingExtended extends BasePhase {
     }
     
     // This catches a case where the 15 move extension has depleted and the Tetrimino freezes in place during falling phase
+    // TODO: DETERMINE IF THIS IS NEEDED
     clearInterval(fallIntervalId)
     newState.fallIntervalId = null
     newState.currentGamePhase = 'lock'
