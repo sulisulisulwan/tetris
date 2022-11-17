@@ -14,20 +14,21 @@ import {
   LockClassic,
   LockExtended,
   LockInfinite,
+  UpdateScore,
   Pattern,
   Iterate,
   Animate,
   Eliminate,
   Completion,
   Off,
-  GameOver
+  GameOver,
 } from './'
 import { HoldQueue } from '../hold-queue/HoldQueue'
 import { 
   initialOptionsIF,
   appStateIF,
   sharedHandlersIF,
-  phases,
+  phasesIF,
   soundEffectsIF
 } from '../../interfaces'
 
@@ -36,7 +37,7 @@ export class Engine {
   public playerControl: PlayerControl
   private tetriminoMovementHandlersMap: Map<string, any>
   private scoringHandlerMap: Map<string, any>
-  private phases: phases
+  private phases: phasesIF
   private currentPhaseName: string
   private currentPhase: BasePhase
 
@@ -72,6 +73,7 @@ export class Engine {
       falling: this.setFallingPhase(initialOptions.lockMode, sharedHandlers),
       lock: this.setLockPhase(initialOptions.lockMode, sharedHandlers),
       pattern: new Pattern(sharedHandlers, initialOptions.possibleActivePatterns),
+      updateScore: new UpdateScore(sharedHandlers,),
       animate: new Animate(sharedHandlers),
       eliminate: new Eliminate(sharedHandlers),
       completion: new Completion(sharedHandlers),
@@ -126,7 +128,7 @@ export class Engine {
   }
 
   setCurrentPhase(phase: string) {
-    this.currentPhase = this.phases[phase as keyof phases]
+    this.currentPhase = this.phases[phase as keyof phasesIF]
   }
 
   setCurrentPhaseName(phaseName: string) {

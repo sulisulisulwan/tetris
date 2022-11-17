@@ -1,5 +1,5 @@
 import { appStateIF, sharedHandlersIF } from "../../../interfaces";
-import ScoreItemFactory from './ScoreItemFactory'
+import ScoreItemFactory from '../../scoring/ScoreItemFactory'
 import BasePhase from "./BasePhase";
 
 export default class FallingInfinite extends BasePhase {
@@ -8,7 +8,7 @@ export default class FallingInfinite extends BasePhase {
 
   constructor(sharedHandlers: sharedHandlersIF) {
     super(sharedHandlers)
-    this.scoreItemFactory = new ScoreItemFactory(sharedHandlers)
+    this.scoreItemFactory = new ScoreItemFactory()
   }
 
   execute() {
@@ -41,7 +41,6 @@ export default class FallingInfinite extends BasePhase {
       }
     }
 
-    console.log(this.localState.fallIntervalId  )
     if (this.localState.fallIntervalId === null) {
       newState.fallIntervalId = this.setContinuousFallEvent()
     }
@@ -89,7 +88,7 @@ export default class FallingInfinite extends BasePhase {
 
       // Handle softdrop scoring
       if (this.localState.playerAction.softdrop) {
-        const scoreItem = this.scoreItemFactory.getItem('softdrop', null)
+        const scoreItem = this.scoreItemFactory.getItem('softdrop', this.localState, null)
         newState.totalScore = this.scoringHandler.updateScore(this.localState.totalScore, scoreItem)
       }
 

@@ -18,7 +18,7 @@ export default class Eliminate extends BasePhase {
     super(sharedHandlers)
 
     this.eliminators = {
-      lineClear: this.lineClear.bind(this)
+      lineClear: this.lineClearEliminator.bind(this)
     }
   }
 
@@ -49,7 +49,7 @@ export default class Eliminate extends BasePhase {
     return newPlayfield
   }
 
-  private lineClear(playfield: string[][], patternData: lineClearPatternDataIF ): string[][] {
+  private lineClearEliminator(playfield: string[][], patternData: lineClearPatternDataIF ): string[][] {
 
     const filteredPlayfield = playfield.filter((row, index) => {
       const isTargetRow = patternData.rowsToClear.includes(index) 
@@ -58,8 +58,9 @@ export default class Eliminate extends BasePhase {
 
     let newRows = new Array(40 - filteredPlayfield.length).fill(null)
     newRows = newRows.map(row => new Array(10).fill('[_]', 0, 10))
-
-    return newRows.concat(filteredPlayfield)
+    const newPlayfield = newRows.concat(filteredPlayfield)
+    this.soundEffects.lineClear.play()
+    return newPlayfield
   }
 
 }

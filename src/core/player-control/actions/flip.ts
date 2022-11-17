@@ -34,24 +34,13 @@ export default function actionFlip(eventData: eventDataIF) {
   newState.scoringItemsForCompletion = this.localState.scoringItemsForCompletion
 
   if (performedTSpin) {
-    
-    newState.scoringItemsForCompletion.push({
-      scoringMethodName: 'tSpinNoLineClear', 
-      scoringData: {
-        currentScore: this.localState.totalScore,
-        currentLevel: this.localState.currentLevel
-      }
-    })
+    const scoreItem = this.scoreItemFactory.getItem('tSpinNoLineClear', this.localState)
+    newState.scoreItems.push(scoreItem)
   }
 
   if (performedTSpinMini) {
-    newState.scoringItemsForCompletion.push({
-      scoringMethodName: 'tSpinMiniNoLineClear', 
-      scoringData: {
-        currentScore: this.localState.totalScore,
-        currentLevel: this.localState.currentLevel
-      }
-    })
+    const scoreItem = this.scoreItemFactory.getItem('tSpinNoLineClear', this.localState)
+    newState.scoreItems.push(scoreItem)
   }
 
 

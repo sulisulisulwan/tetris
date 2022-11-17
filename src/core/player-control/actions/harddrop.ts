@@ -26,9 +26,11 @@ export default function actionHarddrop(eventData: eventDataIF) {
   const harddroppedTetrimino = this.tetriminoMovementHandler.getProjectedLandedTetrimino(playfield, currentTetrimino)
   const harddroppedTetriminoCoords = this.tetriminoMovementHandler.getPlayfieldCoords(harddroppedTetrimino)
   const currentTetriminoCoords = this.tetriminoMovementHandler.getPlayfieldCoords(currentTetrimino)
-  const linesDropped = harddroppedTetriminoCoords[0] - currentTetriminoCoords[0]
 
-  const scoreItem = this.scoreItemFactory.getItem('harddrop', { linesDropped })
+  const linesDropped = harddroppedTetriminoCoords[0][0] - currentTetriminoCoords[0][0]
+
+  console.log('linesDropped', linesDropped)
+  const scoreItem = this.scoreItemFactory.getItem('harddrop', this.localState, { linesDropped })
   newState.totalScore = this.scoringHandler.updateScore(this.localState.totalScore, scoreItem)
 
   clearTimeout(this.localState.fallIntervalId)

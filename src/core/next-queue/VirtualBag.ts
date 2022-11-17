@@ -5,13 +5,13 @@ export class VirtualBag {
 
   constructor() {
     this.tetriminos = [
-      'ITetrimino', 
-      'OTetrimino', 
-      'STetrimino', 
-      'ZTetrimino',
+      // 'ITetrimino', 
+      // 'OTetrimino', 
+      // 'STetrimino', 
+      // 'ZTetrimino',
+      // 'JTetrimino', 
+      // 'LTetrimino',
       'TTetrimino',
-      'JTetrimino', 
-      'LTetrimino'
     ]
     this.bag = this.getShuffledTetriminos() || []
   }

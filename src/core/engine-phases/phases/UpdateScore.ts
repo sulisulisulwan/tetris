@@ -1,6 +1,6 @@
 import { appStateIF, genericObjectIF, scoreItemIF, sharedHandlersIF } from "../../../interfaces";
 import BasePhase from "./BasePhase";
-import ScoreItemFactory from "./ScoreItemFactory";
+import ScoreItemFactory from "../../scoring/ScoreItemFactory";
 
 export default class UpdateScore extends BasePhase {
 
@@ -8,7 +8,7 @@ export default class UpdateScore extends BasePhase {
 
   constructor(sharedHandlers: sharedHandlersIF) {
     super(sharedHandlers)
-    this.scoreItemFactory = new ScoreItemFactory(sharedHandlers)
+    this.scoreItemFactory = new ScoreItemFactory()
   }
 
   public execute() {
@@ -19,7 +19,7 @@ export default class UpdateScore extends BasePhase {
       this.promoteLevel(newState)
     }
 
-    newState.scoringItems = []
+    newState.scoreItems = []
     newState.totalScore = newTotalScore
     newState.currentGamePhase = 'animate'
     this.setAppState(newState)
@@ -40,7 +40,7 @@ export default class UpdateScore extends BasePhase {
 
     patternItems.forEach(pattern => {
       const { type, data } = pattern
-      scoreItems.push(this.scoreItemFactory.getItem(type, data))
+      scoreItems.push(this.scoreItemFactory.getItem(type, this.localState, data))
       scoreHistory[type as keyof genericObjectIF] = true
     })
 

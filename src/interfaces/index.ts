@@ -18,12 +18,13 @@ import {
   Eliminate,
   Completion,
   Iterate,
+  UpdateScore,
   GameOver
 } from "../core/engine-phases"
 import { BaseAward } from "../core/scoring/awards/BaseAward"
 import { BaseScoringHandler } from "../core/scoring/modes/BaseScoringHandler"
 
-export interface phases {
+export interface phasesIF {
   off: Off
   pregame: Pregame
   generation: Generation
@@ -35,6 +36,7 @@ export interface phases {
   completion: Completion
   iterate: Iterate
   gameOver: GameOver
+  updateScore: UpdateScore
 }
 export type setAppStateIF = React.Dispatch<React.SetStateAction<appStateIF>>
 
@@ -75,7 +77,7 @@ export declare interface appStateIF {
   postLockMode: boolean
   currentLevel: number
   patternItems: patternItemIF[]
-  scoringItems: scoreItemIF[]
+  scoreItems: scoreItemIF[]
   levelClearedLinesGoal: number
   fallSpeed: number
   totalLinesCleared: number
@@ -103,9 +105,14 @@ export type lineClearScoringDataIF = {
   backToBack?: boolean
 }
 
+export interface stateUpdateIF {
+  field: string | null
+  value: number | string | null
+}
 export interface patternItemIF {
   type: string
   action: string
+  stateUpdate: stateUpdateIF[] | null
   data: patternDataIF
 }
 

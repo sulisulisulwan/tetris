@@ -1,12 +1,12 @@
 import { SharedScope } from "../SharedScope"
 import { actionLeftAndRight, actionFlip, actionSoftdrop, actionHarddrop, actionHold, actionPauseGame } from "./actions"
 import { appStateIF, eventDataIF, playerActionHandlersIF, sharedHandlersIF } from "../../interfaces"
-import ScoreItemFactory from "../engine-phases/phases/ScoreItemFactory"
+import ScoreItemFactory from "../scoring/ScoreItemFactory"
 
 export class PlayerControl extends SharedScope {
 
   private keystrokeMap: Map<string, string>
-  private scoreItemFactory: ScoreItemFactory
+  protected scoreItemFactory: ScoreItemFactory
   private playerActions: playerActionHandlersIF
   constructor(sharedHandlers: sharedHandlersIF) {
 
@@ -46,7 +46,7 @@ export class PlayerControl extends SharedScope {
       pauseGame: actionPauseGame.bind(this)
     }
 
-    this.scoreItemFactory = new ScoreItemFactory(sharedHandlers)
+    this.scoreItemFactory = new ScoreItemFactory()
 
   }
 
@@ -63,8 +63,6 @@ export class PlayerControl extends SharedScope {
       strokeType: e.type,
       action: this.keystrokeMap.get(e.key)
     }
-
-    
 
     if (eventData.action === 'left' 
       || eventData.action === 'right'
@@ -97,17 +95,14 @@ export class PlayerControl extends SharedScope {
 
   right(eventData: eventDataIF) {
     actionLeftAndRight(eventData)
-    this.soundEffects.tetriminoMove.play()
   }
 
   flipCounterClockwise(eventData: eventDataIF) {
     actionFlip(eventData)
-    this.soundEffects.tetriminoMove.play()
   }
   
   flipClockwise(eventData: eventDataIF) {
     actionFlip(eventData)
-    this.soundEffects.tetriminoMove.play()
   }
 
   softdrop(eventData: eventDataIF) {

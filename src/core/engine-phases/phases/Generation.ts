@@ -26,7 +26,6 @@ export default class Generation extends BasePhase {
       this.setAppState(newState)
       return
     }
-    console.log('this ran')
     
     // Place dequeued tetrimino in playfield
     let newPlayfield = this.tetriminoMovementHandler.addTetriminoToPlayfield(targetStartingCoords, playfield, newTetrimino.minoGraphic)

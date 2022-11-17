@@ -14,6 +14,7 @@ import Pregame from './phases/Pregame'
 import Off from './phases/Off'
 import GameOver from './phases/GameOver'
 import BasePhase from './phases/BasePhase'
+import UpdateScore from './phases/UpdateScore'
 
 export {
   BasePhase,
@@ -29,6 +30,7 @@ export {
   Generation,
   Iterate,
   Pattern,
+  UpdateScore,
   Pregame,
   Off,
   GameOver

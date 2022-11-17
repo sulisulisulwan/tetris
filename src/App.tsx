@@ -8,6 +8,10 @@ import { Engine } from './core/engine-phases/Engine'
 import { appStateIF, initialOptionsIF, setAppStateIF, soundEffectsIF } from './interfaces'
 import { makeCopy } from './core/utils/utils'
 
+import { TestPlayfields } from '../__tests__/test-playfields/testPlayfields'
+const newTestPlayfields = new TestPlayfields()
+
+
 class App extends React.Component<{}, appStateIF> {
 
   readonly backgrounds: { [key: string]: string }
@@ -33,7 +37,8 @@ class App extends React.Component<{}, appStateIF> {
       view: 'title',
 
       currentTetrimino: null,
-      playfield: this.getInitialPlayfield(),
+      // playfield: this.getInitialPlayfield(),
+      playfield: newTestPlayfields.backToBackTSpin,
 
       gameMode: 'classic',
       nextQueue: null,
@@ -73,7 +78,7 @@ class App extends React.Component<{}, appStateIF> {
       currentLevel: 1,
 
       patternItems: [],
-      scoringItems: [],
+      scoreItems: [],
       levelClearedLinesGoal: 5, // this is a fixed goal system
       fallSpeed: 1000,
       totalLinesCleared: 0,

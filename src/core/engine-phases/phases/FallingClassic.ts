@@ -1,6 +1,6 @@
 import { appStateIF, sharedHandlersIF } from "../../../interfaces";
 import BasePhase from "./BasePhase";
-import ScoreItemFactory from "./ScoreItemFactory";
+import ScoreItemFactory from "../../scoring/ScoreItemFactory";
 
 export default class FallingClassic extends BasePhase {
 
@@ -8,7 +8,7 @@ export default class FallingClassic extends BasePhase {
 
   constructor(sharedHandlers: sharedHandlersIF) {
     super(sharedHandlers)
-    this.scoreItemFactory = new ScoreItemFactory(sharedHandlers)
+    this.scoreItemFactory = new ScoreItemFactory()
   }
 
   execute() {
@@ -86,7 +86,7 @@ export default class FallingClassic extends BasePhase {
 
       // Handle softdrop scoring
       if (this.localState.playerAction.softdrop) {
-        const scoreItem = this.scoreItemFactory.getItem('softdrop', null)
+        const scoreItem = this.scoreItemFactory.getItem('softdrop', this.localState, null)
         newState.totalScore = this.scoringHandler.updateScore(this.localState.totalScore, scoreItem)
       }
 

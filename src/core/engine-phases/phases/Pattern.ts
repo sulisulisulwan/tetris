@@ -21,10 +21,25 @@ export default class Pattern extends BasePhase {
 
   execute() {
     // console.log('>>>> PATTERN PHASE')
-    const newState = {} as appStateIF
-    newState.patternItems = this.runPatternScanners() 
+    const foundPatterns = this.runPatternScanners() 
+    const newState = this.deriveNewStatePropsFromPatterns(foundPatterns) as appStateIF
+    newState.patternItems = foundPatterns
     newState.currentGamePhase = newState.patternItems.length ? 'updateScore' : 'completion' // If there are no patterns to process through elimination, animation, and iteration, skip to completion.
     this.setAppState(newState)
+  }
+
+  private deriveNewStatePropsFromPatterns(foundPatterns: patternItemIF[]) {
+    const newState: genericObjectIF = {}
+    foundPatterns.forEach(patternItem => {
+      const { stateUpdate } = patternItem
+      if (stateUpdate) {
+        stateUpdate.forEach(update => {
+          const { field, value } = update
+          newState[field as keyof genericObjectIF] = value
+        })
+      }
+    })
+    return newState
   }
 
   private runPatternScanners() {
@@ -71,6 +86,12 @@ export default class Pattern extends BasePhase {
       lineClearPatternItem = {
         type: 'lineClear',
         action: 'eliminate',
+        stateUpdate: [
+          {
+            field: 'totalLinesCleared',
+            value: rowsToClear.length + this.localState.totalLinesCleared
+          }
+        ],
         data: {
           linesCleared: rowsToClear.length,
           rowsToClear: rowsToClear
