@@ -1,10 +1,14 @@
 import { appStateIF, sharedHandlersIF } from "../../../interfaces";
+import ScoreItemFactory from "./ScoreItemFactory";
 import BasePhase from "./BasePhase";
 
 export default class FallingExtended extends BasePhase {
 
+  private scoreItemFactory: ScoreItemFactory
+
   constructor(sharedHandlers: sharedHandlersIF) {
     super(sharedHandlers)
+    this.scoreItemFactory = new ScoreItemFactory(sharedHandlers)
   }
 
   /**
@@ -90,20 +94,10 @@ export default class FallingExtended extends BasePhase {
 
       // Handle softdrop scoring
       if (this.localState.playerAction.softdrop) {
-        const scoreItem = { 
-          scoringMethodName: 'softdrop', 
-          scoringData: {}
-        }
-        newState.scoringHistoryPerCycle = this.localState.scoringHistoryPerCycle
-        
-        if (!newState.scoringHistoryPerCycle.softdrop) {
-          newState.scoringHistoryPerCycle.softdrop = []
-        }
-        newState.scoringHistoryPerCycle.softdrop.push(scoreItem.scoringData)
-
-        const currentScore = this.localState.totalScore
-        newState.totalScore = this.scoringHandler.updateScore(currentScore, scoreItem)
+        const scoreItem = this.scoreItemFactory.getItem('softdrop', null)
+        newState.totalScore = this.scoringHandler.updateScore(this.localState.totalScore, scoreItem)
       }
+
 
       // If new tetrimino row is the newest low, update the newest low and reset the extended move count
       const newTetriminoBaseRowIdx = this.tetriminoMovementHandler.getLowestPlayfieldRowOfTetrimino(newTetrimino)

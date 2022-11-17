@@ -1,4 +1,4 @@
-import { scoringDataIF, scoreItemIF, scoringHistoryPerCycleIF, scoringMethodsIF } from "../../../interfaces"
+import { genericObjectIF, scoreItemIF, scoringHistoryPerCycleIF, scoringMethodsIF } from "../../../interfaces"
 
 export abstract class BaseScoringHandler {
 
@@ -18,20 +18,20 @@ export abstract class BaseScoringHandler {
   // scoreContext can be passed from any part of the Application for any reason
   public updateScore(currentScore: number, scoreItem: scoreItemIF) {
 
-    const { scoringMethodName, scoringData } = scoreItem
-    const scoringMethod = this.scoringMethods[scoringMethodName as keyof scoringMethodsIF]
-    return scoringMethod(currentScore, scoringData)
+    const { type, data } = scoreItem
+    const scoringMethod = this.scoringMethods[type as keyof scoringMethodsIF]
+    return scoringMethod(currentScore, data)
   }
   // Executed within PlayerAction or Falling Phase
-  protected abstract softdrop(currentScore: number, scoringData: scoringDataIF): number
+  protected abstract softdrop(currentScore: number, scoringData: genericObjectIF): number
 
-  protected abstract harddrop(currentScore: number, scoringData: scoringDataIF): number
+  protected abstract harddrop(currentScore: number, scoringData: genericObjectIF): number
 
-  protected abstract lineClear(currentScore: number, scoringData: scoringDataIF): number
+  protected abstract lineClear(currentScore: number, scoringData: genericObjectIF): number
 
-  protected abstract tSpinNoLineClear(currentScore: number, scoringData: scoringDataIF): number
+  protected abstract tSpinNoLineClear(currentScore: number, scoringData: genericObjectIF): number
   
-  protected abstract tSpinMiniNoLineClear(currentScore: number, scoringData: scoringDataIF): number
+  protected abstract tSpinMiniNoLineClear(currentScore: number, scoringData: genericObjectIF): number
   
 
 }

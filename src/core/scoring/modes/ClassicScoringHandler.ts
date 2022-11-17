@@ -1,4 +1,4 @@
-import { scoringDataIF, scoreItemIF, scoringHistoryPerCycleIF } from "../../../interfaces"
+import { genericObjectIF, scoreItemIF, scoringHistoryPerCycleIF } from "../../../interfaces"
 import { 
   LineClearAward,
   SoftdropAward,
@@ -43,9 +43,9 @@ export class ClassicScoringHandler extends BaseScoringHandler {
   ): number {
 
     const filteredScoringContexts = scoreItemsForCompletion.filter((scoreItem: scoreItemIF) => {
-      const { scoringMethodName } = scoreItem
+      const { type } = scoreItem
 
-      if (scoringMethodName === 'tSpinNoLineClear' || scoringMethodName === 'tSpinMiniNoLineClear') {
+      if (type === 'tSpinNoLineClear' || type === 'tSpinMiniNoLineClear') {
         // skip this context as lineClear is the priority
         return scoringHistoryPerCycle.lineClear ? false : true
       }
@@ -62,30 +62,28 @@ export class ClassicScoringHandler extends BaseScoringHandler {
   }
 
   // Executed within PlayerAction or Falling Phase
-  softdrop(currentScore: number, scoringData: scoringDataIF) {
-
-    console.log('here')
+  softdrop(currentScore: number, scoringData: genericObjectIF) {
     const newTotalScore = this.awardSoftdrop.calculateScore(currentScore, scoringData)
     return newTotalScore
   }
 
-  harddrop(currentScore: number, scoringData: scoringDataIF) {
+  harddrop(currentScore: number, scoringData: genericObjectIF) {
     const newTotalScore = this.awardHarddrop.calculateScore(currentScore, scoringData)
     return newTotalScore
   }
 
   // Executed in Completion Phase
-  lineClear(currentScore: number, scoringData: scoringDataIF) {
+  lineClear(currentScore: number, scoringData: genericObjectIF) {
     const newTotalScore = this.awardLineClear.calculateScore(currentScore, scoringData)
     return newTotalScore
   }
 
-  tSpinNoLineClear(currentScore: number, scoringData: scoringDataIF) {
+  tSpinNoLineClear(currentScore: number, scoringData: genericObjectIF) {
     const newTotalScore = this.awardTSpinNoLineClear.calculateScore(currentScore, scoringData)
     return newTotalScore
   }
   
-  tSpinMiniNoLineClear(currentScore: number, scoringData: scoringDataIF) {
+  tSpinMiniNoLineClear(currentScore: number, scoringData: genericObjectIF) {
     const newTotalScore = this.awardTSpinMiniNoLineClear.calculateScore(currentScore, scoringData)
     return newTotalScore  
   }

@@ -1,12 +1,12 @@
-import { coordinates, GenericObjectInterface } from "../../interfaces"
+import { coordinates, genericObjectIF } from "../../interfaces"
 
 const makeCopy = (objOrArray: object) => {
 
   if (Array.isArray(objOrArray)) {
-    const obj: GenericObjectInterface = {} 
+    const obj: genericObjectIF = {} 
 
     objOrArray.forEach((row: string[], i: number) => {
-      obj[i as keyof GenericObjectInterface] = {}
+      obj[i as keyof genericObjectIF] = {}
       row.forEach((square: string, j: number) => {
         obj[i][j] = square
       })

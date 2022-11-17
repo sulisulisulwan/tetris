@@ -1,11 +1,12 @@
 import { SharedScope } from "../SharedScope"
 import { actionLeftAndRight, actionFlip, actionSoftdrop, actionHarddrop, actionHold, actionPauseGame } from "./actions"
 import { appStateIF, eventDataIF, playerActionHandlersIF, sharedHandlersIF } from "../../interfaces"
+import ScoreItemFactory from "../engine-phases/phases/ScoreItemFactory"
 
 export class PlayerControl extends SharedScope {
 
   private keystrokeMap: Map<string, string>
-
+  private scoreItemFactory: ScoreItemFactory
   private playerActions: playerActionHandlersIF
   constructor(sharedHandlers: sharedHandlersIF) {
 
@@ -44,6 +45,8 @@ export class PlayerControl extends SharedScope {
       hold: actionHold.bind(this),
       pauseGame: actionPauseGame.bind(this)
     }
+
+    this.scoreItemFactory = new ScoreItemFactory(sharedHandlers)
 
   }
 

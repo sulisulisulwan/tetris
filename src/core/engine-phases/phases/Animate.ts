@@ -10,9 +10,13 @@ export default class Animate extends BasePhase {
   execute() {
     // console.log('>>>> ANIMATE PHASE')
 
+    // iterate through all this.localState.patternItems and handle animation execution depending on patternItem.type 
+
     const newState = {} as appStateIF
     newState.currentGamePhase = 'eliminate'
     this.setAppState(newState)
+
+
   }
 }
 

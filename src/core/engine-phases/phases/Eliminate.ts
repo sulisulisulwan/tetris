@@ -1,9 +1,10 @@
 import { 
   appStateIF, 
   sharedHandlersIF, 
-  eliminationActionsIF, 
   eliminatorsIF, 
-  eliminator 
+  eliminator, 
+  patternItemIF,
+  lineClearPatternDataIF
 } from "../../../interfaces";
 import BasePhase from "./BasePhase";
 
@@ -21,48 +22,43 @@ export default class Eliminate extends BasePhase {
     }
   }
 
-  execute() {
+  public execute() {
     // console.log('>>>> ELIMINATE PHASE')
-
     const newState = {} as appStateIF
-    
     const newPlayfield = this.runEliminators()
     
-    newState.currentGamePhase = 'completion',
+    newState.currentGamePhase = 'iterate',
     newState.playfield = newPlayfield
 
     this.setAppState(newState)
   }
 
-  // We will have to refactor the pattern/elimination routines so
-  // that we create a "marked" playfield as opposed to a list of
-  // indices to remove.  This would allow us to eliminate minos from
-  // the playfield, update the playfield with each eliminate action,
-  // and still be able to target minos with subsequent actions.  currently
-  // subsequent actions will break as indices and individual squares 
-  // can't be updated in an easy way.
-  runEliminators() {
-    const actions = this.localState.eliminationActions as eliminationActionsIF[]
+  private runEliminators() {
+
+    const patternsFound = this.localState.patternItems as patternItemIF[]
     let newPlayfield = this.localState.playfield
 
-    for (let i = 0; i < actions.length; i += 1) {
-      const action = actions[i]
-      const { eliminatorName, actionData } = action
-      const eliminator: eliminator = this.eliminators[eliminatorName as keyof eliminatorsIF]
-      newPlayfield = eliminator(newPlayfield, actionData)
-    }
+    patternsFound.forEach(pattern => {
+      if (pattern.action === 'eliminate') {
+        const { type, data } = pattern
+        const eliminator: eliminator = this.eliminators[type as keyof eliminatorsIF]
+        newPlayfield = eliminator(newPlayfield, data)
+      }
+    })
 
     return newPlayfield
   }
 
-  lineClear(playfield: string[], actionData: any /** TODO: make this stronger  A generic maybe??? */) {
+  private lineClear(playfield: string[][], patternData: lineClearPatternDataIF ): string[][] {
+
     const filteredPlayfield = playfield.filter((row, index) => {
-      const isTargetRow = actionData.includes(index) 
+      const isTargetRow = patternData.rowsToClear.includes(index) 
       return !isTargetRow
     })
 
     let newRows = new Array(40 - filteredPlayfield.length).fill(null)
     newRows = newRows.map(row => new Array(10).fill('[_]', 0, 10))
+
     return newRows.concat(filteredPlayfield)
   }
 

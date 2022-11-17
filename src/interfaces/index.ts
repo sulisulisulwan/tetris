@@ -73,9 +73,9 @@ export declare interface appStateIF {
   extendedLockdownMovesRemaining: number
   lowestLockSurfaceRow: null | number
   postLockMode: boolean
-  eliminationActions: eliminationActionsIF[]
   currentLevel: number
-  scoringItemsForCompletion: scoreItemIF[]
+  patternItems: patternItemIF[]
+  scoringItems: scoreItemIF[]
   levelClearedLinesGoal: number
   fallSpeed: number
   totalLinesCleared: number
@@ -89,11 +89,11 @@ export declare interface appStateIF {
 }
 
 export interface scoringHistoryPerCycleIF {
-  softdrop?: scoringDataIF[]
+  softdrop?: lineClearScoringDataIF[]
   lineClear?: boolean
 }
 
-export type scoringDataIF = { 
+export type lineClearScoringDataIF = { 
   currentScore?: number 
   linesDropped?: number
   currentLevel?: number
@@ -103,14 +103,22 @@ export type scoringDataIF = {
   backToBack?: boolean
 }
 
-export interface scoreItemIF {
-  scoringMethodName: string
-  scoringData: scoringDataIF
+export interface patternItemIF {
+  type: string
+  action: string
+  data: patternDataIF
 }
 
-export interface eliminationActionsIF {
-  eliminatorName: string
-  actionData: any // TODO: this needs to be updated
+export type patternDataIF = lineClearPatternDataIF
+
+export interface lineClearPatternDataIF {
+  rowsToClear: number[]
+  linesCleared: number
+}
+
+export interface scoreItemIF {
+  type: string
+  data: genericObjectIF | lineClearScoringDataIF
 }
 
 export type eliminator = (playfield: string[][], actionData: any /* TODO: make this stronger*/) => string[][]
@@ -193,7 +201,7 @@ export interface gameOptionsIF {
   lockMode: string
   setAppState: null | setAppStateIF
 }
-export interface GenericObjectInterface {
+export interface genericObjectIF {
   [key: string]: any
 }
 

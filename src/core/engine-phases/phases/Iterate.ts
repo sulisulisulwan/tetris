@@ -10,10 +10,13 @@ export default class Iterate extends BasePhase {
   execute() {
     // console.log('>>>> ITERATE PHASE')
     const newState = {} as appStateIF
-    newState.currentGamePhase = 'animate'
+
+    const todoCondition: undefined = undefined
+    newState.currentGamePhase = todoCondition ? 'pattern' : 'completion'/**TODO: This will be replaced with a condition where the game mode requires pattern scans after eliminations */ 
 
     this.setAppState(newState)
   }
+
 
 }
 

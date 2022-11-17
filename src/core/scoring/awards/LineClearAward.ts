@@ -1,4 +1,4 @@
-import { scoringDataIF } from "../../../interfaces"
+import { genericObjectIF } from "../../../interfaces"
 import { BaseAward } from "./BaseAward"
 
 export class LineClearAward extends BaseAward {
@@ -20,7 +20,7 @@ export class LineClearAward extends BaseAward {
   }
 
 
-  public calculateScore(currentScore: number, scoringData: scoringDataIF): number {
+  public calculateScore(currentScore: number, scoringData: genericObjectIF): number {
 
     const { currentLevel, linesCleared, performedTSpin, performedTSpinMini, backToBack } = scoringData
     let totalScore = currentScore

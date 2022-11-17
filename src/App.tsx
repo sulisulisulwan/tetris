@@ -70,10 +70,10 @@ class App extends React.Component<{}, appStateIF> {
       lowestLockSurfaceRow: null,
       postLockMode: false,
 
-      eliminationActions: [],
-
       currentLevel: 1,
-      scoringItemsForCompletion: [],
+
+      patternItems: [],
+      scoringItems: [],
       levelClearedLinesGoal: 5, // this is a fixed goal system
       fallSpeed: 1000,
       totalLinesCleared: 0,

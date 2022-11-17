@@ -1,5 +1,5 @@
-import { scoringDataIF } from "../../../interfaces";
+import { genericObjectIF } from "../../../interfaces";
 
 export abstract class BaseAward {
-  public abstract calculateScore(currentScore: number, scoringData: scoringDataIF): number
+  public abstract calculateScore(currentScore: number, scoringData: genericObjectIF): number
 }

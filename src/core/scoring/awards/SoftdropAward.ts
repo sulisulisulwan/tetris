@@ -1,7 +1,7 @@
-import { scoringDataIF } from "../../../interfaces";
+import { genericObjectIF } from "../../../interfaces";
 
 export class SoftdropAward {
-  public calculateScore(currentScore: number, scoringData: scoringDataIF): number {
+  public calculateScore(currentScore: number, scoringData: genericObjectIF): number {
     return currentScore + 1
   }
 }

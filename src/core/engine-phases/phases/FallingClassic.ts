@@ -1,10 +1,14 @@
 import { appStateIF, sharedHandlersIF } from "../../../interfaces";
 import BasePhase from "./BasePhase";
+import ScoreItemFactory from "./ScoreItemFactory";
 
 export default class FallingClassic extends BasePhase {
 
+  private scoreItemFactory: ScoreItemFactory
+
   constructor(sharedHandlers: sharedHandlersIF) {
     super(sharedHandlers)
+    this.scoreItemFactory = new ScoreItemFactory(sharedHandlers)
   }
 
   execute() {
@@ -82,20 +86,8 @@ export default class FallingClassic extends BasePhase {
 
       // Handle softdrop scoring
       if (this.localState.playerAction.softdrop) {
-        const scoringData = { currentScore: this.localState.totalScore }
-        const scoreItem = { 
-          scoringMethodName: 'softdrop', 
-          scoringData 
-        }
-        newState.scoringHistoryPerCycle = this.localState.scoringHistoryPerCycle
-        
-        if (!newState.scoringHistoryPerCycle.softdrop) {
-          newState.scoringHistoryPerCycle.softdrop = []
-        }
-        newState.scoringHistoryPerCycle.softdrop.push(scoringData)
-        
-        const currentScore = this.localState.totalScore
-        newState.totalScore = this.scoringHandler.updateScore(currentScore, scoreItem)
+        const scoreItem = this.scoreItemFactory.getItem('softdrop', null)
+        newState.totalScore = this.scoringHandler.updateScore(this.localState.totalScore, scoreItem)
       }
 
       newState.currentTetrimino = newTetrimino

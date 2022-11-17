@@ -1,16 +1,19 @@
-import { actionItemIF, appStateIF, patternScannersIF, possibleActivePatternsIF, scoreItemIF, sharedHandlersIF } from "../../../interfaces";
+import { actionItemIF, appStateIF, genericObjectIF, patternScannersIF, patternItemIF, possibleActivePatternsIF, scoreItemIF, sharedHandlersIF } from "../../../interfaces";
 import BasePhase from "./BasePhase";
+
+
+
 
 export default class Pattern extends BasePhase {
 
-  private loadedPatterns: string[]
+  private patternsToMatch: string[]
   private patternScanners: patternScannersIF
   constructor(
     sharedHandlers: sharedHandlersIF, 
     possibleActivePatterns: possibleActivePatternsIF
   ) {
     super(sharedHandlers)
-    this.loadedPatterns = this.loadPatterns(possibleActivePatterns)
+    this.patternsToMatch = this.loadPatternsToMatch(possibleActivePatterns)
     this.patternScanners = {
       lineClear: this.lineClear.bind(this)
     }
@@ -18,63 +21,28 @@ export default class Pattern extends BasePhase {
 
   execute() {
     // console.log('>>>> PATTERN PHASE')
-
     const newState = {} as appStateIF
-    newState.scoringItemsForCompletion = this.localState.scoringItemsForCompletion as scoreItemIF[]
-    newState.currentGamePhase = 'iterate'
-    newState.eliminationActions = this.runPatternScanners() 
-    newState.scoringHistoryPerCycle = this.localState.scoringHistoryPerCycle
-    newState.eliminationActions.forEach(action => {
-
-      switch (action.eliminatorName) {
-        case 'lineClear':
-          const { performedTSpinMini, performedTSpin, currentLevel } = this.localState
-          const linesCleared = action.actionData.length
-          newState.backToBack = linesCleared === 4 || (performedTSpin || performedTSpinMini) ? true : false
-          newState.scoringHistoryPerCycle.lineClear = true
-          newState.totalLinesCleared = this.localState.totalLinesCleared + action.actionData.length
-
-          const scoringData = { 
-            currentLevel: currentLevel,
-            linesCleared: linesCleared, 
-            performedTSpin: performedTSpin,
-            performedTSpinMini: performedTSpinMini,
-            backToBack: newState.backToBack && this.localState.backToBack ? true : false // First back to back qualifier in chain doesn't count
-          }
-
-          const scoreItem = {
-            scoringMethodName: 'lineClear',
-            scoringData
-          }
-
-          this.soundEffects.lineClear.play()
-          
-          newState.scoringItemsForCompletion.push(scoreItem)
-
-          break
-        default:
-          break
-      }
-
-    })
-
+    newState.patternItems = this.runPatternScanners() 
+    newState.currentGamePhase = newState.patternItems.length ? 'updateScore' : 'completion' // If there are no patterns to process through elimination, animation, and iteration, skip to completion.
     this.setAppState(newState)
   }
 
-  runPatternScanners() {
-    const patterns = this.loadedPatterns
-    const actions: actionItemIF[] = []
-    patterns.forEach(pattern => {
+  private runPatternScanners() {
+    const patternsToMatch = this.patternsToMatch
+    const foundPatterns: patternItemIF[] = []
+
+    patternsToMatch.forEach(pattern => {
       const scanner = this.patternScanners[pattern as keyof patternScannersIF]
-      const action = scanner()
-      if (action) { 
-        actions.push(action)
+      const foundPattern = scanner()
+      if (foundPattern) { 
+        foundPatterns.push(foundPattern)
       }
     })
-    return actions
+
+    return foundPatterns
   }
 
-  loadPatterns(possibleActivePatterns: possibleActivePatternsIF): string[] {
+  private loadPatternsToMatch(possibleActivePatterns: possibleActivePatternsIF): string[] {
     const patternsToLoad = []
 
     for (const pattern in possibleActivePatterns) {
@@ -87,9 +55,7 @@ export default class Pattern extends BasePhase {
     return patternsToLoad
   }
 
-  // In this phase, we only mark the lines to be cleared.  We can map the return action object to functions in future phases
-  // that take care of playfield clearing, animations, etc.
-  lineClear(): actionItemIF | null {
+  private lineClear(): patternItemIF | null {
     const rowsToClear: number[] = []
     const { playfield } = this.localState
 
@@ -99,12 +65,20 @@ export default class Pattern extends BasePhase {
       }
     })
 
-    const actionItem = { 
-      eliminatorName: 'lineClear', 
-      actionData: rowsToClear 
-    } 
+    let lineClearPatternItem: patternItemIF | null = null
 
-    return rowsToClear.length ? actionItem : null
+    if (rowsToClear.length) {
+      lineClearPatternItem = {
+        type: 'lineClear',
+        action: 'eliminate',
+        data: {
+          linesCleared: rowsToClear.length,
+          rowsToClear: rowsToClear
+        }
+      }  
+    }
+
+    return lineClearPatternItem
   }
 
 }
