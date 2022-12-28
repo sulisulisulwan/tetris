@@ -1,14 +1,14 @@
 import * as React from 'react'
-
-import PlayView from './visual-components/PlayView/PlayView'
-import TitleView from './visual-components/TitleView/TitleView'
-import {SinglePlayer, MultiPlayer, Options, HighScore, Help} from './visual-components/TitleView/menuOptions'
 import { Engine } from './core/engine-phases/Engine'
 
-import { appStateIF, initialOptionsIF, setAppStateIF, soundEffectsIF } from './interfaces'
+import { appStateIF, setAppStateIF, soundEffectsIF } from './interfaces'
 import { makeCopy } from './core/utils/utils'
 
 import { TestPlayfields } from '../__tests__/test-playfields/testPlayfields'
+import { getView } from './getView'
+import { soundEffectsConfig, soundEffectsConfigIF } from './soundEffectsToSet'
+import { getBackgrounds } from './getBackgrounds'
+
 const newTestPlayfields = new TestPlayfields()
 
 
@@ -16,7 +16,6 @@ class App extends React.Component<{}, appStateIF> {
 
   readonly backgrounds: { [key: string]: string }
   private engine: Engine | null
-  private playerKeystrokeHandler: React.KeyboardEventHandler
   public soundEffects: soundEffectsIF
 
   constructor(props: appStateIF) {
@@ -37,8 +36,8 @@ class App extends React.Component<{}, appStateIF> {
       view: 'title',
 
       currentTetrimino: null,
-      // playfield: this.getInitialPlayfield(),
-      playfield: newTestPlayfields.backToBackTSpin,
+      playfield: this.getInitialPlayfield(),
+      // playfield: newTestPlayfields.backToBackTSpin,
 
       gameMode: 'classic',
       nextQueue: null,
@@ -93,16 +92,7 @@ class App extends React.Component<{}, appStateIF> {
       ghostCoords: []
     }
 
-    this.backgrounds = {
-      gameActive: "https://img.freepik.com/free-photo/cool-geometric-triangular-figure-neon-laser-light-great-backgrounds_181624-11068.jpg?w=2000&t=st=1668228722~exp=1668229322~hmac=1e4c1bc515bd4d2d6c9146bb3d43b26bc08bc676904b90c0e8c9f24b026de6ea",
-      title: "purple",
-      singlePlayer: "green",
-      multiPlayer: "blue",
-      options: "yellow",
-      highScore: "coral",
-      help: "gray",
-      loadGame: "black"
-    }
+    this.backgrounds = getBackgrounds()
 
     this.startQuitClickHandler = this.startQuitClickHandler.bind(this)
     this.handlePlayerKeyStroke = this.handlePlayerKeyStroke.bind(this)    
@@ -149,97 +139,53 @@ class App extends React.Component<{}, appStateIF> {
     }
 
     if (this.state.view === 'gameActive') {
-
       this.engine.handleGameStateUpdate(this.state)
     }
 
   }
 
   setSoundEffects() {
-    this.soundEffects = {
-      one: document.getElementById('sound-effect-1') as HTMLAudioElement,
-      levelUp: document.getElementById('sound-effect-2') as HTMLAudioElement,
-      tetriminoMove: document.getElementById('sound-effect-3') as HTMLAudioElement,
-      four: document.getElementById('sound-effect-4') as HTMLAudioElement,
-      five: document.getElementById('sound-effect-5') as HTMLAudioElement,
-      tetriminoLand: document.getElementById('sound-effect-6') as HTMLAudioElement,
-      lineClear: document.getElementById('sound-effect-7') as HTMLAudioElement,
-      eight: document.getElementById('sound-effect-8') as HTMLAudioElement,
+
+    const soundEffectsToSet = {} as soundEffectsIF
+
+    for (const sound in soundEffectsConfig) {
+      soundEffectsToSet[sound as keyof soundEffectsIF] = document.getElementById(sound) as HTMLAudioElement
     }
+
+    this.soundEffects = soundEffectsToSet
+  }
+  
+  addSoundEffectsToHTML() {
+
+    const audioTags = [] 
+
+    for (const sound in soundEffectsConfig) {
+      audioTags.push(<audio id={sound} src={soundEffectsConfig[sound]}></audio>)
+    }
+
+    return audioTags
   }
 
   setBackground(view: string): void {
 
-    let background = this.backgrounds[view]
+    let backgroundUrl = this.backgrounds[view]
 
-    if (background.substring(0,4) === 'http') {
-      const urlPrefix = 'url('
-      const urlSuffix = ')'
-      background = urlPrefix + background + urlSuffix
+    if (backgroundUrl.substring(0,4) === 'http') {
+      backgroundUrl = `url(${backgroundUrl})`
     }
     const htmlTag = document.querySelector('html')
-    htmlTag.style.background = background
+    htmlTag.style.background = backgroundUrl
+    htmlTag.style.backgroundPosition = 'center'
   }
 
   getView() {
-    switch (this.state.view) {
-      case 'gameActive':
-        return (
-          <PlayView 
-            appState={this.state} 
-            startQuitClickHandler={this.startQuitClickHandler} 
-            playerKeystrokeHandler={this.playerKeystrokeHandler}
-          />
-        ) 
-      case 'title':
-        return (
-          <TitleView 
-            appState={this.state}
-            setAppState={this.setState.bind(this)}  
-          />
-        )
-      case 'singlePlayer':
-        return (
-          <SinglePlayer
-            appState={this.state}
-            setAppState={this.setState.bind(this)}  
-          />
-        )
-      case 'multiPlayer':
-        return (
-          <MultiPlayer
-            appState={this.state}
-            setAppState={this.setState.bind(this)}  
-          />
-        )
-      case 'options':
-        return (
-          <Options
-            appState={this.state}
-            setAppState={this.setState.bind(this)}  
-          />
-        )
-      case 'highScore':
-        return (
-          <HighScore
-            appState={this.state}
-            setAppState={this.setState.bind(this)}  
-          />
-        )
-      case 'loadGame':
-        return (
-          <div>LOADING</div>
-        )
-      case 'help':
-        return (
-          <Help
-            appState={this.state}
-            setAppState={this.setState.bind(this)}  
-          />
-        )
-      // case '':
-      //   break
-    }
+    const getter = getView.bind(this)
+    return getter()
+  }
+
+  renderSoundEffects() {
+    const { soundEffects } = this
+
   }
 
   render() {
@@ -249,17 +195,12 @@ class App extends React.Component<{}, appStateIF> {
     return (
       <div>
         { this.getView() }
-        <audio id="sound-effect-1" src="./assets/sound/mixkit-arcade-mechanical-bling-210.wav"></audio>
-        <audio id="sound-effect-2" src="./assets/sound/mixkit-game-bonus-reached-2065.wav"></audio>
-        <audio id="sound-effect-3" src="./assets/sound/mixkit-player-jumping-in-a-video-game-2043.wav"></audio>
-        <audio id="sound-effect-4" src="./assets/sound/mixkit-quick-positive-video-game-notification-interface-265.wav"></audio>
-        <audio id="sound-effect-5" src="./assets/sound/mixkit-sci-fi-positive-notification-266.wav"></audio>
-        <audio id="sound-effect-6" src="./assets/sound/mixkit-small-hit-in-a-game-2072.wav"></audio>
-        <audio id="sound-effect-7" src="./assets/sound/mixkit-video-game-health-recharge-2837.wav"></audio>
-        <audio id="sound-effect-8" src="./assets/sound/mixkit-winning-a-coin-video-game-2069.wav"></audio>
+        { this.addSoundEffectsToHTML().map(audioTag => audioTag ) }
       </div>
     )
   }
 } 
+
+
 
 export default App

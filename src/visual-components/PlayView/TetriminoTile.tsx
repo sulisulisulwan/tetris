@@ -1,11 +1,11 @@
 import * as React from 'react'
 
 const squareColors = new Map([
-  ['[i]','green'],
+  ['[i]','rgb(141, 141, 141)'],
   ['[t]','#ff00ff'],
-  ['[j]','red'],
-  ['[o]','yellow'],
-  ['[s]','orange'],
+  ['[j]','plum'],
+  ['[o]','rgb(119, 3, 101)'],
+  ['[s]','powderblue'],
   ['[l]','cyan'],
   ['[z]','white'],
   ['[_]','black']
